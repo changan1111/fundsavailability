@@ -3,338 +3,285 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Funds Availability — v5.2</title>
+<title>Funds Availability — v5.9.2 Final</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0d1b2a;--ink2:#1e3a5f;
-  --blue:#1d4ed8;--blue-l:#dbeafe;--blue-ll:#eff6ff;
-  --teal:#0f766e;--teal-l:#ccfbf1;
-  --amber:#b45309;--amber-l:#fef3c7;
-  --red:#b91c1c;--red-l:#fee2e2;
-  --slate1:#f8fafc;--slate2:#f1f5f9;--slate3:#e2e8f0;
-  --slate4:#cbd5e1;--slate5:#94a3b8;--slate6:#64748b;--slate7:#475569;
-  --white:#fff;
-  --green:#166534;--green-l:#dcfce7;
-  --purple:#6d28d9;--purple-l:#ede9fe;
-  --orange:#c2410c;--orange-l:#ffedd5;
-  --shadow:0 1px 3px rgba(13,27,42,.08),0 4px 16px rgba(13,27,42,.06);
-  --r:12px;
+  --ink:#0d1b2a; --blue:#1d4ed8; --blue-l:#dbeafe; --blue-ll:#eff6ff;
+  --teal:#0f766e; --teal-l:#ccfbf1; --amber:#b45309; --amber-l:#fef3c7;
+  --red:#b91c1c; --red-l:#fee2e2; --slate1:#f8fafc; --slate2:#f1f5f9;
+  --slate3:#e2e8f0; --slate4:#cbd5e1; --slate5:#94a3b8; --slate6:#64748b;
+  --white:#fff; --shadow:0 4px 16px rgba(13,27,42,.06); --r:12px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%,#f0f4fb 100%);min-height:100vh;color:var(--ink)}
+body{font-family:'Inter',sans-serif;background:#f0f4fb;color:var(--ink);min-height:100vh}
 
-.hdr{background:var(--ink);padding:20px 32px;display:flex;align-items:center;gap:16px}
-.hdr-icon{width:42px;height:42px;background:linear-gradient(135deg,#1d4ed8,#0f766e);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.hdr-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
-.hdr-sub{font-size:.73rem;color:#64748b;margin-top:2px}
-.hdr-right{margin-left:auto}
-.badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:#94a3b8;letter-spacing:.04em}
+.hdr{background:var(--ink);padding:18px 30px;display:flex;align-items:center;gap:15px;color:#fff}
+.hdr-icon{font-size:1.5rem;background:linear-gradient(135deg,#1d4ed8,#0f766e);padding:8px;border-radius:10px}
+.hdr-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem}
 
-.wrap{max-width:1380px;margin:0 auto;padding:24px 18px 60px;display:grid;grid-template-columns:380px 1fr;gap:18px;align-items:start}
-@media(max-width:980px){.wrap{grid-template-columns:1fr}}
-.sticky-left{position:sticky;top:18px;display:flex;flex-direction:column;gap:14px}
+.wrap{max-width:1440px;margin:0 auto;padding:20px;display:grid;grid-template-columns:420px 1fr;gap:20px}
+@media(max-width:1100px){.wrap{grid-template-columns:1fr}}
+.sticky-side{position:sticky;top:20px;display:flex;flex-direction:column;gap:15px}
 
-.panel{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
-.panel-hd{padding:12px 18px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px}
-.panel-hd h3{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.01em;color:var(--ink)}
-.panel-hd .ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
-.panel-body{padding:16px 18px}
+.panel{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--slate3)}
+.panel-hd{padding:12px 18px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px;background:var(--slate1)}
+.panel-hd h3{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--ink)}
 
 .field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:.67rem;font-weight:700;color:var(--slate6);letter-spacing:.06em;text-transform:uppercase}
-.field input,.field select{font-family:'Inter',sans-serif;font-size:.85rem;padding:7px 10px;border:1.5px solid var(--slate3);border-radius:7px;color:var(--ink);background:var(--slate1);outline:none;transition:border-color .15s,box-shadow .15s;font-weight:500}
-.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,.1);background:#fff}
-.pfx{position:relative}.pfx span{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.82rem;pointer-events:none}
-.pfx input{padding-left:20px}
-.cfg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.field label{font-size:.62rem;font-weight:800;color:var(--slate6);text-transform:uppercase;letter-spacing:.05em}
+.field input, .field select{padding:8px;border:1.5px solid var(--slate3);border-radius:8px;font-size:.85rem;outline:none;background:var(--slate1);font-family:'Inter'}
 
-.bkt-table{width:100%;border-collapse:collapse;font-size:.75rem}
-.bkt-table thead th{padding:6px 5px;background:var(--slate2);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
-.bkt-table thead th:first-child{text-align:left;padding-left:8px}
-.bkt-table tbody tr{border-bottom:1px solid var(--slate2);transition:background .12s}
-.bkt-table tbody tr:hover{background:var(--slate1)}
-.bkt-table tbody tr.row-disabled{opacity:.45}
-.bkt-cell{padding:5px 4px;text-align:center;vertical-align:middle}
-.bkt-cell:first-child{text-align:left;padding-left:8px}
-.bkt-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--ink)}
-.bkt-name small{font-size:.6rem;font-weight:400;color:var(--slate5);display:block;line-height:1.2}
-.bkt-inp{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:4px 5px;border:1.5px solid var(--slate3);border-radius:6px;width:46px;text-align:center;background:var(--white);color:var(--ink);outline:none;-moz-appearance:textfield}
-.bkt-inp::-webkit-inner-spin-button,.bkt-inp::-webkit-outer-spin-button{-webkit-appearance:none}
-.bkt-inp:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
-.bkt-inp:disabled{background:var(--slate2);color:var(--slate4);border-color:var(--slate3)}
-.bkt-chk{accent-color:var(--blue);width:14px;height:14px;cursor:pointer}
-.bkt-chk-nd{accent-color:#f59e0b;width:14px;height:14px;cursor:pointer}
-.bkt-chk-excl{accent-color:var(--red);width:14px;height:14px;cursor:pointer}
-.bkt-pri{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:4px 5px;border:1.5px solid var(--slate3);border-radius:6px;width:38px;text-align:center;background:var(--white);color:var(--ink);outline:none;-moz-appearance:textfield}
-.bkt-pri::-webkit-inner-spin-button,.bkt-pri::-webkit-outer-spin-button{-webkit-appearance:none}
-.bkt-pri:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
-.bkt-pri:disabled{background:var(--slate2);color:var(--slate4)}
-.col-ex{color:var(--blue);font-size:.6rem;font-weight:700;background:var(--blue-ll);padding:1px 4px;border-radius:4px;white-space:nowrap}
-.col-nw{color:var(--teal);font-size:.6rem;font-weight:700;background:var(--teal-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
-.col-nd{color:var(--amber);font-size:.6rem;font-weight:700;background:var(--amber-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
-.col-excl{color:var(--red);font-size:.6rem;font-weight:700;background:var(--red-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
+/* Bucket Config Table */
+.bkt-table{width:100%;border-collapse:collapse;font-size:.68rem}
+.bkt-table th{padding:6px;background:var(--slate2);font-weight:700;border-bottom:2px solid var(--slate3)}
+.bkt-table td{padding:5px 2px;text-align:center;border-bottom:1px solid var(--slate2)}
+.bkt-inp{width:34px;text-align:center;padding:3px;border:1px solid var(--slate3);border-radius:4px;font-family:'JetBrains Mono'}
 
-.dep-header{display:grid;grid-template-columns:22px 90px 1fr 70px 22px;gap:8px;padding:0 8px 6px;align-items:end}
-.dep-header span{font-size:.62rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em}
-.rows-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:340px;overflow-y:auto;padding-right:2px}
-.dep-row{border-radius:9px;border:1.5px solid var(--slate3);background:var(--slate1);transition:border-color .15s;overflow:hidden}
-.dep-row:hover{border-color:var(--slate4)}
-.dep-row-top{display:grid;grid-template-columns:22px 90px 1fr 70px 22px;gap:8px;align-items:center;padding:8px 8px 7px}
-.dep-row-bot{display:flex;align-items:center;gap:6px;padding:0 8px 7px;font-size:.68rem;color:var(--slate5);font-weight:500}
-.row-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--slate5);text-align:center;width:22px}
-.dep-ref{font-family:'JetBrains Mono',monospace;font-size:.8rem;padding:6px 8px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600}
-.dep-amt-wrap{position:relative}
-.dep-amt-wrap span{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.8rem;pointer-events:none;font-weight:500}
-.dep-amt{font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:6px 8px 6px 18px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600}
-.dep-bkt{font-size:.8rem;padding:6px 8px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600;cursor:pointer}
-.del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:.85rem;border-radius:5px;transition:color .12s,background .12s;display:flex;align-items:center;justify-content:center;width:22px;height:22px;flex-shrink:0}
-.del-btn:hover{color:var(--red);background:var(--red-l)}
-.add-row-btn{width:100%;padding:8px;border:2px dashed var(--slate3);border-radius:8px;background:none;color:var(--slate5);font-size:.78rem;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
-.add-row-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-ll)}
-.btn-row{display:flex;gap:8px;margin-top:12px}
-.btn{padding:9px 20px;border-radius:8px;font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;letter-spacing:.01em}
-.btn-primary{background:var(--ink);color:#fff;flex:1;box-shadow:0 2px 8px rgba(13,27,42,.2)}
-.btn-primary:hover{background:var(--blue);box-shadow:0 4px 14px rgba(29,78,216,.25);transform:translateY(-1px)}
-.btn-clear{background:var(--slate2);color:var(--slate6)}
-.btn-clear:hover{background:var(--slate3);color:var(--ink)}
+/* TRANSACTION ROW - FIXED 3 COLUMN VISIBILITY */
+.dep-header{display:grid;grid-template-columns:25px 95px 1fr 75px 25px;gap:10px;padding:0 10px 8px;font-size:.6rem;font-weight:800;color:var(--slate5);text-transform:uppercase}
+.rows-wrap{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px}
+.dep-row{background:var(--white);border-radius:10px;border:1.5px solid var(--slate3);overflow:hidden}
+.dep-row-top{display:grid;grid-template-columns:25px 95px 1fr 75px 25px;gap:10px;padding:10px;align-items:center}
+.row-num{font-family:'JetBrains Mono';font-size:.7rem;color:var(--slate5);font-weight:700}
 
-.tabs-bar{display:flex;gap:3px;padding:4px;background:var(--slate2);border-radius:10px;margin-bottom:16px;width:fit-content}
-.tab-btn{padding:7px 18px;border-radius:7px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;color:var(--slate6);background:transparent;font-family:'Syne',sans-serif;letter-spacing:.01em}
-.tab-btn.on-ex{background:var(--ink);color:#fff;box-shadow:0 2px 6px rgba(13,27,42,.2)}
-.tab-btn.on-nw{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(15,118,110,.2)}
-.tab-btn.on-cmp{background:var(--purple);color:#fff;box-shadow:0 2px 6px rgba(109,40,217,.2)}
+.dep-ref{width:95px !important; font-family:'JetBrains Mono'; font-size:.75rem !important; padding:6px !important}
+.dep-amt-wrap{position:relative; min-width:80px}
+.dep-amt-wrap span{position:absolute;left:7px;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--slate5);font-weight:600}
+.dep-amt{padding-left:16px !important; width:100%; font-family:'JetBrains Mono' !important; font-weight:700 !important; color:var(--blue) !important; background:var(--blue-ll) !important; border-color:var(--blue-l) !important; font-size:.8rem !important}
+.dep-bkt{width:75px !important; font-weight:700; cursor:pointer; font-size:.75rem !important; padding:6px !important}
 
-.out-panel{display:none}
-.out-panel.show{display:block;animation:up .3s ease}
-@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.dep-row-bot{padding:0 10px 8px 45px;display:flex;gap:6px}
+.tag{font-size:.55rem;font-weight:800;padding:2px 5px;border-radius:4px;text-transform:uppercase}
+.tag-nd{background:var(--amber-l);color:var(--amber)}
+.tag-excl{background:var(--red-l);color:var(--red)}
 
-.day-grid-wrap{overflow-x:auto;margin-bottom:20px}
-table.dg{width:100%;border-collapse:collapse;font-size:.77rem;min-width:680px}
-table.dg th{padding:8px 8px;background:var(--slate1);font-weight:700;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
-table.dg th.rh{text-align:left;background:var(--ink);color:#fff;min-width:100px}
-table.dg td{padding:7px 7px;border-bottom:1px solid var(--slate2);text-align:center;vertical-align:top;min-width:76px}
-table.dg tr:hover td{background:var(--slate1)}
-.td-bucket{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink);font-size:.8rem}
-.td-acct{font-size:.58rem;padding:1px 5px;border-radius:8px;font-weight:700;display:inline-block;margin-top:2px}
-.td-acct.ex{background:var(--blue-l);color:var(--blue)}
-.td-acct.nw{background:var(--teal-l);color:var(--teal)}
-.cell-amt{font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:600;line-height:1.3}
-.cell-src{font-size:.6rem;color:var(--slate5);margin-top:1px;line-height:1.3}
-.cell-hold{color:var(--amber);font-weight:700}
-.cell-nd{color:var(--orange);font-weight:700}
-.cell-rel-ex{color:var(--blue)}
-.cell-rel-nw{color:var(--teal)}
-.cell-rem{color:var(--purple)}
-.cell-excl{color:var(--red)}
-.cell-none{color:var(--slate3)}
-.cell-pri{font-size:.58rem;font-weight:700;padding:1px 4px;border-radius:4px;background:var(--slate2);color:var(--slate6);margin-top:2px;display:inline-block}
+/* Results UI */
+.tabs-bar{display:flex;gap:5px;margin-bottom:15px;background:var(--slate2);padding:5px;border-radius:10px;width:fit-content}
+.tab-btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700;font-size:.75rem;font-family:'Syne';color:var(--slate6);background:transparent}
+.tab-btn.active{background:var(--ink);color:#fff}
+.tab-btn.active.nw-mode{background:var(--teal)}
 
-.day-summary{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
-.ds-col{border-radius:7px;overflow:hidden;border:1px solid var(--slate3);min-width:70px;flex:1}
-.ds-head{padding:4px 3px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;background:var(--slate1);color:var(--slate6);border-bottom:1px solid var(--slate3)}
-.ds-body{padding:5px 3px;text-align:center;min-height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.ds-total{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700}
-.ds-total.has-ex{color:var(--blue)}.ds-total.has-nw{color:var(--teal)}.ds-total.has-hold{color:var(--amber)}
-.ds-rows{font-size:.56rem;color:var(--slate5)}
+.day-summary{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto}
+.ds-box{background:#fff;border:1px solid var(--slate3);border-radius:8px;min-width:95px;flex:1;text-align:center}
+.ds-day{background:var(--slate1);font-size:.6rem;font-weight:800;padding:5px;border-bottom:1px solid var(--slate3)}
+.ds-amt{padding:10px;font-family:'JetBrains Mono';font-weight:700;font-size:.85rem}
 
-.split-section{margin-bottom:20px}
-.split-title{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.split-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.split-card{border-radius:9px;border:1px solid var(--slate3);overflow:hidden}
-.sc-head{padding:7px 11px;font-size:.7rem;font-weight:700;letter-spacing:.03em;display:flex;align-items:center;justify-content:space-between}
-.sc-head.ex{background:var(--ink);color:#fff}.sc-head.nw{background:var(--teal);color:#fff}
-.sc-rows{padding:7px 11px;display:flex;flex-direction:column;gap:3px}
-.sc-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:.73rem;padding:3px 0;border-bottom:1px solid var(--slate2)}
-.sc-total-row{display:flex;justify-content:space-between;padding:5px 11px;background:var(--slate1);font-size:.73rem;font-weight:700}
+table.dg{width:100%;border-collapse:collapse;font-size:.75rem}
+table.dg th{padding:10px;background:var(--slate1);border-bottom:2px solid var(--slate3);text-transform:uppercase;font-size:.6rem;letter-spacing:.05em}
+table.dg td{padding:12px 10px;border-bottom:1px solid var(--slate2);text-align:center}
+.cell-val{font-family:'JetBrains Mono';font-weight:700;font-size:.8rem}
+.cell-tag{font-size:.5rem;font-weight:800;padding:2px 4px;border-radius:4px;display:inline-block;margin-top:4px}
 
-table.cmp{width:100%;border-collapse:collapse;font-size:.77rem}
-table.cmp th{padding:8px 11px;background:var(--ink);color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;text-align:left;white-space:nowrap}
-table.cmp td{padding:7px 11px;border-bottom:1px solid var(--slate2);vertical-align:top}
-.diff-chip{font-size:.63rem;padding:2px 6px;border-radius:8px;font-weight:700;display:inline-block}
-.diff-same{background:var(--slate2);color:var(--slate6)}
-.diff-earlier{background:var(--green-l);color:var(--green)}
-.diff-later{background:var(--amber-l);color:var(--amber)}
-.diff-special{background:var(--red-l);color:var(--red)}
-.diff-only{background:var(--purple-l);color:var(--purple)}
-
-.alert{padding:9px 13px;border-radius:8px;font-size:.76rem;margin-bottom:10px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
-.alert-amber{background:var(--amber-l);border:1px solid #fcd34d;color:var(--amber)}
-.alert-blue{background:var(--blue-l);border:1px solid #93c5fd;color:var(--blue)}
-.alert-red{background:var(--red-l);border:1px solid #fca5a5;color:var(--red)}
-.alert-green{background:var(--green-l);border:1px solid #86efac;color:var(--green)}
-
-.pri-note{font-size:.68rem;color:var(--slate5);margin-top:8px;line-height:1.6;padding:8px 10px;background:var(--slate1);border-radius:7px;border:1px solid var(--slate3)}
-.section-divider{height:1px;background:var(--slate3);margin:16px 0}
-.empty{text-align:center;padding:60px 20px}
-.empty-icon{font-size:2.6rem;margin-bottom:12px}
-.empty p{font-size:.83rem;line-height:1.8;color:var(--slate5)}
-.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.leg{font-size:.63rem;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.02em}
+.btn-main{width:100%;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;font-family:'Syne';margin-top:10px;transition:0.2s}
+.btn-main:hover{background:var(--blue);transform:translateY(-1px)}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:1rem;display:flex;justify-content:center}
+.del-btn:hover{color:var(--red)}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-icon">💰</div>
-  <div>
-    <div class="hdr-title">Funds Availability Calculator</div>
-    <div class="hdr-sub">Configurable bucket days · Single Global ND Release Logic</div>
-  </div>
-  <div class="hdr-right"><span class="badge">INTERNAL · QA USE</span></div>
+  <div class="hdr-icon">🏛️</div>
+  <div class="hdr-title">Availability Engine v5.9.2</div>
 </div>
 
 <div class="wrap">
-  <div class="sticky-left">
+  <div class="sticky-side">
     <div class="panel">
-      <div class="panel-hd"><div class="ic" style="background:#eff6ff">⚙️</div><h3>Global Configuration</h3></div>
+      <div class="panel-hd"><h3>⚙️ Global Configuration</h3></div>
       <div class="panel-body">
-        <div class="cfg-row">
-          <div class="field"><label>Cap / Max Threshold ($)</label><div class="pfx"><span>$</span><input type="number" id="cfgMax" value="6725" min="1"></div></div>
-          <div class="field"><label>ND Min Release ($)</label><div class="pfx"><span>$</span><input type="number" id="cfgNdMin" value="100" min="1"></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="field"><label>Release Cap ($)</label><input type="number" id="cfgMax" value="6725"></div>
+          <div class="field"><label>ND Min ($)</label><input type="number" id="cfgNdMin" value="100"></div>
         </div>
-        <div class="field"><label>Account Type</label><select id="cfgAcct" onchange="renderBucketTable()"><option value="both">Both</option><option value="existing">Existing Only</option><option value="new">New Only</option></select></div>
-        <div class="pri-note"><strong>Single ND Rule:</strong> Only the first high-priority check with ⚡ND enabled receives the Day 1 Min release.</div>
+        <div class="field"><label>Environment Mode</label>
+          <select id="acctType" onchange="renderBucketTable(); renderRows();">
+            <option value="both">Compare View</option>
+            <option value="existing">Existing Only</option>
+            <option value="new">New Account Only</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="panel"><div class="panel-hd"><div class="ic" style="background:#f0fdf4">🎯</div><h3>Bucket Configuration</h3></div><div class="panel-body"><div id="bucketTableWrap"></div></div></div>
+
     <div class="panel">
-      <div class="panel-hd"><div class="ic" style="background:#fef3c7">📋</div><h3>Deposit Rows</h3></div>
+      <div class="panel-hd"><h3>🎯 Bucket Logic</h3></div>
+      <div class="panel-body" id="bucketTableWrap"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hd"><h3>📋 Transactions</h3></div>
       <div class="panel-body">
-        <div class="dep-header"><span></span><span>Ref ID</span><span>Amount</span><span>Bucket</span><span></span></div>
-        <div class="rows-wrap" id="rowsWrap"></div>
-        <button class="add-row-btn" onclick="addRow()">＋ Add Row</button>
-        <div class="btn-row"><button class="btn btn-primary" onclick="calculate()">▶ Calculate</button><button class="btn btn-clear" onclick="clearAll()">↺ Clear</button></div>
+        <div class="dep-header"><span>#</span><span>Ref ID</span><span>Amount</span><span>Bkt</span><span></span></div>
+        <div id="rowsWrap" class="rows-wrap"></div>
+        <button class="btn-main" style="background:var(--slate2);color:var(--ink);font-size:.7rem;padding:8px" onclick="addRow()">＋ Add Deposit Row</button>
+        <button class="btn-main" onclick="calculate()">▶ Process Results</button>
       </div>
     </div>
   </div>
 
-  <div>
-    <div id="emptyState" class="empty"><div class="empty-icon">📊</div><p>Configure buckets and add rows.</p></div>
-    <div class="out-panel" id="outPanel">
-      <div class="tabs-bar" id="tabsBar">
-        <button class="tab-btn on-ex" id="tab-ex" onclick="showTab('ex')">🏦 Existing</button>
-        <button class="tab-btn" id="tab-nw" onclick="showTab('nw')">🆕 New Account</button>
-        <button class="tab-btn" id="tab-cmp" onclick="showTab('cmp')">⚖️ Compare</button>
+  <div id="outPanel" style="display:none">
+    <div class="tabs-bar">
+      <button class="tab-btn active" id="tab-ex" onclick="showTab('ex')">Existing Account</button>
+      <button class="tab-btn" id="tab-nw" onclick="showTab('nw')">New Account</button>
+    </div>
+
+    <div id="pane-ex" class="panel">
+      <div class="panel-hd" style="background:var(--ink)"><h3 style="color:#fff">Schedule: Existing</h3></div>
+      <div class="panel-body">
+        <div class="day-summary" id="ex-summary"></div>
+        <table class="dg" id="ex-table"><thead></thead><tbody></tbody></table>
       </div>
-      <div id="pane-ex">
-        <div class="panel"><div class="panel-hd" style="background:var(--ink)"><h3 style="color:#fff">Existing Account</h3></div><div class="panel-body"><div id="ex-alerts"></div><div class="day-summary" id="ex-day-summary"></div><div class="day-grid-wrap"><table class="dg" id="ex-table"><thead></thead><tbody></tbody></table></div><div class="split-cards" id="ex-splits"></div></div></div>
-      </div>
-      <div id="pane-nw" style="display:none">
-        <div class="panel"><div class="panel-hd" style="background:var(--teal)"><h3 style="color:#fff">New Account</h3></div><div class="panel-body"><div id="nw-alerts"></div><div class="day-summary" id="nw-day-summary"></div><div class="day-grid-wrap"><table class="dg" id="nw-table"><thead></thead><tbody></tbody></table></div><div class="split-cards" id="nw-splits"></div></div></div>
-      </div>
-      <div id="pane-cmp" style="display:none">
-        <div class="panel"><div class="panel-hd" style="background:var(--purple)"><h3 style="color:#fff">Compare</h3></div><div class="panel-body" style="padding:0"><table class="cmp" id="cmp-table"><thead><tr><th>Row</th><th>Bucket</th><th>Day</th><th>Existing</th><th>New</th><th>Diff</th></tr></thead><tbody id="cmp-body"></tbody></table></div></div>
+    </div>
+
+    <div id="pane-nw" class="panel" style="display:none">
+      <div class="panel-hd" style="background:var(--teal)"><h3 style="color:#fff">Schedule: New</h3></div>
+      <div class="panel-body">
+        <div class="day-summary" id="nw-summary"></div>
+        <table class="dg" id="nw-table"><thead></thead><tbody></tbody></table>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-let rowId = 0, rows = [], currentTab = 'ex';
+let rows = [];
+let nextUniqueId = 1;
 const BUCKETS = [2,3,4,5,6,7];
-const BUCKET_DEFAULTS = {
-  2:{ label:'B2', priority:1, def:1, ext:6, t1:0, t2:6, ndOn:false, exclOn:false },
-  3:{ label:'B3', priority:4, def:4, ext:3, t1:2, t2:3, ndOn:false, exclOn:false },
-  4:{ label:'B4', priority:5, def:2, ext:5, t1:0, t2:5, ndOn:false, exclOn:false },
-  5:{ label:'B5', priority:2, def:1, ext:1, t1:5, t2:6, ndOn:true,  exclOn:false },
-  6:{ label:'B6', priority:3, def:2, ext:5, t1:3, t2:5, ndOn:false, exclOn:true  },
-  7:{ label:'B7', priority:6, def:3, ext:5, t1:0, t2:5, ndOn:false, exclOn:false },
+const bucketCfg = {
+    2:{pri:1, def:1, ext:6, t1:0, t2:6, nd:false, excl:false},
+    3:{pri:4, def:4, ext:3, t1:2, t2:3, nd:false, excl:false},
+    4:{pri:5, def:2, ext:5, t1:0, t2:5, nd:false, excl:false},
+    5:{pri:2, def:1, ext:1, t1:5, t2:6, nd:true,  excl:false},
+    6:{pri:3, def:2, ext:5, t1:3, t2:5, nd:false, excl:true },
+    7:{pri:6, def:3, ext:5, t1:0, t2:5, nd:false, excl:false}
 };
-let bucketCfg = {};
-BUCKETS.forEach(b => { bucketCfg[b] = { ...BUCKET_DEFAULTS[b], checked: true, note:'' }; });
 
 function renderBucketTable() {
-  const acctType = document.getElementById('cfgAcct').value;
-  const showEx = acctType !== 'new', showNw = acctType !== 'existing';
-  let html = `<table class="bkt-table"><thead><tr><th>Bkt</th><th>Pri</th>${showEx?'<th>EX Def</th><th>EX +Ext</th>':''}${showNw?'<th>NW +T1</th><th>NW +T2</th><th>Excl</th>':''}${showEx?'<th>⚡ND</th>':''}<th>On</th></tr></thead><tbody>`;
-  BUCKETS.forEach(b => {
-    const c = bucketCfg[b], dis = c.checked ? '' : 'disabled';
-    html += `<tr class="${c.checked?'':'row-disabled'}">
-      <td class="bkt-cell">B${b}</td>
-      <td class="bkt-cell"><input type="number" class="bkt-pri" value="${c.priority}" ${dis} onchange="bucketCfg[${b}].priority=parseInt(this.value)"></td>
-      ${showEx?`<td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.def}" ${dis} onchange="bucketCfg[${b}].def=parseInt(this.value)"></td><td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.ext}" ${dis} onchange="bucketCfg[${b}].ext=parseInt(this.value)"></td>`:''}
-      ${showNw?`<td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.t1}" ${dis} onchange="bucketCfg[${b}].t1=parseInt(this.value)"></td><td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.t2}" ${dis} onchange="bucketCfg[${b}].t2=parseInt(this.value)"></td><td class="bkt-cell"><input type="checkbox" class="bkt-chk-excl" ${c.exclOn?'checked':''} ${dis} onchange="bucketCfg[${b}].exclOn=this.checked"></td>`:''}
-      ${showEx?`<td class="bkt-cell"><input type="checkbox" class="bkt-chk-nd" ${c.ndOn?'checked':''} ${dis} onchange="bucketCfg[${b}].ndOn=this.checked"></td>`:''}
-      <td class="bkt-cell"><input type="checkbox" class="bkt-chk" ${c.checked?'checked':''} onchange="onBucketToggle(${b},this.checked)"></td>
-    </tr>`;
-  });
-  document.getElementById('bucketTableWrap').innerHTML = html + `</tbody></table>`;
+    const type = document.getElementById('acctType').value;
+    let html = `<table class="bkt-table"><thead><tr><th>Bkt</th><th>Pri</th><th>Def</th>`;
+    if(type !== 'new') html += `<th>Ext</th><th>ND</th>`;
+    if(type !== 'existing') html += `<th>T1</th><th>T2</th><th>Exc</th>`;
+    html += `</tr></thead><tbody>`;
+    BUCKETS.forEach(b => {
+        const c = bucketCfg[b];
+        html += `<tr><td><b>B${b}</b></td>
+            <td><input class="bkt-inp" type="number" value="${c.pri}" onchange="bucketCfg[${b}].pri=parseInt(this.value)"></td>
+            <td><input class="bkt-inp" type="number" value="${c.def}" onchange="bucketCfg[${b}].def=parseInt(this.value)"></td>`;
+        if(type !== 'new') html += `
+            <td><input class="bkt-inp" type="number" value="${c.ext}" onchange="bucketCfg[${b}].ext=parseInt(this.value)"></td>
+            <td><input type="checkbox" ${c.nd?'checked':''} onchange="bucketCfg[${b}].nd=this.checked; renderRows();"></td>`;
+        if(type !== 'existing') html += `
+            <td><input class="bkt-inp" type="number" value="${c.t1}" onchange="bucketCfg[${b}].t1=parseInt(this.value)"></td>
+            <td><input class="bkt-inp" type="number" value="${c.t2}" onchange="bucketCfg[${b}].t2=parseInt(this.value)"></td>
+            <td><input type="checkbox" ${c.excl?'checked':''} onchange="bucketCfg[${b}].excl=this.checked; renderRows();"></td>`;
+        html += `</tr>`;
+    });
+    document.getElementById('bucketTableWrap').innerHTML = html + `</tbody></table>`;
 }
 
-function onBucketToggle(b, chk) { bucketCfg[b].checked = chk; renderBucketTable(); }
-function addRow() { rowId++; rows.push({ id: rowId, ref: 'R'+String(rowId).padStart(3,'0'), amount: 0, bucket: 2 }); renderRows(); }
-function removeRow(id) { rows = rows.filter(r => r.id !== id); renderRows(); }
-function updateRow(id, f, v) { const r = rows.find(x => x.id === id); if(r) r[f] = (f==='amount'||f==='bucket')?parseFloat(v):v; }
-function renderRows() {
-  document.getElementById('rowsWrap').innerHTML = rows.map((r,i) => `<div class="dep-row"><div class="dep-row-top"><div class="row-num">${i+1}</div><input type="text" class="dep-ref" value="${r.ref}" onchange="updateRow(${r.id},'ref',this.value)"><div class="dep-amt-wrap"><span>$</span><input type="number" class="dep-amt" value="${r.amount||''}" onchange="updateRow(${r.id},'amount',this.value)"></div><select class="dep-bkt" onchange="updateRow(${r.id},'bucket',this.value)">${BUCKETS.filter(b=>bucketCfg[b].checked).map(b=>`<option value="${b}" ${r.bucket==b?'selected':''}>B${b}</option>`).join('')}</select><button class="del-btn" onclick="removeRow(${r.id})">✕</button></div></div>`).join('');
+function addRow() {
+    rows.push({id: Date.now(), ref: 'CK' + String(nextUniqueId).padStart(4,'0'), amt: 0, bkt: 2});
+    nextUniqueId++;
+    renderRows();
 }
-function clearAll() { rows = []; rowId = 0; renderRows(); document.getElementById('outPanel').classList.remove('show'); document.getElementById('emptyState').style.display = ''; }
+
+function updateRow(idx, field, val) {
+    if(field === 'amt') rows[idx].amt = parseFloat(val) || 0;
+    else if(field === 'ref') rows[idx].ref = val;
+    else if(field === 'bkt') rows[idx].bkt = parseInt(val);
+}
+
+function renderRows() {
+    const type = document.getElementById('acctType').value;
+    document.getElementById('rowsWrap').innerHTML = rows.map((r,i) => {
+        const c = bucketCfg[r.bkt];
+        let tags = '';
+        if(type !== 'new' && c.nd) tags += `<span class="tag tag-nd">⚡ ND</span>`;
+        if(type !== 'existing' && c.excl) tags += `<span class="tag tag-excl">Exclusion</span>`;
+        
+        return `
+        <div class="dep-row">
+            <div class="dep-row-top">
+                <span class="row-num">${i+1}</span>
+                <input type="text" class="field dep-ref" value="${r.ref}" onchange="updateRow(${i},'ref',this.value)">
+                <div class="dep-amt-wrap">
+                    <span>$</span>
+                    <input type="number" class="field dep-amt" value="${r.amt||''}" placeholder="0.00" onchange="updateRow(${i},'amt',this.value)">
+                </div>
+                <select class="field dep-bkt" onchange="updateRow(${i},'bkt',this.value); renderRows();">
+                    ${BUCKETS.map(b => `<option value="${b}" ${r.bkt==b?'selected':''}>B${b}</option>`).join('')}
+                </select>
+                <button class="del-btn" onclick="rows.splice(${i},1);renderRows()">✕</button>
+            </div>
+            ${tags ? `<div class="dep-row-bot">${tags}</div>` : ''}
+        </div>`;
+    }).join('');
+}
 
 function calculate() {
-  const sorted = rows.filter(r => r.amount > 0).map((r,i)=>({...r,_idx:i})).sort((a,b)=>{const pa=bucketCfg[a.bucket].priority, pb=bucketCfg[b.bucket].priority; return pa!==pb?pa-pb:a._idx-b._idx;});
-  const ex = buildSchedules(sorted, 'existing'), nw = buildSchedules(sorted, 'new');
-  renderTable(ex, 'existing'); renderTable(nw, 'new'); renderCompare(ex, nw);
-  document.getElementById('outPanel').classList.add('show'); document.getElementById('emptyState').style.display = 'none';
+    const sorted = [...rows].filter(r => r.amt > 0).sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
+    if(sorted.length === 0) return;
+    renderResults(sorted, 'ex');
+    renderResults(sorted, 'nw');
+    document.getElementById('outPanel').style.display = 'block';
 }
 
-function buildSchedules(sortedRows, mode) {
-  const cap = parseFloat(document.getElementById('cfgMax').value)||6725, ndMin = parseFloat(document.getElementById('cfgNdMin').value)||100;
-  let remCap = cap, ndUsed = false;
-  return sortedRows.map(row => {
-    const cfg = bucketCfg[row.bucket], s = [{day:0, action:'hold', amount:row.amount}];
-    let capUsed = 0, locCap = remCap;
-    if (mode === 'existing') {
-      const extDay = cfg.def + cfg.ext;
-      if (cfg.ndOn && !ndUsed && locCap > 0) {
-        const ndRel = Math.min(ndMin, row.amount, locCap);
-        s.push({ day:1, action:'nd', amount:ndRel, note:'⚡ND Min' });
-        capUsed += ndRel; ndUsed = true;
-        const left = row.amount - ndRel, capAfter = locCap - capUsed;
-        if (left > 0 && capAfter > 0) {
-          const rel = Math.min(left, capAfter); s.push({day:cfg.def, action:'release', amount:rel, note:'Default'});
-          capUsed += rel; if (left-rel > 0) s.push({day:extDay, action:'remaining', amount:left-rel, note:'Ext'});
-        } else if (left > 0) s.push({day:extDay, action:'remaining', amount:left, note:'Ext'});
-      } else {
-        if (row.amount <= locCap) { s.push({day:cfg.def, action:'release', amount:row.amount, note:'Default'}); capUsed = row.amount; }
-        else { if(locCap>0) s.push({day:cfg.def, action:'release', amount:locCap, note:'Default'}); capUsed=locCap; s.push({day:extDay, action:'remaining', amount:row.amount-locCap, note:'Ext'}); }
-      }
-    } else {
-      const t1D = cfg.def+cfg.t1, t2D = cfg.def+cfg.t2;
-      if (cfg.exclOn) s.push({day:t2D, action:'exclusion', amount:row.amount});
-      else if (locCap > 0) { const rel = Math.min(row.amount, locCap); s.push({day:t1D, action:'release', amount:rel}); capUsed=rel; if (row.amount-rel > 0) s.push({day:t2D, action:'remaining', amount:row.amount-rel}); }
-      else s.push({day:t2D, action:'remaining', amount:row.amount});
-    }
-    remCap = Math.max(0, remCap - capUsed);
-    return { ...row, schedule: s };
-  });
+function renderResults(data, mode) {
+    const cap = parseFloat(document.getElementById('cfgMax').value);
+    const ndMin = parseFloat(document.getElementById('cfgNdMin').value);
+    let rem = cap, ndDone = false, totals = {};
+    
+    const processed = data.map(r => {
+        const c = bucketCfg[r.bkt], s = [];
+        let rAmt = r.amt;
+
+        if(mode === 'ex') {
+            if(c.nd && !ndDone && rem > 0) {
+                let release = Math.min(ndMin, rAmt, rem);
+                s.push({d: 1, amt: release, tag: '⚡ ND'});
+                rAmt -= release; rem -= release; ndDone = true;
+            }
+            let defRel = Math.min(rAmt, rem);
+            if(defRel > 0) { s.push({d: c.def, amt: defRel, tag: 'DEFAULT'}); rAmt -= defRel; rem -= defRel; }
+            if(rAmt > 0) s.push({d: c.def + c.ext, amt: rAmt, tag: 'EXT'});
+        } else {
+            if(c.excl) s.push({d: c.def + c.t2, amt: rAmt, tag: 'EXCL'});
+            else {
+                let t1Rel = Math.min(rAmt, rem);
+                if(t1Rel > 0) { s.push({d: c.def + c.t1, amt: t1Rel, tag: 'TIER 1'}); rAmt -= t1Rel; rem -= t1Rel; }
+                if(rAmt > 0) s.push({d: c.def + c.t2, amt: rAmt, tag: 'TIER 2'});
+            }
+        }
+        s.forEach(e => totals[e.d] = (totals[e.d] || 0) + e.amt);
+        return { ref: r.ref, bkt: r.bkt, s };
+    });
+
+    const days = [...new Set(processed.flatMap(p => p.s.map(x => x.d)))].sort((a,b)=>a-b);
+    const table = document.getElementById(mode+'-table');
+    table.querySelector('thead').innerHTML = `<tr><th>Ref ID</th>${days.map(d=>`<th>Day ${d}</th>`).join('')}</tr>`;
+    table.querySelector('tbody').innerHTML = processed.map(p => `
+        <tr><td><b>${p.ref}</b><br><small>B${p.bkt}</small></td>
+        ${days.map(d => {
+            const e = p.s.find(x => x.d === d);
+            const tagCls = e?.tag.includes('ND') ? 'tag-nd' : e?.tag.includes('TIER 1') ? 'tag-t1' : e?.tag === 'EXCL' ? 'tag-excl' : 'tag-ext';
+            return e ? `<td><div class="cell-val">$${e.amt.toLocaleString()}</div><div class="cell-tag ${tagCls}">${e.tag}</div></td>` : `<td>—</td>`;
+        }).join('')}</tr>`).join('');
+
+    document.getElementById(mode+'-summary').innerHTML = days.map(d => `
+        <div class="ds-box"><div class="ds-day">DAY ${d}</div><div class="ds-amt">$${totals[d].toLocaleString()}</div></div>`).join('');
 }
 
-function renderTable(data, type) {
-  const prefix = type === 'existing' ? 'ex' : 'nw', days = [...new Set(data.flatMap(r=>r.schedule.map(s=>s.day)))].sort((a,b)=>a-b);
-  const tbl = document.getElementById(prefix+'-table');
-  tbl.querySelector('thead').innerHTML = `<tr><th class="rh">Row</th>${days.map(d=>`<th>Day ${d}</th>`).join('')}</tr>`;
-  tbl.querySelector('tbody').innerHTML = data.map(r => {
-    const cells = days.map(d => {
-      const e = r.schedule.find(s=>s.day===d);
-      return e ? `<td><span class="cell-amt ${e.action==='hold'?'cell-hold':(e.action==='nd'?'cell-nd':(type==='existing'?'cell-rel-ex':'cell-rel-nw'))}">$${fmt(e.amount)}</span><div class="cell-src">${e.note||''}</div></td>` : `<td>—</td>`;
-    }).join('');
-    return `<tr><td>B${r.bucket}<br><small>${r.ref}</small></td>${cells}</tr>`;
-  }).join('');
+function showTab(t) {
+    document.getElementById('pane-ex').style.display = t === 'ex' ? 'block' : 'none';
+    document.getElementById('pane-nw').style.display = t === 'nw' ? 'block' : 'none';
+    document.getElementById('tab-ex').className = 'tab-btn' + (t === 'ex' ? ' active' : '');
+    document.getElementById('tab-nw').className = 'tab-btn' + (t === 'nw' ? ' active nw-mode' : '');
 }
 
-function renderCompare(ex, nw) {
-  const days = [...new Set([...ex,...nw].flatMap(r=>r.schedule.map(s=>s.day)))].sort((a,b)=>a-b);
-  document.getElementById('cmp-body').innerHTML = ex.map((r,i) => days.map(d => {
-    const e = r.schedule.find(s=>s.day===d), n = nw[i].schedule.find(s=>s.day===d);
-    if (!e && !n) return '';
-    return `<tr><td>${r.ref}</td><td>B${r.bucket}</td><td>D${d}</td><td>${e?fmt(e.amount):'—'}</td><td>${n?fmt(n.amount):'—'}</td><td>${(e?.amount===n?.amount)?'Same':'Diff'}</td></tr>`;
-  }).join('')).join('');
-}
-
-function showTab(t) { currentTab = t; ['ex','nw','cmp'].forEach(p => { document.getElementById('pane-'+p).style.display = p===t?'block':'none'; document.getElementById('tab-'+p).className = 'tab-btn'+(p===t?` on-${p}`:''); }); }
-function fmt(n) { return Number(n).toLocaleString('en-US',{minimumFractionDigits:2}); }
-renderBucketTable(); addRow(); addRow(); rows[0].amount=5000; rows[1].amount=2000; renderRows();
+renderBucketTable();
+addRow();
 </script>
 </body>
 </html>
