@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Funds Availability — v5.1</title>
+<title>Funds Availability — v5.2</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -24,7 +24,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%,#f0f4fb 100%);min-height:100vh;color:var(--ink)}
 
-/* HEADER */
 .hdr{background:var(--ink);padding:20px 32px;display:flex;align-items:center;gap:16px}
 .hdr-icon{width:42px;height:42px;background:linear-gradient(135deg,#1d4ed8,#0f766e);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .hdr-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
@@ -32,19 +31,16 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%
 .hdr-right{margin-left:auto}
 .badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:#94a3b8;letter-spacing:.04em}
 
-/* LAYOUT */
 .wrap{max-width:1380px;margin:0 auto;padding:24px 18px 60px;display:grid;grid-template-columns:380px 1fr;gap:18px;align-items:start}
 @media(max-width:980px){.wrap{grid-template-columns:1fr}}
 .sticky-left{position:sticky;top:18px;display:flex;flex-direction:column;gap:14px}
 
-/* PANELS */
 .panel{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
 .panel-hd{padding:12px 18px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px}
 .panel-hd h3{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.01em;color:var(--ink)}
 .panel-hd .ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
 .panel-body{padding:16px 18px}
 
-/* FIELDS */
 .field{display:flex;flex-direction:column;gap:4px}
 .field label{font-size:.67rem;font-weight:700;color:var(--slate6);letter-spacing:.06em;text-transform:uppercase}
 .field input,.field select{font-family:'Inter',sans-serif;font-size:.85rem;padding:7px 10px;border:1.5px solid var(--slate3);border-radius:7px;color:var(--ink);background:var(--slate1);outline:none;transition:border-color .15s,box-shadow .15s;font-weight:500}
@@ -53,7 +49,6 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%
 .pfx input{padding-left:20px}
 .cfg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 
-/* ── BUCKET CONFIG TABLE ── */
 .bkt-table{width:100%;border-collapse:collapse;font-size:.75rem}
 .bkt-table thead th{padding:6px 5px;background:var(--slate2);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
 .bkt-table thead th:first-child{text-align:left;padding-left:8px}
@@ -80,7 +75,6 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%
 .col-nd{color:var(--amber);font-size:.6rem;font-weight:700;background:var(--amber-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
 .col-excl{color:var(--red);font-size:.6rem;font-weight:700;background:var(--red-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
 
-/* ── DEPOSIT ROWS ── */
 .dep-header{display:grid;grid-template-columns:22px 90px 1fr 70px 22px;gap:8px;padding:0 8px 6px;align-items:end}
 .dep-header span{font-size:.62rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em}
 .rows-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:340px;overflow-y:auto;padding-right:2px}
@@ -90,13 +84,10 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%
 .dep-row-bot{display:flex;align-items:center;gap:6px;padding:0 8px 7px;font-size:.68rem;color:var(--slate5);font-weight:500}
 .row-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--slate5);text-align:center;width:22px}
 .dep-ref{font-family:'JetBrains Mono',monospace;font-size:.8rem;padding:6px 8px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600}
-.dep-ref:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
 .dep-amt-wrap{position:relative}
 .dep-amt-wrap span{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.8rem;pointer-events:none;font-weight:500}
 .dep-amt{font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:6px 8px 6px 18px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600}
-.dep-amt:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
 .dep-bkt{font-size:.8rem;padding:6px 8px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600;cursor:pointer}
-.dep-bkt:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
 .del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:.85rem;border-radius:5px;transition:color .12s,background .12s;display:flex;align-items:center;justify-content:center;width:22px;height:22px;flex-shrink:0}
 .del-btn:hover{color:var(--red);background:var(--red-l)}
 .add-row-btn{width:100%;padding:8px;border:2px dashed var(--slate3);border-radius:8px;background:none;color:var(--slate5);font-size:.78rem;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
@@ -108,19 +99,16 @@ body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%
 .btn-clear{background:var(--slate2);color:var(--slate6)}
 .btn-clear:hover{background:var(--slate3);color:var(--ink)}
 
-/* TABS */
 .tabs-bar{display:flex;gap:3px;padding:4px;background:var(--slate2);border-radius:10px;margin-bottom:16px;width:fit-content}
 .tab-btn{padding:7px 18px;border-radius:7px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;color:var(--slate6);background:transparent;font-family:'Syne',sans-serif;letter-spacing:.01em}
 .tab-btn.on-ex{background:var(--ink);color:#fff;box-shadow:0 2px 6px rgba(13,27,42,.2)}
 .tab-btn.on-nw{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(15,118,110,.2)}
 .tab-btn.on-cmp{background:var(--purple);color:#fff;box-shadow:0 2px 6px rgba(109,40,217,.2)}
 
-/* OUTPUT */
 .out-panel{display:none}
 .out-panel.show{display:block;animation:up .3s ease}
 @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* DAY GRID */
 .day-grid-wrap{overflow-x:auto;margin-bottom:20px}
 table.dg{width:100%;border-collapse:collapse;font-size:.77rem;min-width:680px}
 table.dg th{padding:8px 8px;background:var(--slate1);font-weight:700;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
@@ -142,7 +130,6 @@ table.dg tr:hover td{background:var(--slate1)}
 .cell-none{color:var(--slate3)}
 .cell-pri{font-size:.58rem;font-weight:700;padding:1px 4px;border-radius:4px;background:var(--slate2);color:var(--slate6);margin-top:2px;display:inline-block}
 
-/* DAY SUMMARY */
 .day-summary{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
 .ds-col{border-radius:7px;overflow:hidden;border:1px solid var(--slate3);min-width:70px;flex:1}
 .ds-head{padding:4px 3px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;background:var(--slate1);color:var(--slate6);border-bottom:1px solid var(--slate3)}
@@ -151,7 +138,6 @@ table.dg tr:hover td{background:var(--slate1)}
 .ds-total.has-ex{color:var(--blue)}.ds-total.has-nw{color:var(--teal)}.ds-total.has-hold{color:var(--amber)}
 .ds-rows{font-size:.56rem;color:var(--slate5)}
 
-/* SPLIT DETAIL */
 .split-section{margin-bottom:20px}
 .split-title{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .split-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
@@ -160,17 +146,11 @@ table.dg tr:hover td{background:var(--slate1)}
 .sc-head.ex{background:var(--ink);color:#fff}.sc-head.nw{background:var(--teal);color:#fff}
 .sc-rows{padding:7px 11px;display:flex;flex-direction:column;gap:3px}
 .sc-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:.73rem;padding:3px 0;border-bottom:1px solid var(--slate2)}
-.sc-row:last-child{border-bottom:none}
-.sc-src{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--slate5)}
-.sc-amt{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.73rem}
-.sc-amt.rel-ex{color:var(--blue)}.sc-amt.rel-nw{color:var(--teal)}.sc-amt.nd{color:var(--orange)}
 .sc-total-row{display:flex;justify-content:space-between;padding:5px 11px;background:var(--slate1);font-size:.73rem;font-weight:700}
 
-/* COMPARE */
 table.cmp{width:100%;border-collapse:collapse;font-size:.77rem}
 table.cmp th{padding:8px 11px;background:var(--ink);color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;text-align:left;white-space:nowrap}
 table.cmp td{padding:7px 11px;border-bottom:1px solid var(--slate2);vertical-align:top}
-table.cmp tr:hover td{background:var(--slate1)}
 .diff-chip{font-size:.63rem;padding:2px 6px;border-radius:8px;font-weight:700;display:inline-block}
 .diff-same{background:var(--slate2);color:var(--slate6)}
 .diff-earlier{background:var(--green-l);color:var(--green)}
@@ -178,7 +158,6 @@ table.cmp tr:hover td{background:var(--slate1)}
 .diff-special{background:var(--red-l);color:var(--red)}
 .diff-only{background:var(--purple-l);color:var(--purple)}
 
-/* ALERTS */
 .alert{padding:9px 13px;border-radius:8px;font-size:.76rem;margin-bottom:10px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
 .alert-amber{background:var(--amber-l);border:1px solid #fcd34d;color:var(--amber)}
 .alert-blue{background:var(--blue-l);border:1px solid #93c5fd;color:var(--blue)}
@@ -190,8 +169,6 @@ table.cmp tr:hover td{background:var(--slate1)}
 .empty{text-align:center;padding:60px 20px}
 .empty-icon{font-size:2.6rem;margin-bottom:12px}
 .empty p{font-size:.83rem;line-height:1.8;color:var(--slate5)}
-
-/* Legend pills */
 .legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .leg{font-size:.63rem;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.02em}
 </style>
@@ -202,585 +179,162 @@ table.cmp tr:hover td{background:var(--slate1)}
   <div class="hdr-icon">💰</div>
   <div>
     <div class="hdr-title">Funds Availability Calculator</div>
-    <div class="hdr-sub">Configurable bucket days · Default / Extension / Tier1 / Tier2 · Next Day Release · Exclusion</div>
+    <div class="hdr-sub">Configurable bucket days · Single Global ND Release Logic</div>
   </div>
   <div class="hdr-right"><span class="badge">INTERNAL · QA USE</span></div>
 </div>
 
 <div class="wrap">
-
   <div class="sticky-left">
-
     <div class="panel">
-      <div class="panel-hd">
-        <div class="ic" style="background:#eff6ff">⚙️</div>
-        <h3>Global Configuration</h3>
-      </div>
+      <div class="panel-hd"><div class="ic" style="background:#eff6ff">⚙️</div><h3>Global Configuration</h3></div>
       <div class="panel-body">
         <div class="cfg-row">
-          <div class="field">
-            <label>Cap / Max Threshold ($)</label>
-            <div class="pfx"><span>$</span><input type="number" id="cfgMax" value="6725" min="1" step="0.01"></div>
-          </div>
-          <div class="field">
-            <label>ND Min Release ($)</label>
-            <div class="pfx"><span>$</span><input type="number" id="cfgNdMin" value="275" min="1" step="0.01" title="Amount released on Day 1 when Next Day is ON (existing account)"></div>
-          </div>
+          <div class="field"><label>Cap / Max Threshold ($)</label><div class="pfx"><span>$</span><input type="number" id="cfgMax" value="6725" min="1"></div></div>
+          <div class="field"><label>ND Min Release ($)</label><div class="pfx"><span>$</span><input type="number" id="cfgNdMin" value="100" min="1"></div></div>
         </div>
-        <div class="field">
-          <label>Account Type</label>
-          <select id="cfgAcct" onchange="renderBucketTable()">
-            <option value="existing">Existing Account Only</option>
-            <option value="new">New Account Only</option>
-          </select>
-        </div>
-        <div class="pri-note" style="margin-top:10px">
-          <strong>ND Min Release</strong> — for <em>Existing</em> accounts only. When ⚡ND is checked for a bucket, the ND Min amount is released on <strong>Day 1</strong>; the remaining (up to cap) releases on the Default day. Acts as the single "Min Partial" threshold.
-        </div>
+        <div class="field"><label>Account Type</label><select id="cfgAcct" onchange="renderBucketTable()"><option value="both">Both</option><option value="existing">Existing Only</option><option value="new">New Only</option></select></div>
+        <div class="pri-note"><strong>Single ND Rule:</strong> Only the first high-priority check with ⚡ND enabled receives the Day 1 Min release.</div>
       </div>
     </div>
-
+    <div class="panel"><div class="panel-hd"><div class="ic" style="background:#f0fdf4">🎯</div><h3>Bucket Configuration</h3></div><div class="panel-body"><div id="bucketTableWrap"></div></div></div>
     <div class="panel">
-      <div class="panel-hd">
-        <div class="ic" style="background:#f0fdf4">🎯</div>
-        <h3>Bucket Configuration</h3>
-      </div>
-      <div class="panel-body" style="padding:10px 14px">
-        <div id="bucketTableWrap"></div>
-        <div class="pri-note" style="margin-top:10px">
-          Enter release <strong>day numbers</strong> per bucket.<br>
-          <span style="color:var(--blue)">■ EX:</span> Default day (≤ cap) · Extension offset (> cap remaining)<br>
-          <span style="color:var(--teal)">■ NW:</span> Default+Tier1 day (first release) · Default+Tier2 day (remainder)<br>
-          <span style="color:var(--red)">■ Excl</span> (New) → skips Tier1, uses Default+Tier2 directly<br>
-          <span style="color:var(--orange)">■ ⚡ND</span> (Existing) → releases ND Min on Day 1, rest on Default day
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-hd">
-        <div class="ic" style="background:#fef3c7">📋</div>
-        <h3>Deposit Rows</h3>
-      </div>
+      <div class="panel-hd"><div class="ic" style="background:#fef3c7">📋</div><h3>Deposit Rows</h3></div>
       <div class="panel-body">
-        <div class="dep-header">
-          <span></span>
-          <span>Ref / Check ID</span>
-          <span>Amount</span>
-          <span>Bucket</span>
-          <span></span>
-        </div>
+        <div class="dep-header"><span></span><span>Ref ID</span><span>Amount</span><span>Bucket</span><span></span></div>
         <div class="rows-wrap" id="rowsWrap"></div>
-        <button class="add-row-btn" onclick="addRow()">＋ Add Deposit Row</button>
-        <div class="btn-row">
-          <button class="btn btn-primary" onclick="calculate()">▶ Calculate Schedule</button>
-          <button class="btn btn-clear" onclick="clearAll()">↺ Clear</button>
-        </div>
+        <button class="add-row-btn" onclick="addRow()">＋ Add Row</button>
+        <div class="btn-row"><button class="btn btn-primary" onclick="calculate()">▶ Calculate</button><button class="btn btn-clear" onclick="clearAll()">↺ Clear</button></div>
       </div>
     </div>
-
   </div>
 
   <div>
-    <div id="emptyState" class="empty">
-      <div class="empty-icon">📊</div>
-      <p>Configure bucket day values, add deposit rows,<br>then click <strong>Calculate Schedule</strong>.</p>
-    </div>
-
+    <div id="emptyState" class="empty"><div class="empty-icon">📊</div><p>Configure buckets and add rows.</p></div>
     <div class="out-panel" id="outPanel">
       <div class="tabs-bar" id="tabsBar">
         <button class="tab-btn on-ex" id="tab-ex" onclick="showTab('ex')">🏦 Existing</button>
         <button class="tab-btn" id="tab-nw" onclick="showTab('nw')">🆕 New Account</button>
         <button class="tab-btn" id="tab-cmp" onclick="showTab('cmp')">⚖️ Compare</button>
       </div>
-
       <div id="pane-ex">
-        <div class="panel" style="margin-bottom:14px">
-          <div class="panel-hd" style="background:var(--ink)">
-            <div class="ic" style="background:rgba(255,255,255,.1)">🏦</div>
-            <h3 style="color:#fff">Existing Account — Day-by-Day Release</h3>
-          </div>
-          <div class="panel-body">
-            <div class="legend">
-              <span class="leg" style="background:var(--amber-l);color:var(--amber)">● HOLD</span>
-              <span class="leg" style="background:var(--orange-l);color:var(--orange)">⚡ND Min (Day 1)</span>
-              <span class="leg" style="background:var(--blue-ll);color:var(--blue)">● Default Release</span>
-              <span class="leg" style="background:var(--blue-ll);color:var(--blue)">● Default+Ext Release</span>
-              <span class="leg" style="background:var(--purple-l);color:var(--purple)">● Remaining</span>
-            </div>
-            <div id="ex-alerts"></div>
-            <div class="day-summary" id="ex-day-summary"></div>
-            <div class="day-grid-wrap"><table class="dg" id="ex-table"><thead></thead><tbody></tbody></table></div>
-            <div class="section-divider"></div>
-            <div class="split-section">
-              <div class="split-title">💡 Split Detail by Day</div>
-              <div class="split-cards" id="ex-splits"></div>
-            </div>
-          </div>
-        </div>
+        <div class="panel"><div class="panel-hd" style="background:var(--ink)"><h3 style="color:#fff">Existing Account</h3></div><div class="panel-body"><div id="ex-alerts"></div><div class="day-summary" id="ex-day-summary"></div><div class="day-grid-wrap"><table class="dg" id="ex-table"><thead></thead><tbody></tbody></table></div><div class="split-cards" id="ex-splits"></div></div></div>
       </div>
-
       <div id="pane-nw" style="display:none">
-        <div class="panel" style="margin-bottom:14px">
-          <div class="panel-hd" style="background:var(--teal)">
-            <div class="ic" style="background:rgba(255,255,255,.1)">🆕</div>
-            <h3 style="color:#fff">New Account — Day-by-Day Release</h3>
-          </div>
-          <div class="panel-body">
-            <div class="legend">
-              <span class="leg" style="background:var(--amber-l);color:var(--amber)">● HOLD</span>
-              <span class="leg" style="background:var(--teal-l);color:var(--teal)">● Default+Tier1 (1st)</span>
-              <span class="leg" style="background:var(--teal-l);color:var(--teal)">● Default+Tier2 (Rem)</span>
-              <span class="leg" style="background:var(--red-l);color:var(--red)">● Exclusion→D+T2</span>
-              <span class="leg" style="background:var(--purple-l);color:var(--purple)">● Remaining (over cap)</span>
-            </div>
-            <div id="nw-alerts"></div>
-            <div class="day-summary" id="nw-day-summary"></div>
-            <div class="day-grid-wrap"><table class="dg" id="nw-table"><thead></thead><tbody></tbody></table></div>
-            <div class="section-divider"></div>
-            <div class="split-section">
-              <div class="split-title">💡 Split Detail by Day</div>
-              <div class="split-cards" id="nw-splits"></div>
-            </div>
-          </div>
-        </div>
+        <div class="panel"><div class="panel-hd" style="background:var(--teal)"><h3 style="color:#fff">New Account</h3></div><div class="panel-body"><div id="nw-alerts"></div><div class="day-summary" id="nw-day-summary"></div><div class="day-grid-wrap"><table class="dg" id="nw-table"><thead></thead><tbody></tbody></table></div><div class="split-cards" id="nw-splits"></div></div></div>
       </div>
-
       <div id="pane-cmp" style="display:none">
-        <div class="panel">
-          <div class="panel-hd" style="background:var(--purple)">
-            <div class="ic" style="background:rgba(255,255,255,.1)">⚖️</div>
-            <h3 style="color:#fff">Side-by-Side Comparison</h3>
-          </div>
-          <div class="panel-body" style="padding:0;overflow-x:auto">
-            <table class="cmp" id="cmp-table">
-              <thead><tr><th>Row</th><th>Bucket</th><th>Day</th><th>Existing Account</th><th>New Account</th><th>Diff</th></tr></thead>
-              <tbody id="cmp-body"></tbody>
-            </table>
-          </div>
-        </div>
+        <div class="panel"><div class="panel-hd" style="background:var(--purple)"><h3 style="color:#fff">Compare</h3></div><div class="panel-body" style="padding:0"><table class="cmp" id="cmp-table"><thead><tr><th>Row</th><th>Bucket</th><th>Day</th><th>Existing</th><th>New</th><th>Diff</th></tr></thead><tbody id="cmp-body"></tbody></table></div></div>
       </div>
-
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════
-let rowId = 0;
-let rows = [];
-let currentTab = 'ex';
-
-// Bucket definitions
+let rowId = 0, rows = [], currentTab = 'ex';
 const BUCKETS = [2,3,4,5,6,7];
-
 const BUCKET_DEFAULTS = {
-  2:{ label:'B2', note:'Cash / Next-Day',   priority:1, def:1,  ext:6,  t1:0,  t2:6,  ndOn:false, exclOn:false },
-  3:{ label:'B3', note:'Local Check',        priority:4, def:4,  ext:3,  t1:2,  t2:3,  ndOn:false, exclOn:false },
-  4:{ label:'B4', note:'Non-Local Check',    priority:5, def:2,  ext:5,  t1:0,  t2:5,  ndOn:false, exclOn:false },
-  5:{ label:'B5', note:'Teller / Govt',      priority:2, def:1,  ext:1,  t1:5,  t2:6,  ndOn:false, exclOn:false },
-  6:{ label:'B6', note:'New Acct / Special', priority:3, def:2,  ext:5,  t1:3,  t2:5,  ndOn:false, exclOn:true  },
-  7:{ label:'B7', note:'Out-of-State',       priority:6, def:3,  ext:5,  t1:0,  t2:5,  ndOn:false, exclOn:false },
+  2:{ label:'B2', priority:1, def:1, ext:6, t1:0, t2:6, ndOn:false, exclOn:false },
+  3:{ label:'B3', priority:4, def:4, ext:3, t1:2, t2:3, ndOn:false, exclOn:false },
+  4:{ label:'B4', priority:5, def:2, ext:5, t1:0, t2:5, ndOn:false, exclOn:false },
+  5:{ label:'B5', priority:2, def:1, ext:1, t1:5, t2:6, ndOn:true,  exclOn:false },
+  6:{ label:'B6', priority:3, def:2, ext:5, t1:3, t2:5, ndOn:false, exclOn:true  },
+  7:{ label:'B7', priority:6, def:3, ext:5, t1:0, t2:5, ndOn:false, exclOn:false },
 };
-
-// Live config
 let bucketCfg = {};
-BUCKETS.forEach(b => { bucketCfg[b] = { ...BUCKET_DEFAULTS[b], checked: true }; });
+BUCKETS.forEach(b => { bucketCfg[b] = { ...BUCKET_DEFAULTS[b], checked: true, note:'' }; });
 
-// ═══════════════════════════════════════════
-// BUCKET TABLE RENDER
-// ═══════════════════════════════════════════
 function renderBucketTable() {
   const acctType = document.getElementById('cfgAcct').value;
-  const showEx = acctType !== 'new';
-  const showNw = acctType !== 'existing';
-
-  let html = `<table class="bkt-table">
-    <thead>
-      <tr>
-        <th style="min-width:90px">Bucket</th>
-        <th>Pri</th>
-        ${showEx ? `<th><span class="col-ex">EX Default</span></th><th><span class="col-ex">EX +Ext</span></th>` : ''}
-        ${showNw ? `<th><span class="col-nw">NW +T1</span></th><th><span class="col-nw">NW +T2</span></th>` : ''}
-        ${showNw ? `<th><span class="col-excl">Excl</span></th>` : ''}
-        ${showEx ? `<th><span class="col-nd">⚡ND</span></th>` : ''}
-        <th>On</th>
-      </tr>
-    </thead>
-    <tbody>`;
-
+  const showEx = acctType !== 'new', showNw = acctType !== 'existing';
+  let html = `<table class="bkt-table"><thead><tr><th>Bkt</th><th>Pri</th>${showEx?'<th>EX Def</th><th>EX +Ext</th>':''}${showNw?'<th>NW +T1</th><th>NW +T2</th><th>Excl</th>':''}${showEx?'<th>⚡ND</th>':''}<th>On</th></tr></thead><tbody>`;
   BUCKETS.forEach(b => {
-    const c = bucketCfg[b];
-    const dis = c.checked ? '' : 'disabled';
-    const rowCls = c.checked ? '' : 'row-disabled';
-    html += `<tr class="${rowCls}" id="bktr-${b}">
-      <td class="bkt-cell">
-        <div class="bkt-name">${c.label}<small>${c.note}</small></div>
-      </td>
-      <td class="bkt-cell">
-        <input type="number" class="bkt-pri" value="${c.priority}" min="1" max="99" ${dis}
-          onchange="bucketCfg[${b}].priority=parseInt(this.value)||1" title="Priority (1=highest)">
-      </td>
-      ${showEx ? `
-        <td class="bkt-cell">
-          <input type="number" class="bkt-inp" value="${c.def}" min="0" max="30" ${dis}
-            onchange="bucketCfg[${b}].def=parseInt(this.value)||0" title="EX: Default release day">
-        </td>
-        <td class="bkt-cell">
-          <input type="number" class="bkt-inp" value="${c.ext}" min="0" max="30" ${dis}
-            onchange="bucketCfg[${b}].ext=parseInt(this.value)||0" title="EX: Extension offset (added to Default day)">
-        </td>` : ''}
-      ${showNw ? `
-        <td class="bkt-cell">
-          <input type="number" class="bkt-inp" value="${c.t1}" min="0" max="30" ${dis}
-            onchange="bucketCfg[${b}].t1=parseInt(this.value)||0" title="NW: Default+Tier1 day (first release)">
-        </td>
-        <td class="bkt-cell">
-          <input type="number" class="bkt-inp" value="${c.t2}" min="0" max="30" ${dis}
-            onchange="bucketCfg[${b}].t2=parseInt(this.value)||0" title="NW: Default+Tier2 day (remaining)">
-        </td>` : ''}
-      ${showNw ? `
-        <td class="bkt-cell" title="New Account Exclusion: skip Tier1, go straight to Default+Tier2">
-          <input type="checkbox" class="bkt-chk-excl" ${c.exclOn?'checked':''} ${dis}
-            onchange="bucketCfg[${b}].exclOn=this.checked">
-        </td>` : ''}
-      ${showEx ? `
-        <td class="bkt-cell" title="Next Day Release: release ND Min on Day 1, rest on Default day (Existing only)">
-          <input type="checkbox" class="bkt-chk-nd" ${c.ndOn?'checked':''} ${dis}
-            onchange="bucketCfg[${b}].ndOn=this.checked">
-        </td>` : ''}
-      <td class="bkt-cell">
-        <input type="checkbox" class="bkt-chk" ${c.checked?'checked':''}
-          onchange="onBucketToggle(${b},this.checked)">
-      </td>
+    const c = bucketCfg[b], dis = c.checked ? '' : 'disabled';
+    html += `<tr class="${c.checked?'':'row-disabled'}">
+      <td class="bkt-cell">B${b}</td>
+      <td class="bkt-cell"><input type="number" class="bkt-pri" value="${c.priority}" ${dis} onchange="bucketCfg[${b}].priority=parseInt(this.value)"></td>
+      ${showEx?`<td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.def}" ${dis} onchange="bucketCfg[${b}].def=parseInt(this.value)"></td><td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.ext}" ${dis} onchange="bucketCfg[${b}].ext=parseInt(this.value)"></td>`:''}
+      ${showNw?`<td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.t1}" ${dis} onchange="bucketCfg[${b}].t1=parseInt(this.value)"></td><td class="bkt-cell"><input type="number" class="bkt-inp" value="${c.t2}" ${dis} onchange="bucketCfg[${b}].t2=parseInt(this.value)"></td><td class="bkt-cell"><input type="checkbox" class="bkt-chk-excl" ${c.exclOn?'checked':''} ${dis} onchange="bucketCfg[${b}].exclOn=this.checked"></td>`:''}
+      ${showEx?`<td class="bkt-cell"><input type="checkbox" class="bkt-chk-nd" ${c.ndOn?'checked':''} ${dis} onchange="bucketCfg[${b}].ndOn=this.checked"></td>`:''}
+      <td class="bkt-cell"><input type="checkbox" class="bkt-chk" ${c.checked?'checked':''} onchange="onBucketToggle(${b},this.checked)"></td>
     </tr>`;
   });
-
-  html += `</tbody></table>`;
-  document.getElementById('bucketTableWrap').innerHTML = html;
+  document.getElementById('bucketTableWrap').innerHTML = html + `</tbody></table>`;
 }
 
-function onBucketToggle(b, checked) {
-  bucketCfg[b].checked = checked;
-  if (!checked) { bucketCfg[b].ndOn = false; bucketCfg[b].exclOn = false; }
-  renderBucketTable();
-}
-
-// ═══════════════════════════════════════════
-// DEPOSIT ROWS
-// ═══════════════════════════════════════════
-function addRow() {
-  rowId++;
-  rows.push({ id: rowId, ref: 'R'+String(rowId).padStart(3,'0'), amount: 0, bucket: 2 });
-  renderRows();
-}
+function onBucketToggle(b, chk) { bucketCfg[b].checked = chk; renderBucketTable(); }
+function addRow() { rowId++; rows.push({ id: rowId, ref: 'R'+String(rowId).padStart(3,'0'), amount: 0, bucket: 2 }); renderRows(); }
 function removeRow(id) { rows = rows.filter(r => r.id !== id); renderRows(); }
-function updateRow(id, field, val) {
-  const r = rows.find(x => x.id === id);
-  if (!r) return;
-  if (field === 'amount') r.amount = parseFloat(val) || 0;
-  else if (field === 'bucket') r.bucket = parseInt(val);
-  else r[field] = val;
-}
-function clearAll() {
-  rows = []; rowId = 0; renderRows();
-  document.getElementById('outPanel').classList.remove('show');
-  document.getElementById('emptyState').style.display = '';
-}
-
+function updateRow(id, f, v) { const r = rows.find(x => x.id === id); if(r) r[f] = (f==='amount'||f==='bucket')?parseFloat(v):v; }
 function renderRows() {
-  const el = document.getElementById('rowsWrap');
-  if (rows.length === 0) {
-    el.innerHTML = '<div style="text-align:center;color:var(--slate4);font-size:.8rem;padding:16px 0">No rows yet. Click Add Deposit Row.</div>';
-    return;
-  }
-  el.innerHTML = rows.map((r, i) => {
-    const cfg = bucketCfg[r.bucket];
-    const acctType = document.getElementById('cfgAcct').value;
-    const ndLabel = (acctType !== 'new' && cfg?.ndOn) ? `<span style="color:var(--orange);font-weight:700;font-size:.65rem">⚡ND</span>` : '';
-    const exclLabel = (acctType !== 'existing' && cfg?.exclOn) ? `<span style="color:var(--red);font-weight:700;font-size:.65rem">EXCL</span>` : '';
-    const tags = [ndLabel, exclLabel].filter(Boolean).join(' ');
-    return `<div class="dep-row" id="deprow-${r.id}">
-      <div class="dep-row-top">
-        <div class="row-num">${i+1}</div>
-        <input type="text" class="dep-ref" value="${r.ref}" placeholder="Ref ID"
-          onchange="updateRow(${r.id},'ref',this.value)">
-        <div class="dep-amt-wrap">
-          <span>$</span>
-          <input type="number" class="dep-amt" value="${r.amount||''}" placeholder="0.00" min="0" step="0.01"
-            onchange="updateRow(${r.id},'amount',this.value)"
-            onkeydown="if(event.key==='Enter')calculate()">
-        </div>
-        <select class="dep-bkt" onchange="updateRow(${r.id},'bucket',this.value);renderRows()">
-          ${BUCKETS.filter(b=>bucketCfg[b].checked).map(b=>`<option value="${b}" ${r.bucket==b?'selected':''}>Bucket ${b}</option>`).join('')}
-        </select>
-        <button class="del-btn" onclick="removeRow(${r.id})">✕</button>
-      </div>
-      ${tags ? `<div class="dep-row-bot">${tags}&nbsp;active for this bucket</div>` : ''}
-    </div>`;
-  }).join('');
+  document.getElementById('rowsWrap').innerHTML = rows.map((r,i) => `<div class="dep-row"><div class="dep-row-top"><div class="row-num">${i+1}</div><input type="text" class="dep-ref" value="${r.ref}" onchange="updateRow(${r.id},'ref',this.value)"><div class="dep-amt-wrap"><span>$</span><input type="number" class="dep-amt" value="${r.amount||''}" onchange="updateRow(${r.id},'amount',this.value)"></div><select class="dep-bkt" onchange="updateRow(${r.id},'bucket',this.value)">${BUCKETS.filter(b=>bucketCfg[b].checked).map(b=>`<option value="${b}" ${r.bucket==b?'selected':''}>B${b}</option>`).join('')}</select><button class="del-btn" onclick="removeRow(${r.id})">✕</button></div></div>`).join('');
 }
+function clearAll() { rows = []; rowId = 0; renderRows(); document.getElementById('outPanel').classList.remove('show'); document.getElementById('emptyState').style.display = ''; }
 
-// ═══════════════════════════════════════════
-// BUSINESS LOGIC
-// ═══════════════════════════════════════════
-
-function getSortedRows() {
-  const checked = BUCKETS.filter(b => bucketCfg[b].checked);
-  return rows.filter(r => r.amount > 0 && checked.includes(r.bucket))
-    .map((r, i) => ({...r, _idx: i}))
-    .sort((a, b) => {
-      const pa = bucketCfg[a.bucket].priority;
-      const pb = bucketCfg[b.bucket].priority;
-      return pa !== pb ? pa - pb : a._idx - b._idx;
-    });
+function calculate() {
+  const sorted = rows.filter(r => r.amount > 0).map((r,i)=>({...r,_idx:i})).sort((a,b)=>{const pa=bucketCfg[a.bucket].priority, pb=bucketCfg[b.bucket].priority; return pa!==pb?pa-pb:a._idx-b._idx;});
+  const ex = buildSchedules(sorted, 'existing'), nw = buildSchedules(sorted, 'new');
+  renderTable(ex, 'existing'); renderTable(nw, 'new'); renderCompare(ex, nw);
+  document.getElementById('outPanel').classList.add('show'); document.getElementById('emptyState').style.display = 'none';
 }
 
 function buildSchedules(sortedRows, mode) {
-  const cap = parseFloat(document.getElementById('cfgMax').value) || 6725;
-  const ndMin = parseFloat(document.getElementById('cfgNdMin').value) || 275;
-  let capRemaining = cap;
-
+  const cap = parseFloat(document.getElementById('cfgMax').value)||6725, ndMin = parseFloat(document.getElementById('cfgNdMin').value)||100;
+  let remCap = cap, ndUsed = false;
   return sortedRows.map(row => {
-    const { amount, bucket } = row;
-    const cfg = bucketCfg[bucket];
-    const s = [{ day:0, action:'hold', amount }];
-    let capUsed = 0;
-    let localCap = capRemaining;
-
+    const cfg = bucketCfg[row.bucket], s = [{day:0, action:'hold', amount:row.amount}];
+    let capUsed = 0, locCap = remCap;
     if (mode === 'existing') {
-      // ── EXISTING ACCOUNT ──
-      const extDay = cfg.def + cfg.ext; // Def + Ext added together
-
-      if (cfg.ndOn) {
-        // Day 1: release ND Min
-        const ndRel = Math.min(ndMin, amount, localCap);
-        if (ndRel > 0) {
-          s.push({ day:1, action:'nd', amount: ndRel, note:`⚡ND Min $${fmt(ndRel)}` });
-          capUsed += ndRel;
-        }
-        // Default day: rest up to cap
-        const capAfterNd = localCap - capUsed;
-        const remAmt = amount - ndRel;
-        if (remAmt > 0 && capAfterNd > 0) {
-          const rel = Math.min(remAmt, capAfterNd);
-          s.push({ day: cfg.def, action:'release', amount: rel, note: `Default D${cfg.def}${rel < remAmt ? ' (cap)' : ''}` });
-          capUsed += rel;
-          const leftover = remAmt - rel;
-          if (leftover > 0) s.push({ day: extDay, action:'remaining', amount: leftover, note:`Ext D${extDay} (over cap)` });
-        } else if (remAmt > 0) {
-          s.push({ day: extDay, action:'remaining', amount: remAmt, note:`Ext D${extDay} (cap exhausted)` });
-        }
+      const extDay = cfg.def + cfg.ext;
+      if (cfg.ndOn && !ndUsed && locCap > 0) {
+        const ndRel = Math.min(ndMin, row.amount, locCap);
+        s.push({ day:1, action:'nd', amount:ndRel, note:'⚡ND Min' });
+        capUsed += ndRel; ndUsed = true;
+        const left = row.amount - ndRel, capAfter = locCap - capUsed;
+        if (left > 0 && capAfter > 0) {
+          const rel = Math.min(left, capAfter); s.push({day:cfg.def, action:'release', amount:rel, note:'Default'});
+          capUsed += rel; if (left-rel > 0) s.push({day:extDay, action:'remaining', amount:left-rel, note:'Ext'});
+        } else if (left > 0) s.push({day:extDay, action:'remaining', amount:left, note:'Ext'});
       } else {
-        if (amount <= localCap) {
-          s.push({ day: cfg.def, action:'release', amount, note:`Default D${cfg.def}` });
-          capUsed = amount;
-        } else {
-          if (localCap > 0) {
-            s.push({ day: cfg.def, action:'release', amount: localCap, note:`Default D${cfg.def} (≤ cap)` });
-            capUsed = localCap;
-          }
-          const leftover = amount - localCap;
-          s.push({ day: extDay, action:'remaining', amount: leftover, note:`Ext D${extDay} (> cap remaining)` });
-        }
+        if (row.amount <= locCap) { s.push({day:cfg.def, action:'release', amount:row.amount, note:'Default'}); capUsed = row.amount; }
+        else { if(locCap>0) s.push({day:cfg.def, action:'release', amount:locCap, note:'Default'}); capUsed=locCap; s.push({day:extDay, action:'remaining', amount:row.amount-locCap, note:'Ext'}); }
       }
-
     } else {
-      // ── NEW ACCOUNT ──
-      if (cfg.exclOn) {
-        const exclDay = cfg.def + cfg.t2;
-        s.push({ day: exclDay, action:'exclusion', amount, note:`Excl → D${cfg.def}+T2=D${exclDay}` });
-        capUsed = 0;
-      } else {
-        const t1Day = cfg.def + cfg.t1;
-        const t2Day = cfg.def + cfg.t2;
-        if (localCap > 0) {
-          const rel = Math.min(amount, localCap);
-          s.push({ day: t1Day, action:'release', amount: rel, note:`D+T1 = D${t1Day}` });
-          capUsed += rel;
-          const rem = amount - rel;
-          if (rem > 0) s.push({ day: t2Day, action:'remaining', amount: rem, note:`D+T2 = D${t2Day} (remainder)` });
-        } else {
-          s.push({ day: t2Day, action:'remaining', amount, note:`D+T2 = D${t2Day} (cap exhausted)` });
-        }
-      }
+      const t1D = cfg.def+cfg.t1, t2D = cfg.def+cfg.t2;
+      if (cfg.exclOn) s.push({day:t2D, action:'exclusion', amount:row.amount});
+      else if (locCap > 0) { const rel = Math.min(row.amount, locCap); s.push({day:t1D, action:'release', amount:rel}); capUsed=rel; if (row.amount-rel > 0) s.push({day:t2D, action:'remaining', amount:row.amount-rel}); }
+      else s.push({day:t2D, action:'remaining', amount:row.amount});
     }
-
-    capRemaining = Math.max(0, capRemaining - capUsed);
-    return { ...row, schedule: s, _capUsed: capUsed, _capAfter: capRemaining };
+    remCap = Math.max(0, remCap - capUsed);
+    return { ...row, schedule: s };
   });
-}
-
-// ═══════════════════════════════════════════
-// UI CORE
-// ═══════════════════════════════════════════
-function calculate() {
-  if (rows.length === 0) { alert('Please add at least one deposit row.'); return; }
-  const validRows = rows.filter(r => r.amount > 0);
-  if (validRows.length === 0) { alert('Please enter amounts.'); return; }
-
-  const acctType = document.getElementById('cfgAcct').value;
-  const sortedRows = getSortedRows();
-
-  const exData = buildSchedules(sortedRows, 'existing');
-  const nwData = buildSchedules(sortedRows, 'new');
-
-  document.getElementById('tab-ex').style.display = acctType === 'new' ? 'none' : '';
-  document.getElementById('tab-nw').style.display = acctType === 'existing' ? 'none' : '';
-  if (acctType === 'existing') currentTab = 'ex';
-  if (acctType === 'new') currentTab = 'nw';
-
-  if (acctType !== 'new') renderTable(exData, 'existing');
-  if (acctType !== 'existing') renderTable(nwData, 'new');
-  renderCompare(exData, nwData, acctType);
-
-  document.getElementById('outPanel').classList.add('show');
-  document.getElementById('emptyState').style.display = 'none';
-  showTab(currentTab);
-}
-
-function getAllDays(data) {
-  const days = new Set();
-  data.forEach(r => r.schedule.forEach(s => days.add(s.day)));
-  return [...days].sort((a,b) => a-b);
 }
 
 function renderTable(data, type) {
-  const prefix = type === 'existing' ? 'ex' : 'nw';
-  const cap = parseFloat(document.getElementById('cfgMax').value) || 6725;
-  const days = getAllDays(data);
-
-  const alertEl = document.getElementById(prefix+'-alerts');
-  const totalAmt = data.reduce((s,r)=>s+r.amount,0);
-  let alerts = `<div class="alert alert-blue">ℹ️ <span><strong>${data.length} check(s) · Total $${fmt(totalAmt)}</strong> · Account cap $${fmt(cap)} shared in priority order.</span></div>`;
-
-  data.forEach(r => {
-    const capUsed = r._capUsed ?? 0;
-    const capAfter = r._capAfter ?? 0;
-    const ndEntry = r.schedule.find(s => s.action === 'nd');
-    const exclEntry = r.schedule.find(s => s.action === 'exclusion');
-    if (exclEntry) {
-      alerts += `<div class="alert alert-red">🚫 <span><strong>${r.ref} · B${r.bucket} (Excl):</strong> $${fmt(r.amount)} → D${exclEntry.day} (Excl, no cap).</span></div>`;
-    } else if (ndEntry) {
-      alerts += `<div class="alert alert-amber">⚡ <span><strong>${r.ref} · B${r.bucket} (ND):</strong> $${fmt(ndEntry.amount)} on Day 1 · $${fmt(r.amount - ndEntry.amount)} on Default day. Cap left: $${fmt(capAfter)}.</span></div>`;
-    } else if (capUsed < r.amount) {
-      alerts += `<div class="alert alert-amber">⚠️ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} — $${fmt(capUsed)} released (cap), $${fmt(r.amount-capUsed)} to extension/Tier2 day. Cap left: $${fmt(capAfter)}.</span></div>`;
-    } else {
-      alerts += `<div class="alert alert-green">✅ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} fully within cap. Cap left: $${fmt(capAfter)}.</span></div>`;
-    }
-  });
-  alertEl.innerHTML = alerts;
-
-  const dsEl = document.getElementById(prefix+'-day-summary');
-  dsEl.innerHTML = days.map(d => {
-    let total = 0, refs = [];
-    data.forEach(r => {
-      const e = r.schedule.find(s => s.day === d);
-      if (e && e.action !== 'none') { total += e.amount; refs.push(r.ref); }
-    });
-    const hasHold = data.some(r => { const e = r.schedule.find(s=>s.day===d); return e?.action==='hold'; });
-    const cls = hasHold ? 'has-hold' : total > 0 ? (type==='existing'?'has-ex':'has-nw') : '';
-    return `<div class="ds-col">
-      <div class="ds-head">D${d}</div>
-      <div class="ds-body">
-        ${total > 0 ? `<div class="ds-total ${cls}">$${fmtShort(total)}</div><div class="ds-rows">${refs.join(', ')}</div>` : '<div style="color:var(--slate3);font-size:.75rem">—</div>'}
-      </div>
-    </div>`;
-  }).join('');
-
+  const prefix = type === 'existing' ? 'ex' : 'nw', days = [...new Set(data.flatMap(r=>r.schedule.map(s=>s.day)))].sort((a,b)=>a-b);
   const tbl = document.getElementById(prefix+'-table');
-  const thead = tbl.querySelector('thead');
-  const tbody = tbl.querySelector('tbody');
-  thead.innerHTML = `<tr><th class="rh">Row / Bucket</th><th class="rh" style="background:var(--slate6)">Priority</th>${days.map(d=>`<th>Day ${d}</th>`).join('')}</tr>`;
-
-  tbody.innerHTML = data.map(r => {
-    const cfg = bucketCfg[r.bucket];
+  tbl.querySelector('thead').innerHTML = `<tr><th class="rh">Row</th>${days.map(d=>`<th>Day ${d}</th>`).join('')}</tr>`;
+  tbl.querySelector('tbody').innerHTML = data.map(r => {
     const cells = days.map(d => {
-      const e = r.schedule.find(s => s.day === d);
-      if (!e || e.action === 'none') return `<td><span class="cell-none">—</span></td>`;
-      let cls='', label='';
-      if (e.action==='hold') { cls='cell-hold'; label='HOLD'; }
-      else if (e.action==='nd') { cls='cell-nd'; label=`$${fmt(e.amount)}`; }
-      else if (e.action==='release') { cls=`cell-rel-${type==='existing'?'ex':'nw'}`; label=`$${fmt(e.amount)}`; }
-      else if (e.action==='remaining') { cls='cell-rem'; label=`$${fmt(e.amount)}`; }
-      else if (e.action==='exclusion') { cls='cell-excl'; label=`$${fmt(e.amount)}`; }
-      return `<td><span class="cell-amt ${cls}">${label}</span>${e.note ? `<div class="cell-src">${e.note}</div>` : ''}<div class="cell-src">${r.ref}</div></td>`;
+      const e = r.schedule.find(s=>s.day===d);
+      return e ? `<td><span class="cell-amt ${e.action==='hold'?'cell-hold':(e.action==='nd'?'cell-nd':(type==='existing'?'cell-rel-ex':'cell-rel-nw'))}">$${fmt(e.amount)}</span><div class="cell-src">${e.note||''}</div></td>` : `<td>—</td>`;
     }).join('');
-    return `<tr><td><div class="td-bucket">B${r.bucket}</div><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--slate5)">${r.ref}</div><span class="td-acct ${type==='existing'?'ex':'nw'}">${type==='existing'?'EX':'NW'}</span></td><td><div class="cell-pri">P${cfg.priority}</div><div style="font-size:.6rem;color:var(--slate5);margin-top:2px">$${fmt(r.amount)}</div></td>${cells}</tr>`;
+    return `<tr><td>B${r.bucket}<br><small>${r.ref}</small></td>${cells}</tr>`;
   }).join('');
-
-  const splitsEl = document.getElementById(prefix+'-splits');
-  let splitsHtml = '';
-  days.forEach(d => {
-    const entries = [];
-    data.forEach(r => {
-      const e = r.schedule.find(s => s.day === d);
-      if (e && !['none','hold'].includes(e.action)) entries.push({...e, ref:r.ref, bucket:r.bucket});
-    });
-    if (!entries.length) return;
-    const total = entries.reduce((a,c)=>a+c.amount,0);
-    splitsHtml += `<div class="split-card">
-      <div class="sc-head ${type==='existing'?'ex':'nw'}">Day ${d} <span style="font-size:.62rem;opacity:.75">${entries.length} item${entries.length>1?'s':''}</span></div>
-      <div class="sc-rows">${entries.map(e=>{
-          const amtCls = e.action==='nd'?'nd':(type==='existing'?'rel-ex':'rel-nw');
-          return `<div class="sc-row"><div><span class="sc-src">${e.ref} · B${e.bucket}</span><div style="font-size:.58rem;color:var(--slate4)">${e.note||''}</div></div><span class="sc-amt ${amtCls}">$${fmt(e.amount)}</span></div>`;
-        }).join('')}</div>
-      <div class="sc-total-row"><span>Day ${d} Total</span><span style="font-family:'JetBrains Mono',monospace;color:${type==='existing'?'var(--blue)':'var(--teal)'}">$${fmt(total)}</span></div>
-    </div>`;
-  });
-  splitsEl.innerHTML = splitsHtml || '<div style="color:var(--slate4);font-size:.8rem">No release events.</div>';
 }
 
-function renderCompare(exData, nwData, acctType) {
-  if (acctType !== 'both') { document.getElementById('tab-cmp').style.display='none'; return; }
-  document.getElementById('tab-cmp').style.display='';
-  const days = [...new Set([...exData, ...nwData].flatMap(r=>r.schedule.map(s=>s.day)))].sort((a,b)=>a-b);
-  const tbody = document.getElementById('cmp-body');
-  let html = '';
-  exData.forEach((exRow,i) => {
-    const nwRow = nwData[i];
-    days.forEach(d => {
-      const ex = exRow.schedule.find(s=>s.day===d);
-      const nw = nwRow?.schedule.find(s=>s.day===d);
-      const exA = ex?.action||'none', nwA = nw?.action||'none';
-      if (exA==='none' && nwA==='none') return;
-      const exTxt = exA==='none'?'—':exA==='hold'?`HOLD $${fmt(ex.amount)}`:`$${fmt(ex.amount)} ${ex.note||''}`;
-      const nwTxt = nwA==='none'?'—':nwA==='hold'?`HOLD $${fmt(nw.amount)}`:`$${fmt(nw.amount)} ${nw.note||''}`;
-      let label='Same', cls='diff-same';
-      if (exA!=='none'&&nwA==='none'){label='Ex Only';cls='diff-only';}
-      else if (exA==='none'&&nwA!=='none'){label='NW Only';cls='diff-only';}
-      else if (nwA==='exclusion'){label='Excl';cls='diff-special';}
-      else if (exA===nwA&&Math.abs((ex?.amount||0)-(nw?.amount||0))<.01){label='Same';cls='diff-same';}
-      else if ((ex?.amount||0)>(nw?.amount||0)){label='Ex > NW';cls='diff-later';}
-      else{label='NW > Ex';cls='diff-earlier';}
-      html+=`<tr><td style="font-family:'JetBrains Mono',monospace;font-size:.74rem">${exRow.ref}</td><td style="font-weight:700;font-family:'JetBrains Mono',monospace">B${exRow.bucket}</td><td style="color:var(--slate5);font-size:.74rem">D${d}</td><td style="color:var(--blue);font-size:.76rem">${exTxt}</td><td style="color:var(--teal);font-size:.76rem">${nwTxt}</td><td><span class="diff-chip ${cls}">${label}</span></td></tr>`;
-    });
-  });
-  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--slate4);padding:20px">No data</td></tr>';
+function renderCompare(ex, nw) {
+  const days = [...new Set([...ex,...nw].flatMap(r=>r.schedule.map(s=>s.day)))].sort((a,b)=>a-b);
+  document.getElementById('cmp-body').innerHTML = ex.map((r,i) => days.map(d => {
+    const e = r.schedule.find(s=>s.day===d), n = nw[i].schedule.find(s=>s.day===d);
+    if (!e && !n) return '';
+    return `<tr><td>${r.ref}</td><td>B${r.bucket}</td><td>D${d}</td><td>${e?fmt(e.amount):'—'}</td><td>${n?fmt(n.amount):'—'}</td><td>${(e?.amount===n?.amount)?'Same':'Diff'}</td></tr>`;
+  }).join('')).join('');
 }
 
-function showTab(tab) {
-  currentTab = tab;
-  ['ex','nw','cmp'].forEach(t => {
-    const el = document.getElementById('pane-'+t);
-    if (el) el.style.display = t===tab?'block':'none';
-    const btn = document.getElementById('tab-'+t);
-    if (btn) btn.className = 'tab-btn'+(t===tab?` on-${t}`:'');
-  });
-}
-
-function fmt(n){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function fmtShort(n){return n>=1000?(n/1000).toFixed(1)+'k':Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}
-
-// Boot
-renderBucketTable();
-addRow(); addRow(); addRow();
-rows[0].amount = 5000; rows[0].bucket = 2; rows[0].ref = 'R001';
-rows[1].amount = 8500; rows[1].bucket = 4; rows[1].ref = 'R002';
-rows[2].amount = 6725; rows[2].bucket = 6; rows[2].ref = 'R003';
-renderRows();
+function showTab(t) { currentTab = t; ['ex','nw','cmp'].forEach(p => { document.getElementById('pane-'+p).style.display = p===t?'block':'none'; document.getElementById('tab-'+p).className = 'tab-btn'+(p===t?` on-${p}`:''); }); }
+function fmt(n) { return Number(n).toLocaleString('en-US',{minimumFractionDigits:2}); }
+renderBucketTable(); addRow(); addRow(); rows[0].amount=5000; rows[1].amount=2000; renderRows();
 </script>
 </body>
 </html>
