@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funds Availability — Advanced Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d1b2a;
+  --ink2: #1e3a5f;
+  --blue: #1d4ed8;
+  --blue-l: #dbeafe;
+  --blue-ll: #eff6ff;
+  --teal: #0f766e;
+  --teal-l: #ccfbf1;
+  --amber: #b45309;
+  --amber-l: #fef3c7;
+  --red: #b91c1c;
+  --red-l: #fee2e2;
+  --slate1: #f8fafc;
+  --slate2: #f1f5f9;
+  --slate3: #e2e8f0;
+  --slate4: #cbd5e1;
+  --slate5: #94a3b8;
+  --slate6: #64748b;
+  --slate7: #475569;
+  --white: #fff;
+  --green: #166534;
+  --green-l: #dcfce7;
+  --purple: #6d28d9;
+  --purple-l: #ede9fe;
+  --shadow: 0 1px 3px rgba(13,27,42,.08), 0 4px 16px rgba(13,27,42,.06);
+  --shadow-lg: 0 8px 32px rgba(13,27,42,.12);
+  --r: 12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%,#f0f4fb 100%);min-height:100vh;color:var(--ink)}
+
+/* ── HEADER ── */
+.hdr{background:var(--ink);padding:22px 36px 20px;display:flex;align-items:center;gap:18px}
+.hdr-icon{width:44px;height:44px;background:linear-gradient(135deg,#1d4ed8,#0f766e);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.hdr-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
+.hdr-sub{font-size:0.78rem;color:#64748b;margin-top:2px}
+.hdr-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.badge{font-family:'JetBrains Mono',monospace;font-size:0.65rem;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:#94a3b8;letter-spacing:.04em}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1340px;margin:0 auto;padding:28px 20px 60px;display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+@media(max-width:960px){.wrap{grid-template-columns:1fr}}
+
+/* ── PANELS ── */
+.panel{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.panel-hd{padding:14px 20px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px}
+.panel-hd h3{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.01em;color:var(--ink)}
+.panel-hd .ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.panel-body{padding:18px 20px}
+
+/* ── CONFIG SECTION ── */
+.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:.7rem;font-weight:600;color:var(--slate6);letter-spacing:.06em;text-transform:uppercase}
+.field input,.field select{font-family:'Inter',sans-serif;font-size:.88rem;padding:8px 11px;border:1.5px solid var(--slate3);border-radius:8px;color:var(--ink);background:var(--slate1);outline:none;transition:border-color .18s,box-shadow .18s;font-weight:500}
+.field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,.1);background:#fff}
+.pfx{position:relative}.pfx span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.85rem;pointer-events:none}
+.pfx input{padding-left:22px}
+
+/* ── BUCKET PRIORITY ── */
+.bucket-priority-grid{display:flex;flex-direction:column;gap:6px}
+.bp-row{display:grid;grid-template-columns:24px 1fr 80px 40px;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;background:var(--slate1);border:1.5px solid var(--slate3);transition:border-color .15s}
+.bp-row:has(input[type=checkbox]:checked){background:var(--blue-ll);border-color:#93c5fd}
+.bp-row .chk{accent-color:var(--blue);width:15px;height:15px;cursor:pointer}
+.bp-label{font-size:.82rem;font-weight:600;color:var(--ink)}
+.bp-label small{font-weight:400;font-size:.7rem;color:var(--slate5);display:block;line-height:1.2}
+.bp-pri{font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:5px 8px;border:1.5px solid var(--slate3);border-radius:6px;color:var(--ink);background:var(--white);outline:none;width:100%;text-align:center;-moz-appearance:textfield}
+.bp-pri::-webkit-inner-spin-button,.bp-pri::-webkit-outer-spin-button{-webkit-appearance:none}
+.bp-pri:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
+.bp-pri:disabled{background:var(--slate2);color:var(--slate4)}
+.acct-tag{font-size:.62rem;padding:2px 6px;border-radius:10px;font-weight:700;letter-spacing:.03em}
+.acct-tag.ex{background:var(--ink2);color:#fff}
+.acct-tag.nw{background:var(--teal);color:#fff}
+
+/* ── ROWS ── */
+.rows-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:320px;overflow-y:auto;padding-right:2px}
+.dep-row{display:grid;grid-template-columns:28px 1fr 1fr 1fr 28px;gap:8px;align-items:center;padding:8px 10px;border-radius:8px;border:1.5px solid var(--slate3);background:var(--slate1);transition:border-color .15s}
+.dep-row:hover{border-color:var(--slate4)}
+.row-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--slate5);text-align:center}
+.dep-row input,.dep-row select{font-family:'Inter',sans-serif;font-size:.82rem;padding:6px 9px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:500}
+.dep-row input:focus,.dep-row select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:.9rem;padding:2px;border-radius:5px;transition:color .15s,background .15s;display:flex;align-items:center;justify-content:center}
+.del-btn:hover{color:var(--red);background:var(--red-l)}
+.add-row-btn{width:100%;padding:8px;border:2px dashed var(--slate3);border-radius:8px;background:none;color:var(--slate5);font-size:.8rem;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.add-row-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-ll)}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:8px;margin-top:14px}
+.btn{padding:9px 20px;border-radius:8px;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;letter-spacing:.01em}
+.btn-primary{background:var(--ink);color:#fff;flex:1;box-shadow:0 2px 8px rgba(13,27,42,.2)}
+.btn-primary:hover{background:var(--blue);box-shadow:0 4px 14px rgba(29,78,216,.25);transform:translateY(-1px)}
+.btn-clear{background:var(--slate2);color:var(--slate6)}
+.btn-clear:hover{background:var(--slate3);color:var(--ink)}
+
+/* ── TABS ── */
+.tabs-bar{display:flex;gap:3px;padding:4px;background:var(--slate2);border-radius:10px;margin-bottom:16px;width:fit-content}
+.tab-btn{padding:7px 18px;border-radius:7px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;color:var(--slate6);background:transparent;font-family:'Syne',sans-serif;letter-spacing:.01em}
+.tab-btn.on-ex{background:var(--ink);color:#fff;box-shadow:0 2px 6px rgba(13,27,42,.2)}
+.tab-btn.on-nw{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(15,118,110,.2)}
+.tab-btn.on-cmp{background:var(--purple);color:#fff;box-shadow:0 2px 6px rgba(109,40,217,.2)}
+
+/* ── OUTPUT ── */
+.out-panel{display:none}
+.out-panel.show{display:block;animation:up .3s ease}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── DAY GRID TABLE ── */
+.day-grid-wrap{overflow-x:auto;margin-bottom:20px}
+table.dg{width:100%;border-collapse:collapse;font-size:.78rem;min-width:700px}
+table.dg th{padding:9px 10px;background:var(--slate1);font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
+table.dg th.rh{text-align:left;background:var(--ink);color:#fff;min-width:90px}
+table.dg td{padding:7px 8px;border-bottom:1px solid var(--slate2);text-align:center;vertical-align:top;min-width:80px}
+table.dg tr:hover td{background:var(--slate1)}
+.td-row-id{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--slate6);text-align:left;padding-left:10px}
+.td-bucket{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink)}
+.td-acct{font-size:.62rem;padding:1px 6px;border-radius:10px;font-weight:700;display:inline-block;margin-top:1px}
+.td-acct.ex{background:var(--blue-l);color:var(--blue)}
+.td-acct.nw{background:var(--teal-l);color:var(--teal)}
+.cell-amt{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;line-height:1.3}
+.cell-src{font-size:.62rem;color:var(--slate5);margin-top:1px}
+.cell-hold{color:var(--amber);font-weight:700}
+.cell-rel-ex{color:var(--blue)}
+.cell-rel-nw{color:var(--teal)}
+.cell-rem{color:var(--purple)}
+.cell-excl{color:var(--red)}
+.cell-none{color:var(--slate3)}
+.cell-pri{font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--slate2);color:var(--slate6);margin-top:2px;display:inline-block}
+
+/* ── DAY SUMMARY BAR ── */
+.day-summary{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-bottom:20px}
+.ds-col{border-radius:8px;overflow:hidden;border:1px solid var(--slate3)}
+.ds-head{padding:5px 4px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;background:var(--slate1);color:var(--slate6);border-bottom:1px solid var(--slate3)}
+.ds-body{padding:6px 4px;text-align:center;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ds-total{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700}
+.ds-total.has-ex{color:var(--blue)}
+.ds-total.has-nw{color:var(--teal)}
+.ds-total.has-hold{color:var(--amber)}
+.ds-rows{font-size:.58rem;color:var(--slate5)}
+
+/* ── SPLIT DETAIL ── */
+.split-section{margin-bottom:20px}
+.split-title{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.split-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.split-card{border-radius:10px;border:1px solid var(--slate3);overflow:hidden}
+.sc-head{padding:8px 12px;font-size:.72rem;font-weight:700;letter-spacing:.03em;display:flex;align-items:center;justify-content:space-between}
+.sc-head.ex{background:var(--ink);color:#fff}
+.sc-head.nw{background:var(--teal);color:#fff}
+.sc-rows{padding:8px 12px;display:flex;flex-direction:column;gap:4px}
+.sc-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;padding:3px 0;border-bottom:1px solid var(--slate2)}
+.sc-row:last-child{border-bottom:none}
+.sc-src{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--slate5)}
+.sc-amt{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.75rem}
+.sc-amt.rel-ex{color:var(--blue)}
+.sc-amt.rel-nw{color:var(--teal)}
+.sc-total-row{display:flex;justify-content:space-between;padding:6px 12px;background:var(--slate1);font-size:.75rem;font-weight:700}
+
+/* ── COMPARE TABLE ── */
+table.cmp{width:100%;border-collapse:collapse;font-size:.78rem}
+table.cmp th{padding:9px 12px;background:var(--ink);color:#fff;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:left;white-space:nowrap}
+table.cmp td{padding:8px 12px;border-bottom:1px solid var(--slate2);vertical-align:top}
+table.cmp tr:hover td{background:var(--slate1)}
+.diff-chip{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:700;display:inline-block}
+.diff-same{background:var(--slate2);color:var(--slate6)}
+.diff-earlier{background:var(--green-l);color:var(--green)}
+.diff-later{background:var(--amber-l);color:var(--amber)}
+.diff-special{background:var(--red-l);color:var(--red)}
+.diff-only{background:var(--purple-l);color:var(--purple)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:60px 20px;color:var(--slate4)}
+.empty-icon{font-size:2.8rem;margin-bottom:12px}
+.empty p{font-size:.85rem;line-height:1.7;color:var(--slate5)}
+
+/* ── ALERTS ── */
+.alert{padding:10px 14px;border-radius:8px;font-size:.78rem;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+.alert-amber{background:var(--amber-l);border:1px solid #fcd34d;color:var(--amber)}
+.alert-blue{background:var(--blue-l);border:1px solid #93c5fd;color:var(--blue)}
+.alert-red{background:var(--red-l);border:1px solid #fca5a5;color:var(--red)}
+.alert-green{background:var(--green-l);border:1px solid #86efac;color:var(--green)}
+
+/* ── PRIORITY NOTE ── */
+.pri-note{font-size:.7rem;color:var(--slate5);margin-top:8px;line-height:1.5;padding:8px 10px;background:var(--slate1);border-radius:7px;border:1px solid var(--slate3)}
+
+.section-divider{height:1px;background:var(--slate3);margin:18px 0}
+.sticky-left{position:sticky;top:20px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-icon">💰</div>
+  <div>
+    <div class="hdr-title">Funds Availability Calculator</div>
+    <div class="hdr-sub">Multi-row · Configurable thresholds · Priority buckets · Row-level split tracing</div>
+  </div>
+  <div class="hdr-right">
+    <span class="badge">INTERNAL · QA USE</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ══ LEFT PANEL ══ -->
+  <div class="sticky-left" style="display:flex;flex-direction:column;gap:16px;">
+
+    <!-- Config -->
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="ic" style="background:#eff6ff">⚙️</div>
+        <h3>Configuration</h3>
+      </div>
+      <div class="panel-body">
+        <div class="config-grid">
+          <div class="field">
+            <label>Min Partial ($)</label>
+            <div class="pfx"><span>$</span><input type="number" id="cfgMin" value="275" min="1" step="0.01"></div>
+          </div>
+          <div class="field">
+            <label>Max Threshold ($)</label>
+            <div class="pfx"><span>$</span><input type="number" id="cfgMax" value="6725" min="1" step="0.01"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Account Type</label>
+          <select id="cfgAcct">
+            <option value="both">Both (Existing + New)</option>
+            <option value="existing">Existing Account Only</option>
+            <option value="new">New Account Only</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bucket Priority -->
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="ic" style="background:#f0fdf4">🎯</div>
+        <h3>Bucket Priority</h3>
+      </div>
+      <div class="panel-body">
+        <div class="bucket-priority-grid" id="bucketPriorityGrid"></div>
+        <div class="pri-note">
+          ✔ Check to include bucket. Set priority (1 = highest). Same priority → <strong>first-come-first-serve</strong> by row order.
+        </div>
+      </div>
+    </div>
+
+    <!-- Deposit Rows -->
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="ic" style="background:#fef3c7">📋</div>
+        <h3>Deposit Rows</h3>
+      </div>
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:28px 1fr 1fr 1fr 28px;gap:8px;margin-bottom:6px;padding:0 10px;">
+          <div></div>
+          <div style="font-size:.65rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em">Ref / ID</div>
+          <div style="font-size:.65rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em">Amount</div>
+          <div style="font-size:.65rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em">Bucket</div>
+          <div></div>
+        </div>
+        <div class="rows-wrap" id="rowsWrap"></div>
+        <button class="add-row-btn" onclick="addRow()">＋ Add Row</button>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="calculate()">▶ Calculate</button>
+          <button class="btn btn-clear" onclick="clearAll()">↺ Clear</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ RIGHT PANEL ══ -->
+  <div>
+    <div id="emptyState" class="empty">
+      <div class="empty-icon">📊</div>
+      <p>Add deposit rows, configure bucket priorities,<br>and click <strong>Calculate</strong> to see the full<br>day-by-day funds release schedule.</p>
+    </div>
+
+    <div class="out-panel" id="outPanel">
+
+      <!-- Tabs -->
+      <div class="tabs-bar" id="tabsBar">
+        <button class="tab-btn on-ex" id="tab-ex" onclick="showTab('ex')">🏦 Existing</button>
+        <button class="tab-btn" id="tab-nw" onclick="showTab('nw')">🆕 New Account</button>
+        <button class="tab-btn" id="tab-cmp" onclick="showTab('cmp')">⚖️ Compare</button>
+      </div>
+
+      <!-- EXISTING TAB -->
+      <div id="pane-ex">
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-hd" style="background:var(--ink)">
+            <div class="ic" style="background:rgba(255,255,255,.1)">🏦</div>
+            <h3 style="color:#fff">Existing Account — Day-by-Day Release</h3>
+          </div>
+          <div class="panel-body">
+            <div id="ex-alerts"></div>
+            <div class="day-summary" id="ex-day-summary"></div>
+            <div class="day-grid-wrap"><table class="dg" id="ex-table"><thead></thead><tbody></tbody></table></div>
+            <div class="section-divider"></div>
+            <div class="split-section">
+              <div class="split-title">💡 Split Detail by Day <span style="font-size:.7rem;font-weight:400;color:var(--slate5)">— which row contributes what amount on each day</span></div>
+              <div class="split-cards" id="ex-splits"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW ACCOUNT TAB -->
+      <div id="pane-nw" style="display:none">
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-hd" style="background:var(--teal)">
+            <div class="ic" style="background:rgba(255,255,255,.1)">🆕</div>
+            <h3 style="color:#fff">New Account — Day-by-Day Release</h3>
+          </div>
+          <div class="panel-body">
+            <div id="nw-alerts"></div>
+            <div class="day-summary" id="nw-day-summary"></div>
+            <div class="day-grid-wrap"><table class="dg" id="nw-table"><thead></thead><tbody></tbody></table></div>
+            <div class="section-divider"></div>
+            <div class="split-section">
+              <div class="split-title">💡 Split Detail by Day <span style="font-size:.7rem;font-weight:400;color:var(--slate5)">— which row contributes what amount on each day</span></div>
+              <div class="split-cards" id="nw-splits"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARE TAB -->
+      <div id="pane-cmp" style="display:none">
+        <div class="panel">
+          <div class="panel-hd" style="background:var(--purple)">
+            <div class="ic" style="background:rgba(255,255,255,.1)">⚖️</div>
+            <h3 style="color:#fff">Side-by-Side Comparison</h3>
+          </div>
+          <div class="panel-body" style="padding:0;overflow-x:auto">
+            <table class="cmp" id="cmp-table">
+              <thead>
+                <tr>
+                  <th>Row</th><th>Bucket</th><th>Day</th>
+                  <th>Existing Account</th><th>New Account</th><th>Difference</th>
+                </tr>
+              </thead>
+              <tbody id="cmp-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
+let rowId = 0;
+let rows = []; // {id, ref, amount, bucket}
+let bucketConfig = {}; // {2:{checked,priority}, 3:{...}, ...}
+let currentTab = 'ex';
+
+const BUCKETS = [2,3,4,5,6,7];
+
+// ── Init bucket config ──
+BUCKETS.forEach((b,i) => {
+  bucketConfig[b] = { checked: true, priority: i+1 };
+});
+
+// ── Render bucket priority grid ──
+function renderBucketGrid() {
+  const el = document.getElementById('bucketPriorityGrid');
+  const acctType = document.getElementById('cfgAcct')?.value || 'both';
+  el.innerHTML = BUCKETS.map(b => {
+    const cfg = bucketConfig[b];
+    const notes = bucketNotes(b);
+    return `<div class="bp-row" id="bprow-${b}">
+      <input type="checkbox" class="chk" ${cfg.checked?'checked':''} onchange="onBucketCheck(${b},this.checked)">
+      <div class="bp-label">Bucket ${b}<small>${notes}</small></div>
+      <input type="number" class="bp-pri" value="${cfg.priority}" min="1" max="99" ${cfg.checked?'':'disabled'}
+        onchange="onBucketPri(${b},this.value)" id="bppri-${b}">
+      <span class="acct-tag ${acctType==='new'?'nw':'ex'}">${acctType==='new'?'NW':'EX'}</span>
+    </div>`;
+  }).join('');
+}
+
+function bucketNotes(b) {
+  const notes = {
+    2:'Up to max → Day 1',
+    3:'Partial → Day 1, Extension → Day 4/7',
+    4:'Partial → Day 1, Extension → Day 2/7',
+    5:'All funds → Day 1',
+    6:'Partial → Day 1/2, Excl. ON (New)',
+    7:'Partial → Day 1, Extension → Day 3/8'
+  };
+  return notes[b]||'';
+}
+
+function onBucketCheck(b, checked) {
+  bucketConfig[b].checked = checked;
+  const priEl = document.getElementById('bppri-'+b);
+  if(priEl) priEl.disabled = !checked;
+}
+function onBucketPri(b, val) {
+  bucketConfig[b].priority = parseInt(val)||1;
+}
+
+document.getElementById('cfgAcct').addEventListener('change', renderBucketGrid);
+
+// ── Rows ──
+function addRow() {
+  rowId++;
+  rows.push({ id: rowId, ref: 'R'+String(rowId).padStart(3,'0'), amount: '', bucket: 2 });
+  renderRows();
+}
+
+function removeRow(id) {
+  rows = rows.filter(r => r.id !== id);
+  renderRows();
+}
+
+function renderRows() {
+  const el = document.getElementById('rowsWrap');
+  if (rows.length === 0) {
+    el.innerHTML = '<div style="text-align:center;color:var(--slate4);font-size:.8rem;padding:16px">No rows yet. Click Add Row.</div>';
+    return;
+  }
+  el.innerHTML = rows.map((r,i) => `
+    <div class="dep-row" id="deprow-${r.id}">
+      <div class="row-num">#${i+1}</div>
+      <input type="text" value="${r.ref}" placeholder="Ref" onchange="updateRow(${r.id},'ref',this.value)" style="font-size:.75rem">
+      <input type="number" value="${r.amount}" placeholder="Amount" min="0" step="0.01"
+        onchange="updateRow(${r.id},'amount',this.value)" onkeydown="if(event.key==='Enter')calculate()">
+      <select onchange="updateRow(${r.id},'bucket',this.value)">
+        ${BUCKETS.map(b=>`<option value="${b}" ${r.bucket==b?'selected':''}>Bucket ${b}</option>`).join('')}
+      </select>
+      <button class="del-btn" onclick="removeRow(${r.id})">✕</button>
+    </div>`).join('');
+}
+
+function updateRow(id, field, val) {
+  const r = rows.find(x => x.id === id);
+  if (!r) return;
+  if (field === 'amount') r.amount = parseFloat(val) || 0;
+  else if (field === 'bucket') r.bucket = parseInt(val);
+  else r[field] = val;
+}
+
+function clearAll() {
+  rows = []; rowId = 0; renderRows();
+  document.getElementById('outPanel').classList.remove('show');
+  document.getElementById('emptyState').style.display = '';
+}
+
+// ════════════════════════════════════════════
+// BUSINESS LOGIC
+// ════════════════════════════════════════════
+
+function getThresholds() {
+  const mn = parseFloat(document.getElementById('cfgMin').value) || 275;
+  const mx = parseFloat(document.getElementById('cfgMax').value) || 6725;
+  return { min: mn, max: mx };
+}
+
+// Returns schedule for one row+bucket for existing account
+function scheduleExisting(amount, bucket, T) {
+  const { min, max } = T;
+  const over = amount > max;
+  const s = [];
+  s.push({ day:0, action:'hold', amount });
+
+  if (bucket === 2) {
+    s.push({ day:1, action:'release', amount: over ? max : amount, note: over ? `Up to $${fmt(max)}` : 'Full Release' });
+    if (over) s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining' });
+  } else if (bucket === 3) {
+    const partial = Math.min(min, amount);
+    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
+    const rem1 = amount - partial;
+    if (rem1 <= 0) { /* nothing */ }
+    else if (rem1 <= max) {
+      s.push({ day:4, action:'release', amount: rem1, note:'Full Remaining' });
+    } else {
+      s.push({ day:4, action:'release', amount: max, note:`Up to $${fmt(max)}` });
+      s.push({ day:7, action:'remaining', amount: rem1-max, note:'Remaining' });
+    }
+  } else if (bucket === 4) {
+    const partial = Math.min(min, amount);
+    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
+    const rem1 = amount - partial;
+    if (rem1 <= 0) { /* nothing */ }
+    else if (rem1 <= max) {
+      s.push({ day:2, action:'release', amount: rem1, note:'Full Remaining' });
+    } else {
+      s.push({ day:2, action:'release', amount: max, note:`Up to $${fmt(max)}` });
+      s.push({ day:7, action:'remaining', amount: rem1-max, note:'Remaining' });
+    }
+  } else if (bucket === 5) {
+    s.push({ day:1, action:'release', amount, note:'All Funds' });
+  } else if (bucket === 6) {
+    const partial = Math.min(min, amount);
+    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
+    const rem1 = amount - partial;
+    if (rem1 <= 0) { /* nothing */ }
+    else if (rem1 <= max) {
+      s.push({ day:2, action:'release', amount: rem1, note:'Full Remaining' });
+    } else {
+      s.push({ day:2, action:'release', amount: max, note:`Up to $${fmt(max)}` });
+      s.push({ day:7, action:'remaining', amount: rem1-max, note:'Remaining' });
+    }
+  } else if (bucket === 7) {
+    const partial = Math.min(min, amount);
+    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
+    const rem1 = amount - partial;
+    if (rem1 <= 0) { /* nothing */ }
+    else if (rem1 <= max) {
+      s.push({ day:3, action:'release', amount: rem1, note:'Full Remaining' });
+    } else {
+      s.push({ day:3, action:'release', amount: max, note:`Up to $${fmt(max)}` });
+      s.push({ day:8, action:'remaining', amount: rem1-max, note:'Remaining' });
+    }
+  }
+  return s;
+}
+
+// Returns schedule for one row+bucket for new account
+function scheduleNew(amount, bucket, T) {
+  const { min, max } = T;
+  const over = amount > max;
+  const s = [];
+  s.push({ day:0, action:'hold', amount });
+
+  if (bucket === 2) {
+    // Same as existing
+    s.push({ day:1, action:'release', amount: over ? max : amount, note: over ? `Up to $${fmt(max)}` : 'Full Release' });
+    if (over) s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining' });
+  } else if (bucket === 3) {
+    // Default(4)+Tier1(2)=Day6, Default(4)+Tier2(3)=Day7
+    if (!over) {
+      s.push({ day:6, action:'release', amount, note:'Full Release\n(D4+T1-2)' });
+    } else {
+      s.push({ day:6, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D4+T1-2)` });
+      s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining\n(D4+T2-3)' });
+    }
+  } else if (bucket === 4) {
+    // Default(2)+Tier1(0)=Day2, Default(2)+Tier2(5)=Day7
+    if (!over) {
+      s.push({ day:2, action:'release', amount, note:'Full Release\n(D2+T1-0)' });
+    } else {
+      s.push({ day:2, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D2+T1-0)` });
+      s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining\n(D2+T2-5)' });
+    }
+  } else if (bucket === 5) {
+    // Default(1)+Tier1(5)=Day6, Default(1)+Tier2(6)=Day7
+    if (!over) {
+      s.push({ day:6, action:'release', amount, note:'Full Release\n(D1+T1-5)' });
+    } else {
+      s.push({ day:6, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D1+T1-5)` });
+      s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining\n(D1+T2-6)' });
+    }
+  } else if (bucket === 6) {
+    // Exclusion ON — all funds Day 7
+    s.push({ day:7, action:'exclusion', amount, note:'All Funds\n(Excl. ON)' });
+  } else if (bucket === 7) {
+    // Default(3)+Tier1(0)=Day3, Day8 remaining
+    if (!over) {
+      s.push({ day:3, action:'release', amount, note:'Full Release\n(D3+T1-0)' });
+    } else {
+      s.push({ day:3, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D3+T1-0)` });
+      s.push({ day:8, action:'remaining', amount: amount-max, note:'Remaining' });
+    }
+  }
+  return s;
+}
+
+// Sort rows by bucket priority (then original row order for ties = FCFS)
+function getSortedRows(inputRows) {
+  const checked = BUCKETS.filter(b => bucketConfig[b].checked);
+  // Only rows with checked buckets
+  const valid = inputRows.filter(r => checked.includes(r.bucket));
+  // Sort: primary = priority asc, secondary = original index (FCFS)
+  return valid.map((r,i) => ({...r, _idx: i}))
+    .sort((a,b) => {
+      const pa = bucketConfig[a.bucket].priority;
+      const pb = bucketConfig[b.bucket].priority;
+      if (pa !== pb) return pa - pb;
+      return a._idx - b._idx; // FCFS
+    });
+}
+
+// ════════════════════════════════════════════
+// CALCULATE
+// ════════════════════════════════════════════
+function calculate() {
+  if (rows.length === 0) { alert('Please add at least one deposit row.'); return; }
+
+  const validRows = rows.filter(r => r.amount > 0);
+  if (validRows.length === 0) { alert('Please enter amounts for your rows.'); return; }
+
+  const T = getThresholds();
+  const acctType = document.getElementById('cfgAcct').value;
+  const sortedRows = getSortedRows(validRows);
+
+  // Build per-row schedules
+  const exData = sortedRows.map(r => ({
+    ...r,
+    schedule: scheduleExisting(r.amount, r.bucket, T)
+  }));
+  const nwData = sortedRows.map(r => ({
+    ...r,
+    schedule: scheduleNew(r.amount, r.bucket, T)
+  }));
+
+  // Show/hide tabs based on account type
+  document.getElementById('tab-ex').style.display = acctType === 'new' ? 'none' : '';
+  document.getElementById('tab-nw').style.display = acctType === 'existing' ? 'none' : '';
+
+  if (acctType === 'existing') currentTab = 'ex';
+  if (acctType === 'new') currentTab = 'nw';
+
+  renderOutput(exData, nwData, T, acctType, sortedRows);
+
+  document.getElementById('outPanel').classList.add('show');
+  document.getElementById('emptyState').style.display = 'none';
+  showTab(currentTab);
+}
+
+function renderOutput(exData, nwData, T, acctType, sortedRows) {
+  if (acctType !== 'new') renderTable(exData, 'existing', T);
+  if (acctType !== 'existing') renderTable(nwData, 'new', T);
+  renderCompare(exData, nwData, acctType);
+}
+
+function renderTable(data, type, T) {
+  const prefix = type === 'existing' ? 'ex' : 'nw';
+  const colorClass = type === 'existing' ? 'rel-ex' : 'rel-nw';
+  const days = [0,1,2,3,4,5,6,7,8];
+
+  // ── Alerts ──
+  const alertEl = document.getElementById(prefix+'-alerts');
+  let alerts = '';
+  data.forEach(r => {
+    if (type === 'new' && r.bucket === 6) {
+      alerts += `<div class="alert alert-red">🚫 <span><strong>Row ${r.ref} · Bucket 6 (New):</strong> Exclusion is ON — full $${fmt(r.amount)} held until Day 7 regardless of amount.</span></div>`;
+    } else if (r.amount > T.max) {
+      alerts += `<div class="alert alert-amber">⚠️ <span><strong>Row ${r.ref} · Bucket ${r.bucket}:</strong> $${fmt(r.amount)} exceeds threshold $${fmt(T.max)} — split into $${fmt(T.max)} + Remaining $${fmt(r.amount-T.max)}.</span></div>`;
+    } else {
+      alerts += `<div class="alert alert-green">✅ <span><strong>Row ${r.ref} · Bucket ${r.bucket}:</strong> $${fmt(r.amount)} ≤ $${fmt(T.max)} — full release in one shot.</span></div>`;
+    }
+  });
+  alertEl.innerHTML = alerts;
+
+  // ── Day Summary Bar ──
+  const dsEl = document.getElementById(prefix+'-day-summary');
+  let dsHtml = '';
+  days.forEach(d => {
+    // Aggregate all rows for this day
+    let total = 0;
+    let rowRefs = [];
+    data.forEach(r => {
+      const e = r.schedule.find(s => s.day === d);
+      if (e && e.action !== 'none') {
+        total += e.amount;
+        rowRefs.push(r.ref);
+      }
+    });
+    const hasAction = total > 0;
+    const isHold = data.some(r => { const e = r.schedule.find(s => s.day === d); return e && e.action === 'hold'; });
+    const isExcl = data.some(r => { const e = r.schedule.find(s => s.day === d); return e && e.action === 'exclusion'; });
+    const amtClass = isHold ? 'has-hold' : (isExcl ? '' : hasAction ? (type==='existing'?'has-ex':'has-nw') : '');
+    dsHtml += `<div class="ds-col">
+      <div class="ds-head">D${d}</div>
+      <div class="ds-body">
+        ${hasAction ? `<div class="ds-total ${amtClass}">$${fmtShort(total)}</div><div class="ds-rows">${rowRefs.join(', ')}</div>` : '<div style="color:var(--slate3);font-size:.8rem">—</div>'}
+      </div>
+    </div>`;
+  });
+  dsEl.innerHTML = dsHtml;
+
+  // ── Main Table ──
+  const tbl = document.getElementById(prefix+'-table');
+  const thead = tbl.querySelector('thead');
+  const tbody = tbl.querySelector('tbody');
+
+  thead.innerHTML = `<tr>
+    <th class="rh" style="min-width:80px">Row / Bucket</th>
+    <th class="rh" style="background:var(--slate6);min-width:60px">Priority</th>
+    ${days.map(d=>`<th>Day ${d}</th>`).join('')}
+  </tr>`;
+
+  tbody.innerHTML = data.map(r => {
+    const pri = bucketConfig[r.bucket].priority;
+    const cells = days.map(d => {
+      const e = r.schedule.find(s => s.day === d);
+      if (!e || e.action === 'none' || e.action === undefined) return `<td><span class="cell-none cell-amt">—</span></td>`;
+      let cls = '', label = '';
+      if (e.action === 'hold') { cls='cell-hold'; label='HOLD'; }
+      else if (e.action === 'partial') { cls=`cell-${type==='existing'?'rel-ex':'rel-nw'}`; label=`$${fmt(e.amount)}`; }
+      else if (e.action === 'release') { cls=`cell-${type==='existing'?'rel-ex':'rel-nw'}`; label=`$${fmt(e.amount)}`; }
+      else if (e.action === 'remaining') { cls='cell-rem'; label=`$${fmt(e.amount)}`; }
+      else if (e.action === 'exclusion') { cls='cell-excl'; label=`$${fmt(e.amount)}`; }
+      const noteLine = e.note ? `<div class="cell-src">${e.note.split('\n')[0]}</div>` : '';
+      return `<td><span class="cell-amt ${cls}">${label}</span>${noteLine}<div class="cell-src">from ${r.ref}</div></td>`;
+    }).join('');
+    return `<tr>
+      <td>
+        <div class="td-bucket">B${r.bucket}</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--slate5)">${r.ref}</div>
+        <span class="td-acct ${type==='existing'?'ex':'nw'}">${type==='existing'?'EX':'NW'}</span>
+      </td>
+      <td>
+        <div class="cell-pri">P${pri}</div>
+        <div style="font-size:.62rem;color:var(--slate5);margin-top:3px">$${fmt(r.amount)}</div>
+      </td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  // ── Split Detail ──
+  const splitsEl = document.getElementById(prefix+'-splits');
+  let splitsHtml = '';
+  days.forEach(d => {
+    const entries = [];
+    data.forEach(r => {
+      const e = r.schedule.find(s => s.day === d);
+      if (e && !['none','hold'].includes(e.action)) {
+        entries.push({ ref: r.ref, bucket: r.bucket, amount: e.amount, action: e.action, note: e.note });
+      }
+    });
+    if (entries.length === 0) return;
+    const total = entries.reduce((a,c) => a+c.amount, 0);
+    const isExcl = entries.some(e => e.action === 'exclusion');
+    splitsHtml += `<div class="split-card">
+      <div class="sc-head ${type==='existing'?'ex':'nw'}">
+        Day ${d}
+        <span style="font-size:.65rem;opacity:.8">${entries.length} row${entries.length>1?'s':''}</span>
+      </div>
+      <div class="sc-rows">
+        ${entries.map(e => `
+          <div class="sc-row">
+            <div>
+              <span class="sc-src">${e.ref} · B${e.bucket}</span>
+              <div style="font-size:.62rem;color:var(--slate4);line-height:1.2">${e.note?.split('\n')[0]||''}</div>
+            </div>
+            <span class="sc-amt ${isExcl?'':colorClass}">$${fmt(e.amount)}</span>
+          </div>`).join('')}
+      </div>
+      <div class="sc-total-row">
+        <span>Day ${d} Total</span>
+        <span style="font-family:'JetBrains Mono',monospace;color:${type==='existing'?'var(--blue)':'var(--teal)'}">$${fmt(total)}</span>
+      </div>
+    </div>`;
+  });
+  splitsEl.innerHTML = splitsHtml || '<div style="color:var(--slate4);font-size:.8rem">No release events found.</div>';
+}
+
+function renderCompare(exData, nwData, acctType) {
+  if (acctType !== 'both') {
+    document.getElementById('tab-cmp').style.display = 'none';
+    return;
+  }
+  document.getElementById('tab-cmp').style.display = '';
+  const days = [0,1,2,3,4,5,6,7,8];
+  const tbody = document.getElementById('cmp-body');
+  let html = '';
+
+  exData.forEach((exRow, i) => {
+    const nwRow = nwData[i];
+    days.forEach(d => {
+      const ex = exRow.schedule.find(s => s.day === d);
+      const nw = nwRow?.schedule.find(s => s.day === d);
+      const exA = ex?.action || 'none';
+      const nwA = nw?.action || 'none';
+      if (exA === 'none' && nwA === 'none') return;
+      const exTxt = exA === 'none' ? '—' : exA === 'hold' ? `HOLD ($${fmt(ex.amount)})` : `$${fmt(ex.amount)} · ${ex.note?.split('\n')[0]}`;
+      const nwTxt = nwA === 'none' ? '—' : nwA === 'hold' ? `HOLD ($${fmt(nw.amount)})` : `$${fmt(nw.amount)} · ${nw.note?.split('\n')[0]}`;
+      let diffLabel = 'Same', diffCls = 'diff-same';
+      if (exA === 'hold' && nwA === 'hold') { diffLabel='Same (Hold)'; diffCls='diff-same'; }
+      else if (exA !== 'none' && nwA === 'none') { diffLabel='Existing Only'; diffCls='diff-only'; }
+      else if (exA === 'none' && nwA !== 'none') { diffLabel='New Only'; diffCls='diff-only'; }
+      else if (nwA === 'exclusion') { diffLabel='Excl. Rule'; diffCls='diff-special'; }
+      else if (exA === nwA && Math.abs((ex?.amount||0)-(nw?.amount||0)) < 0.01) { diffLabel='Same'; diffCls='diff-same'; }
+      else if ((ex?.amount||0) > (nw?.amount||0)) { diffLabel='Ex > New'; diffCls='diff-later'; }
+      else { diffLabel='New > Ex'; diffCls='diff-earlier'; }
+      html += `<tr>
+        <td style="font-family:'JetBrains Mono',monospace;font-size:.75rem">${exRow.ref}</td>
+        <td style="font-weight:700;font-family:'JetBrains Mono',monospace">B${exRow.bucket}</td>
+        <td style="color:var(--slate5);font-size:.75rem">Day ${d}</td>
+        <td style="color:var(--blue);font-size:.78rem">${exTxt}</td>
+        <td style="color:var(--teal);font-size:.78rem">${nwTxt}</td>
+        <td><span class="diff-chip ${diffCls}">${diffLabel}</span></td>
+      </tr>`;
+    });
+  });
+  tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--slate4);padding:20px">No data</td></tr>';
+}
+
+function showTab(tab) {
+  currentTab = tab;
+  ['ex','nw','cmp'].forEach(t => {
+    document.getElementById('pane-'+t).style.display = t===tab?'block':'none';
+    const btn = document.getElementById('tab-'+t);
+    if (btn) btn.className = 'tab-btn' + (t===tab ? ` on-${t}` : '');
+  });
+}
+
+// ── Utils ──
+function fmt(n) { return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function fmtShort(n) {
+  if (n >= 1000) return (n/1000).toFixed(1)+'k';
+  return Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+
+// ── Boot ──
+renderBucketGrid();
+addRow(); addRow(); addRow(); // start with 3 sample rows
+// Pre-fill sample data
+rows[0].amount = 5000; rows[0].bucket = 2; rows[0].ref = 'R001';
+rows[1].amount = 8500; rows[1].bucket = 4; rows[1].ref = 'R002';
+rows[2].amount = 6725; rows[2].bucket = 6; rows[2].ref = 'R003';
+renderRows();
+</script>
+</body>
+</html>
