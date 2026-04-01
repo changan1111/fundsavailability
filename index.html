@@ -541,7 +541,7 @@ function getSortedRows() {
 
 function buildSchedules(sortedRows, mode) {
   const cap = parseFloat(document.getElementById('cfgMax').value) || 6725;
-  const ndMin = parseFloat(document.getElementById('cfgNdMin').value) || 100;
+  const ndMin = parseFloat(document.getElementById('cfgNdMin').value) || 275;
   let capRemaining = cap;
 
   return sortedRows.map(row => {
