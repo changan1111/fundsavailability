@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Funds Availability — v5.9.2 Final</title>
+<title>Funds Availability — v5.9.4</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -38,18 +38,26 @@ body{font-family:'Inter',sans-serif;background:#f0f4fb;color:var(--ink);min-heig
 .bkt-table td{padding:5px 2px;text-align:center;border-bottom:1px solid var(--slate2)}
 .bkt-inp{width:34px;text-align:center;padding:3px;border:1px solid var(--slate3);border-radius:4px;font-family:'JetBrains Mono'}
 
-/* TRANSACTION ROW - FIXED 3 COLUMN VISIBILITY */
-.dep-header{display:grid;grid-template-columns:25px 95px 1fr 75px 25px;gap:10px;padding:0 10px 8px;font-size:.6rem;font-weight:800;color:var(--slate5);text-transform:uppercase}
+/* TRANSACTION ROW - UNIFIED INPUT STYLE */
+.dep-header{display:grid;grid-template-columns:25px 95px 95px 75px 25px;gap:10px;padding:0 10px 8px;font-size:.6rem;font-weight:800;color:var(--slate5);text-transform:uppercase}
 .rows-wrap{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px}
 .dep-row{background:var(--white);border-radius:10px;border:1.5px solid var(--slate3);overflow:hidden}
-.dep-row-top{display:grid;grid-template-columns:25px 95px 1fr 75px 25px;gap:10px;padding:10px;align-items:center}
+.dep-row-top{display:grid;grid-template-columns:25px 95px 95px 75px 25px;gap:10px;padding:10px;align-items:center}
 .row-num{font-family:'JetBrains Mono';font-size:.7rem;color:var(--slate5);font-weight:700}
 
-.dep-ref{width:95px !important; font-family:'JetBrains Mono'; font-size:.75rem !important; padding:6px !important}
-.dep-amt-wrap{position:relative; min-width:80px}
-.dep-amt-wrap span{position:absolute;left:7px;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--slate5);font-weight:600}
-.dep-amt{padding-left:16px !important; width:100%; font-family:'JetBrains Mono' !important; font-weight:700 !important; color:var(--blue) !important; background:var(--blue-ll) !important; border-color:var(--blue-l) !important; font-size:.8rem !important}
-.dep-bkt{width:75px !important; font-weight:700; cursor:pointer; font-size:.75rem !important; padding:6px !important}
+/* Standardized Inputs */
+.dep-ref, .dep-amt, .dep-bkt {
+  width: 100% !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.75rem !important;
+  padding: 8px !important;
+  border: 1.5px solid var(--slate3) !important;
+  border-radius: 6px !important;
+  background: var(--slate1) !important;
+  outline: none;
+}
+.dep-amt { color: var(--ink) !important; text-align: left; }
+.dep-bkt { cursor: pointer; font-weight: 700; color: var(--ink); }
 
 .dep-row-bot{padding:0 10px 8px 45px;display:flex;gap:6px}
 .tag{font-size:.55rem;font-weight:800;padding:2px 5px;border-radius:4px;text-transform:uppercase}
@@ -83,7 +91,7 @@ table.dg td{padding:12px 10px;border-bottom:1px solid var(--slate2);text-align:c
 
 <div class="hdr">
   <div class="hdr-icon">🏛️</div>
-  <div class="hdr-title">Funds Availability Calculator</div>
+  <div class="hdr-title">Funds Availablity Calculator</div>
 </div>
 
 <div class="wrap">
@@ -113,7 +121,7 @@ table.dg td{padding:12px 10px;border-bottom:1px solid var(--slate2);text-align:c
     <div class="panel">
       <div class="panel-hd"><h3>📋 Transactions</h3></div>
       <div class="panel-body">
-        <div class="dep-header"><span>#</span><span>Ref ID</span><span>Amount</span><span>Bkt</span><span></span></div>
+        <div class="dep-header"><span>#</span><span>Ref ID</span><span>Amount ($)</span><span>Bkt</span><span></span></div>
         <div id="rowsWrap" class="rows-wrap"></div>
         <button class="btn-main" style="background:var(--slate2);color:var(--ink);font-size:.7rem;padding:8px" onclick="addRow()">＋ Add Deposit Row</button>
         <button class="btn-main" onclick="calculate()">▶ Process Results</button>
@@ -205,12 +213,9 @@ function renderRows() {
         <div class="dep-row">
             <div class="dep-row-top">
                 <span class="row-num">${i+1}</span>
-                <input type="text" class="field dep-ref" value="${r.ref}" onchange="updateRow(${i},'ref',this.value)">
-                <div class="dep-amt-wrap">
-                    <span>$</span>
-                    <input type="number" class="field dep-amt" value="${r.amt||''}" placeholder="0.00" onchange="updateRow(${i},'amt',this.value)">
-                </div>
-                <select class="field dep-bkt" onchange="updateRow(${i},'bkt',this.value); renderRows();">
+                <input type="text" class="dep-ref" value="${r.ref}" placeholder="REFID" onchange="updateRow(${i},'ref',this.value)">
+                <input type="number" class="dep-amt" value="${r.amt||''}" placeholder="0.00" onchange="updateRow(${i},'amt',this.value)">
+                <select class="dep-bkt" onchange="updateRow(${i},'bkt',this.value); renderRows();">
                     ${BUCKETS.map(b => `<option value="${b}" ${r.bkt==b?'selected':''}>B${b}</option>`).join('')}
                 </select>
                 <button class="del-btn" onclick="rows.splice(${i},1);renderRows()">✕</button>
@@ -221,11 +226,16 @@ function renderRows() {
 }
 
 function calculate() {
+    const type = document.getElementById('acctType').value;
     const sorted = [...rows].filter(r => r.amt > 0).sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
     if(sorted.length === 0) return;
+    
     renderResults(sorted, 'ex');
     renderResults(sorted, 'nw');
     document.getElementById('outPanel').style.display = 'block';
+
+    if (type === 'new') showTab('nw');
+    else showTab('ex');
 }
 
 function renderResults(data, mode) {
