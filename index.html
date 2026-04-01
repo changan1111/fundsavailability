@@ -371,8 +371,10 @@ let currentTab = 'ex';
 const BUCKETS = [2,3,4,5,6,7];
 
 // ── Init bucket config ──
-BUCKETS.forEach((b,i) => {
-  bucketConfig[b] = { checked: true, priority: i+1 };
+// Priority order: B2=1, B5=2, B6=3, B3=4, B4=5, B7=6
+const BUCKET_DEFAULT_PRIORITY = {2:1, 3:4, 4:5, 5:2, 6:3, 7:6};
+BUCKETS.forEach(b => {
+  bucketConfig[b] = { checked: true, priority: BUCKET_DEFAULT_PRIORITY[b] };
 });
 
 // ── Render bucket priority grid ──
@@ -436,7 +438,7 @@ function renderRows() {
   el.innerHTML = rows.map((r,i) => `
     <div class="dep-row" id="deprow-${r.id}">
       <div class="row-num">#${i+1}</div>
-      <input type="text" value="${r.ref}" placeholder="Ref" onchange="updateRow(${r.id},'ref',this.value)" style="font-size:.75rem">
+      <input type="text" value="${r.ref}" placeholder="Ref / Check ID" onchange="updateRow(${r.id},'ref',this.value)" style="font-size:.75rem;min-width:0">
       <input type="number" value="${r.amount}" placeholder="Amount" min="0" step="0.01"
         onchange="updateRow(${r.id},'amount',this.value)" onkeydown="if(event.key==='Enter')calculate()">
       <select onchange="updateRow(${r.id},'bucket',this.value)">
@@ -470,122 +472,10 @@ function getThresholds() {
   return { min: mn, max: mx };
 }
 
-// Returns schedule for one row+bucket for existing account
-function scheduleExisting(amount, bucket, T) {
-  const { min, max } = T;
-  const over = amount > max;
-  const s = [];
-  s.push({ day:0, action:'hold', amount });
-
-  if (bucket === 2) {
-    s.push({ day:1, action:'release', amount: over ? max : amount, note: over ? `Up to $${fmt(max)}` : 'Full Release' });
-    if (over) s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining' });
-  } else if (bucket === 3) {
-    const partial = Math.min(min, amount);
-    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
-    const rem1 = amount - partial;
-    if (rem1 <= 0) { /* nothing */ }
-    else if (rem1 <= max) {
-      s.push({ day:4, action:'release', amount: rem1, note:'Full Remaining' });
-    } else {
-      s.push({ day:4, action:'release', amount: max, note:`Up to $${fmt(max)}` });
-      s.push({ day:7, action:'remaining', amount: rem1-max, note:'Remaining' });
-    }
-  } else if (bucket === 4) {
-    const partial = Math.min(min, amount);
-    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
-    const rem1 = amount - partial;
-    if (rem1 <= 0) { /* nothing */ }
-    else if (rem1 <= max) {
-      s.push({ day:2, action:'release', amount: rem1, note:'Full Remaining' });
-    } else {
-      s.push({ day:2, action:'release', amount: max, note:`Up to $${fmt(max)}` });
-      s.push({ day:7, action:'remaining', amount: rem1-max, note:'Remaining' });
-    }
-  } else if (bucket === 5) {
-    s.push({ day:1, action:'release', amount, note:'All Funds' });
-  } else if (bucket === 6) {
-    const partial = Math.min(min, amount);
-    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
-    const rem1 = amount - partial;
-    if (rem1 <= 0) { /* nothing */ }
-    else if (rem1 <= max) {
-      s.push({ day:2, action:'release', amount: rem1, note:'Full Remaining' });
-    } else {
-      s.push({ day:2, action:'release', amount: max, note:`Up to $${fmt(max)}` });
-      s.push({ day:7, action:'remaining', amount: rem1-max, note:'Remaining' });
-    }
-  } else if (bucket === 7) {
-    const partial = Math.min(min, amount);
-    s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` });
-    const rem1 = amount - partial;
-    if (rem1 <= 0) { /* nothing */ }
-    else if (rem1 <= max) {
-      s.push({ day:3, action:'release', amount: rem1, note:'Full Remaining' });
-    } else {
-      s.push({ day:3, action:'release', amount: max, note:`Up to $${fmt(max)}` });
-      s.push({ day:8, action:'remaining', amount: rem1-max, note:'Remaining' });
-    }
-  }
-  return s;
-}
-
-// Returns schedule for one row+bucket for new account
-function scheduleNew(amount, bucket, T) {
-  const { min, max } = T;
-  const over = amount > max;
-  const s = [];
-  s.push({ day:0, action:'hold', amount });
-
-  if (bucket === 2) {
-    // Same as existing
-    s.push({ day:1, action:'release', amount: over ? max : amount, note: over ? `Up to $${fmt(max)}` : 'Full Release' });
-    if (over) s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining' });
-  } else if (bucket === 3) {
-    // Default(4)+Tier1(2)=Day6, Default(4)+Tier2(3)=Day7
-    if (!over) {
-      s.push({ day:6, action:'release', amount, note:'Full Release\n(D4+T1-2)' });
-    } else {
-      s.push({ day:6, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D4+T1-2)` });
-      s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining\n(D4+T2-3)' });
-    }
-  } else if (bucket === 4) {
-    // Default(2)+Tier1(0)=Day2, Default(2)+Tier2(5)=Day7
-    if (!over) {
-      s.push({ day:2, action:'release', amount, note:'Full Release\n(D2+T1-0)' });
-    } else {
-      s.push({ day:2, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D2+T1-0)` });
-      s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining\n(D2+T2-5)' });
-    }
-  } else if (bucket === 5) {
-    // Default(1)+Tier1(5)=Day6, Default(1)+Tier2(6)=Day7
-    if (!over) {
-      s.push({ day:6, action:'release', amount, note:'Full Release\n(D1+T1-5)' });
-    } else {
-      s.push({ day:6, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D1+T1-5)` });
-      s.push({ day:7, action:'remaining', amount: amount-max, note:'Remaining\n(D1+T2-6)' });
-    }
-  } else if (bucket === 6) {
-    // Exclusion ON — all funds Day 7
-    s.push({ day:7, action:'exclusion', amount, note:'All Funds\n(Excl. ON)' });
-  } else if (bucket === 7) {
-    // Default(3)+Tier1(0)=Day3, Day8 remaining
-    if (!over) {
-      s.push({ day:3, action:'release', amount, note:'Full Release\n(D3+T1-0)' });
-    } else {
-      s.push({ day:3, action:'release', amount: max, note:`Up to $${fmt(max)}\n(D3+T1-0)` });
-      s.push({ day:8, action:'remaining', amount: amount-max, note:'Remaining' });
-    }
-  }
-  return s;
-}
-
 // Sort rows by bucket priority (then original row order for ties = FCFS)
 function getSortedRows(inputRows) {
   const checked = BUCKETS.filter(b => bucketConfig[b].checked);
-  // Only rows with checked buckets
   const valid = inputRows.filter(r => checked.includes(r.bucket));
-  // Sort: primary = priority asc, secondary = original index (FCFS)
   return valid.map((r,i) => ({...r, _idx: i}))
     .sort((a,b) => {
       const pa = bucketConfig[a.bucket].priority;
@@ -593,6 +483,170 @@ function getSortedRows(inputRows) {
       if (pa !== pb) return pa - pb;
       return a._idx - b._idx; // FCFS
     });
+}
+
+// ── ACCOUNT-LEVEL SCHEDULER ──
+// Processes all rows in priority order, tracking a single $max cap across the account.
+// Bucket 5 releases ALL funds (no cap consumed from the pool for that row),
+// but those released dollars DO count toward the account cap for other rows.
+// The $275 partial release also counts toward the $6725 cap.
+
+function buildAccountSchedules(sortedRows, T, mode) {
+  // mode: 'existing' | 'new'
+  const { min, max } = T;
+  let capRemaining = max; // account-level cap pool
+
+  return sortedRows.map(row => {
+    const { amount, bucket } = row;
+    const s = [];
+    s.push({ day:0, action:'hold', amount });
+
+    if (mode === 'new' && bucket === 6) {
+      // Exclusion ON — all funds held to Day 7, does NOT consume cap
+      s.push({ day:7, action:'exclusion', amount, note:'All Funds (Excl. ON)' });
+      return { ...row, schedule: s, _capNote: 'exclusion — no cap consumed' };
+    }
+
+    if (bucket === 5) {
+      // Bucket 5: ALL funds released immediately, no cap limit applied to this row.
+      // However the released amount reduces the account cap for other rows.
+      const releaseDay = mode === 'existing' ? 1 : 6;
+      s.push({ day: releaseDay, action:'release', amount, note:'All Funds (B5 — No Cap)' });
+      // Bucket 5 DOES consume cap for other rows
+      capRemaining = Math.max(0, capRemaining - amount);
+      return { ...row, schedule: s, _capNote: `B5 full release; cap remaining after: $${fmt(capRemaining)}` };
+    }
+
+    // All other buckets: subject to account cap
+    // Partial amount (min threshold) also counts against the cap
+    let localCap = capRemaining; // how much this row can use from the pool
+    let capUsed = 0;
+
+    if (mode === 'existing') {
+      if (bucket === 2) {
+        const rel = Math.min(amount, localCap);
+        if (rel > 0) {
+          s.push({ day:1, action: rel === amount ? 'release' : 'release', amount: rel,
+            note: rel < amount ? `Up to cap ($${fmt(rel)})` : 'Full Release' });
+          capUsed += rel;
+        }
+        const leftover = amount - rel;
+        if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+
+      } else if (bucket === 3) {
+        const partial = Math.min(min, amount, localCap);
+        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
+        const rem1 = amount - partial;
+        const capAfterPartial = localCap - capUsed;
+        if (rem1 > 0 && capAfterPartial > 0) {
+          const rel = Math.min(rem1, capAfterPartial);
+          s.push({ day:4, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
+          capUsed += rel;
+          const leftover = rem1 - rel;
+          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+        } else if (rem1 > 0) {
+          s.push({ day:7, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+        }
+
+      } else if (bucket === 4) {
+        const partial = Math.min(min, amount, localCap);
+        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
+        const rem1 = amount - partial;
+        const capAfterPartial = localCap - capUsed;
+        if (rem1 > 0 && capAfterPartial > 0) {
+          const rel = Math.min(rem1, capAfterPartial);
+          s.push({ day:2, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
+          capUsed += rel;
+          const leftover = rem1 - rel;
+          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+        } else if (rem1 > 0) {
+          s.push({ day:7, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+        }
+
+      } else if (bucket === 6) {
+        const partial = Math.min(min, amount, localCap);
+        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
+        const rem1 = amount - partial;
+        const capAfterPartial = localCap - capUsed;
+        if (rem1 > 0 && capAfterPartial > 0) {
+          const rel = Math.min(rem1, capAfterPartial);
+          s.push({ day:2, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
+          capUsed += rel;
+          const leftover = rem1 - rel;
+          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+        } else if (rem1 > 0) {
+          s.push({ day:7, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+        }
+
+      } else if (bucket === 7) {
+        const partial = Math.min(min, amount, localCap);
+        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
+        const rem1 = amount - partial;
+        const capAfterPartial = localCap - capUsed;
+        if (rem1 > 0 && capAfterPartial > 0) {
+          const rel = Math.min(rem1, capAfterPartial);
+          s.push({ day:3, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
+          capUsed += rel;
+          const leftover = rem1 - rel;
+          if (leftover > 0) s.push({ day:8, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+        } else if (rem1 > 0) {
+          s.push({ day:8, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+        }
+      }
+
+    } else {
+      // mode === 'new'
+      if (bucket === 2) {
+        const rel = Math.min(amount, localCap);
+        if (rel > 0) {
+          s.push({ day:1, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})` : 'Full Release' });
+          capUsed += rel;
+        }
+        const leftover = amount - rel;
+        if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+
+      } else if (bucket === 3) {
+        const capAfter = localCap - capUsed;
+        if (capAfter > 0) {
+          const rel = Math.min(amount, capAfter);
+          s.push({ day:6, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D4+T1-2)` : 'Full Release\n(D4+T1-2)' });
+          capUsed += rel;
+          const leftover = amount - rel;
+          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)\n(D4+T2-3)' });
+        } else {
+          s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
+        }
+
+      } else if (bucket === 4) {
+        const capAfter = localCap - capUsed;
+        if (capAfter > 0) {
+          const rel = Math.min(amount, capAfter);
+          s.push({ day:2, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D2+T1-0)` : 'Full Release\n(D2+T1-0)' });
+          capUsed += rel;
+          const leftover = amount - rel;
+          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)\n(D2+T2-5)' });
+        } else {
+          s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
+        }
+
+      } else if (bucket === 7) {
+        const capAfter = localCap - capUsed;
+        if (capAfter > 0) {
+          const rel = Math.min(amount, capAfter);
+          s.push({ day:3, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D3+T1-0)` : 'Full Release\n(D3+T1-0)' });
+          capUsed += rel;
+          const leftover = amount - rel;
+          if (leftover > 0) s.push({ day:8, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+        } else {
+          s.push({ day:8, action:'remaining', amount, note:'Remaining (cap exhausted)' });
+        }
+      }
+    }
+
+    // Deduct this row's consumed amount from the account cap
+    capRemaining = Math.max(0, capRemaining - capUsed);
+    return { ...row, schedule: s, _capUsed: capUsed, _capAfter: capRemaining };
+  });
 }
 
 // ════════════════════════════════════════════
@@ -608,15 +662,9 @@ function calculate() {
   const acctType = document.getElementById('cfgAcct').value;
   const sortedRows = getSortedRows(validRows);
 
-  // Build per-row schedules
-  const exData = sortedRows.map(r => ({
-    ...r,
-    schedule: scheduleExisting(r.amount, r.bucket, T)
-  }));
-  const nwData = sortedRows.map(r => ({
-    ...r,
-    schedule: scheduleNew(r.amount, r.bucket, T)
-  }));
+  // Build per-account-level schedules (cap shared across all rows)
+  const exData = buildAccountSchedules(sortedRows, T, 'existing');
+  const nwData = buildAccountSchedules(sortedRows, T, 'new');
 
   // Show/hide tabs based on account type
   document.getElementById('tab-ex').style.display = acctType === 'new' ? 'none' : '';
@@ -645,14 +693,22 @@ function renderTable(data, type, T) {
 
   // ── Alerts ──
   const alertEl = document.getElementById(prefix+'-alerts');
+  const mode = type; // alias for clarity
   let alerts = '';
+  const totalChecks = data.length;
+  const totalAmount = data.reduce((s,r) => s+r.amount, 0);
+  alerts += `<div class="alert alert-blue">ℹ️ <span><strong>${totalChecks} check(s) — Total: $${fmt(totalAmount)}</strong> · Account cap: $${fmt(T.max)} shared across all checks in priority order. Partial ($${fmt(T.min)}) counts toward the cap.</span></div>`;
   data.forEach(r => {
-    if (type === 'new' && r.bucket === 6) {
-      alerts += `<div class="alert alert-red">🚫 <span><strong>Row ${r.ref} · Bucket 6 (New):</strong> Exclusion is ON — full $${fmt(r.amount)} held until Day 7 regardless of amount.</span></div>`;
-    } else if (r.amount > T.max) {
-      alerts += `<div class="alert alert-amber">⚠️ <span><strong>Row ${r.ref} · Bucket ${r.bucket}:</strong> $${fmt(r.amount)} exceeds threshold $${fmt(T.max)} — split into $${fmt(T.max)} + Remaining $${fmt(r.amount-T.max)}.</span></div>`;
+    const capUsed = r._capUsed ?? 0;
+    const capAfter = r._capAfter ?? 0;
+    if (mode === 'new' && r.bucket === 6) {
+      alerts += `<div class="alert alert-red">🚫 <span><strong>${r.ref} · B6 (New):</strong> Exclusion ON — $${fmt(r.amount)} held to Day 7. No cap consumed.</span></div>`;
+    } else if (r.bucket === 5) {
+      alerts += `<div class="alert alert-green">⚡ <span><strong>${r.ref} · B5:</strong> $${fmt(r.amount)} fully released (no cap limit for B5). Cap remaining for subsequent rows: $${fmt(capAfter)}.</span></div>`;
+    } else if (capUsed < r.amount) {
+      alerts += `<div class="alert alert-amber">⚠️ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} — only $${fmt(capUsed)} released (cap used), $${fmt(r.amount - capUsed)} to remaining schedule. Cap left after: $${fmt(capAfter)}.</span></div>`;
     } else {
-      alerts += `<div class="alert alert-green">✅ <span><strong>Row ${r.ref} · Bucket ${r.bucket}:</strong> $${fmt(r.amount)} ≤ $${fmt(T.max)} — full release in one shot.</span></div>`;
+      alerts += `<div class="alert alert-green">✅ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} — fully covered by cap. Cap left after: $${fmt(capAfter)}.</span></div>`;
     }
   });
   alertEl.innerHTML = alerts;
