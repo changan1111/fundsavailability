@@ -3,194 +3,197 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Funds Availability — Advanced Calculator</title>
+<title>Funds Availability — v5.1</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root {
-  --ink: #0d1b2a;
-  --ink2: #1e3a5f;
-  --blue: #1d4ed8;
-  --blue-l: #dbeafe;
-  --blue-ll: #eff6ff;
-  --teal: #0f766e;
-  --teal-l: #ccfbf1;
-  --amber: #b45309;
-  --amber-l: #fef3c7;
-  --red: #b91c1c;
-  --red-l: #fee2e2;
-  --slate1: #f8fafc;
-  --slate2: #f1f5f9;
-  --slate3: #e2e8f0;
-  --slate4: #cbd5e1;
-  --slate5: #94a3b8;
-  --slate6: #64748b;
-  --slate7: #475569;
-  --white: #fff;
-  --green: #166534;
-  --green-l: #dcfce7;
-  --purple: #6d28d9;
-  --purple-l: #ede9fe;
-  --shadow: 0 1px 3px rgba(13,27,42,.08), 0 4px 16px rgba(13,27,42,.06);
-  --shadow-lg: 0 8px 32px rgba(13,27,42,.12);
-  --r: 12px;
+:root{
+  --ink:#0d1b2a;--ink2:#1e3a5f;
+  --blue:#1d4ed8;--blue-l:#dbeafe;--blue-ll:#eff6ff;
+  --teal:#0f766e;--teal-l:#ccfbf1;
+  --amber:#b45309;--amber-l:#fef3c7;
+  --red:#b91c1c;--red-l:#fee2e2;
+  --slate1:#f8fafc;--slate2:#f1f5f9;--slate3:#e2e8f0;
+  --slate4:#cbd5e1;--slate5:#94a3b8;--slate6:#64748b;--slate7:#475569;
+  --white:#fff;
+  --green:#166534;--green-l:#dcfce7;
+  --purple:#6d28d9;--purple-l:#ede9fe;
+  --orange:#c2410c;--orange-l:#ffedd5;
+  --shadow:0 1px 3px rgba(13,27,42,.08),0 4px 16px rgba(13,27,42,.06);
+  --r:12px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#e8eef7 0%,#f0f4fb 100%);min-height:100vh;color:var(--ink)}
 
-/* ── HEADER ── */
-.hdr{background:var(--ink);padding:22px 36px 20px;display:flex;align-items:center;gap:18px}
-.hdr-icon{width:44px;height:44px;background:linear-gradient(135deg,#1d4ed8,#0f766e);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
-.hdr-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
-.hdr-sub{font-size:0.78rem;color:#64748b;margin-top:2px}
-.hdr-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.badge{font-family:'JetBrains Mono',monospace;font-size:0.65rem;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:#94a3b8;letter-spacing:.04em}
+/* HEADER */
+.hdr{background:var(--ink);padding:20px 32px;display:flex;align-items:center;gap:16px}
+.hdr-icon{width:42px;height:42px;background:linear-gradient(135deg,#1d4ed8,#0f766e);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.hdr-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
+.hdr-sub{font-size:.73rem;color:#64748b;margin-top:2px}
+.hdr-right{margin-left:auto}
+.badge{font-family:'JetBrains Mono',monospace;font-size:.62rem;padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.12);color:#94a3b8;letter-spacing:.04em}
 
-/* ── LAYOUT ── */
-.wrap{max-width:1340px;margin:0 auto;padding:28px 20px 60px;display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
-@media(max-width:960px){.wrap{grid-template-columns:1fr}}
+/* LAYOUT */
+.wrap{max-width:1380px;margin:0 auto;padding:24px 18px 60px;display:grid;grid-template-columns:380px 1fr;gap:18px;align-items:start}
+@media(max-width:980px){.wrap{grid-template-columns:1fr}}
+.sticky-left{position:sticky;top:18px;display:flex;flex-direction:column;gap:14px}
 
-/* ── PANELS ── */
+/* PANELS */
 .panel{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
-.panel-hd{padding:14px 20px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px}
-.panel-hd h3{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;letter-spacing:.01em;color:var(--ink)}
-.panel-hd .ic{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
-.panel-body{padding:18px 20px}
+.panel-hd{padding:12px 18px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px}
+.panel-hd h3{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.01em;color:var(--ink)}
+.panel-hd .ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.panel-body{padding:16px 18px}
 
-/* ── CONFIG SECTION ── */
-.config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
-.field{display:flex;flex-direction:column;gap:5px}
-.field label{font-size:.7rem;font-weight:600;color:var(--slate6);letter-spacing:.06em;text-transform:uppercase}
-.field input,.field select{font-family:'Inter',sans-serif;font-size:.88rem;padding:8px 11px;border:1.5px solid var(--slate3);border-radius:8px;color:var(--ink);background:var(--slate1);outline:none;transition:border-color .18s,box-shadow .18s;font-weight:500}
+/* FIELDS */
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:.67rem;font-weight:700;color:var(--slate6);letter-spacing:.06em;text-transform:uppercase}
+.field input,.field select{font-family:'Inter',sans-serif;font-size:.85rem;padding:7px 10px;border:1.5px solid var(--slate3);border-radius:7px;color:var(--ink);background:var(--slate1);outline:none;transition:border-color .15s,box-shadow .15s;font-weight:500}
 .field input:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,78,216,.1);background:#fff}
-.pfx{position:relative}.pfx span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.85rem;pointer-events:none}
-.pfx input{padding-left:22px}
+.pfx{position:relative}.pfx span{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.82rem;pointer-events:none}
+.pfx input{padding-left:20px}
+.cfg-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 
-/* ── BUCKET PRIORITY ── */
-.bucket-priority-grid{display:flex;flex-direction:column;gap:6px}
-.bp-row{display:grid;grid-template-columns:24px 1fr 80px 40px;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;background:var(--slate1);border:1.5px solid var(--slate3);transition:border-color .15s}
-.bp-row:has(input[type=checkbox]:checked){background:var(--blue-ll);border-color:#93c5fd}
-.bp-row .chk{accent-color:var(--blue);width:15px;height:15px;cursor:pointer}
-.bp-label{font-size:.82rem;font-weight:600;color:var(--ink)}
-.bp-label small{font-weight:400;font-size:.7rem;color:var(--slate5);display:block;line-height:1.2}
-.bp-pri{font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:5px 8px;border:1.5px solid var(--slate3);border-radius:6px;color:var(--ink);background:var(--white);outline:none;width:100%;text-align:center;-moz-appearance:textfield}
-.bp-pri::-webkit-inner-spin-button,.bp-pri::-webkit-outer-spin-button{-webkit-appearance:none}
-.bp-pri:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
-.bp-pri:disabled{background:var(--slate2);color:var(--slate4)}
-.acct-tag{font-size:.62rem;padding:2px 6px;border-radius:10px;font-weight:700;letter-spacing:.03em}
-.acct-tag.ex{background:var(--ink2);color:#fff}
-.acct-tag.nw{background:var(--teal);color:#fff}
+/* ── BUCKET CONFIG TABLE ── */
+.bkt-table{width:100%;border-collapse:collapse;font-size:.75rem}
+.bkt-table thead th{padding:6px 5px;background:var(--slate2);font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
+.bkt-table thead th:first-child{text-align:left;padding-left:8px}
+.bkt-table tbody tr{border-bottom:1px solid var(--slate2);transition:background .12s}
+.bkt-table tbody tr:hover{background:var(--slate1)}
+.bkt-table tbody tr.row-disabled{opacity:.45}
+.bkt-cell{padding:5px 4px;text-align:center;vertical-align:middle}
+.bkt-cell:first-child{text-align:left;padding-left:8px}
+.bkt-name{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--ink)}
+.bkt-name small{font-size:.6rem;font-weight:400;color:var(--slate5);display:block;line-height:1.2}
+.bkt-inp{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:4px 5px;border:1.5px solid var(--slate3);border-radius:6px;width:46px;text-align:center;background:var(--white);color:var(--ink);outline:none;-moz-appearance:textfield}
+.bkt-inp::-webkit-inner-spin-button,.bkt-inp::-webkit-outer-spin-button{-webkit-appearance:none}
+.bkt-inp:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
+.bkt-inp:disabled{background:var(--slate2);color:var(--slate4);border-color:var(--slate3)}
+.bkt-chk{accent-color:var(--blue);width:14px;height:14px;cursor:pointer}
+.bkt-chk-nd{accent-color:#f59e0b;width:14px;height:14px;cursor:pointer}
+.bkt-chk-excl{accent-color:var(--red);width:14px;height:14px;cursor:pointer}
+.bkt-pri{font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:4px 5px;border:1.5px solid var(--slate3);border-radius:6px;width:38px;text-align:center;background:var(--white);color:var(--ink);outline:none;-moz-appearance:textfield}
+.bkt-pri::-webkit-inner-spin-button,.bkt-pri::-webkit-outer-spin-button{-webkit-appearance:none}
+.bkt-pri:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.1)}
+.bkt-pri:disabled{background:var(--slate2);color:var(--slate4)}
+.col-ex{color:var(--blue);font-size:.6rem;font-weight:700;background:var(--blue-ll);padding:1px 4px;border-radius:4px;white-space:nowrap}
+.col-nw{color:var(--teal);font-size:.6rem;font-weight:700;background:var(--teal-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
+.col-nd{color:var(--amber);font-size:.6rem;font-weight:700;background:var(--amber-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
+.col-excl{color:var(--red);font-size:.6rem;font-weight:700;background:var(--red-l);padding:1px 4px;border-radius:4px;white-space:nowrap}
 
-/* ── ROWS ── */
-.rows-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:320px;overflow-y:auto;padding-right:2px}
-.dep-row{display:grid;grid-template-columns:28px 1fr 1fr 1fr 28px;gap:8px;align-items:center;padding:8px 10px;border-radius:8px;border:1.5px solid var(--slate3);background:var(--slate1);transition:border-color .15s}
+/* ── DEPOSIT ROWS ── */
+.dep-header{display:grid;grid-template-columns:22px 90px 1fr 70px 22px;gap:8px;padding:0 8px 6px;align-items:end}
+.dep-header span{font-size:.62rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em}
+.rows-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:340px;overflow-y:auto;padding-right:2px}
+.dep-row{border-radius:9px;border:1.5px solid var(--slate3);background:var(--slate1);transition:border-color .15s;overflow:hidden}
 .dep-row:hover{border-color:var(--slate4)}
-.row-num{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--slate5);text-align:center}
-.dep-row input,.dep-row select{font-family:'Inter',sans-serif;font-size:.82rem;padding:6px 9px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:500}
-.dep-row input:focus,.dep-row select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
-.del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:.9rem;padding:2px;border-radius:5px;transition:color .15s,background .15s;display:flex;align-items:center;justify-content:center}
+.dep-row-top{display:grid;grid-template-columns:22px 90px 1fr 70px 22px;gap:8px;align-items:center;padding:8px 8px 7px}
+.dep-row-bot{display:flex;align-items:center;gap:6px;padding:0 8px 7px;font-size:.68rem;color:var(--slate5);font-weight:500}
+.row-num{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--slate5);text-align:center;width:22px}
+.dep-ref{font-family:'JetBrains Mono',monospace;font-size:.8rem;padding:6px 8px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600}
+.dep-ref:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
+.dep-amt-wrap{position:relative}
+.dep-amt-wrap span{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--slate5);font-size:.8rem;pointer-events:none;font-weight:500}
+.dep-amt{font-family:'JetBrains Mono',monospace;font-size:.85rem;padding:6px 8px 6px 18px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600}
+.dep-amt:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
+.dep-bkt{font-size:.8rem;padding:6px 8px;border:1.5px solid var(--slate3);border-radius:7px;background:var(--white);color:var(--ink);outline:none;width:100%;font-weight:600;cursor:pointer}
+.dep-bkt:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(29,78,216,.09)}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:.85rem;border-radius:5px;transition:color .12s,background .12s;display:flex;align-items:center;justify-content:center;width:22px;height:22px;flex-shrink:0}
 .del-btn:hover{color:var(--red);background:var(--red-l)}
-.add-row-btn{width:100%;padding:8px;border:2px dashed var(--slate3);border-radius:8px;background:none;color:var(--slate5);font-size:.8rem;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.add-row-btn{width:100%;padding:8px;border:2px dashed var(--slate3);border-radius:8px;background:none;color:var(--slate5);font-size:.78rem;font-family:'Inter',sans-serif;font-weight:600;cursor:pointer;transition:all .15s}
 .add-row-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-ll)}
-
-/* ── BUTTONS ── */
-.btn-row{display:flex;gap:8px;margin-top:14px}
-.btn{padding:9px 20px;border-radius:8px;font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;letter-spacing:.01em}
+.btn-row{display:flex;gap:8px;margin-top:12px}
+.btn{padding:9px 20px;border-radius:8px;font-family:'Syne',sans-serif;font-size:.84rem;font-weight:700;cursor:pointer;border:none;transition:all .18s;letter-spacing:.01em}
 .btn-primary{background:var(--ink);color:#fff;flex:1;box-shadow:0 2px 8px rgba(13,27,42,.2)}
 .btn-primary:hover{background:var(--blue);box-shadow:0 4px 14px rgba(29,78,216,.25);transform:translateY(-1px)}
 .btn-clear{background:var(--slate2);color:var(--slate6)}
 .btn-clear:hover{background:var(--slate3);color:var(--ink)}
 
-/* ── TABS ── */
+/* TABS */
 .tabs-bar{display:flex;gap:3px;padding:4px;background:var(--slate2);border-radius:10px;margin-bottom:16px;width:fit-content}
-.tab-btn{padding:7px 18px;border-radius:7px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;color:var(--slate6);background:transparent;font-family:'Syne',sans-serif;letter-spacing:.01em}
+.tab-btn{padding:7px 18px;border-radius:7px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;transition:all .18s;color:var(--slate6);background:transparent;font-family:'Syne',sans-serif;letter-spacing:.01em}
 .tab-btn.on-ex{background:var(--ink);color:#fff;box-shadow:0 2px 6px rgba(13,27,42,.2)}
 .tab-btn.on-nw{background:var(--teal);color:#fff;box-shadow:0 2px 6px rgba(15,118,110,.2)}
 .tab-btn.on-cmp{background:var(--purple);color:#fff;box-shadow:0 2px 6px rgba(109,40,217,.2)}
 
-/* ── OUTPUT ── */
+/* OUTPUT */
 .out-panel{display:none}
 .out-panel.show{display:block;animation:up .3s ease}
 @keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── DAY GRID TABLE ── */
+/* DAY GRID */
 .day-grid-wrap{overflow-x:auto;margin-bottom:20px}
-table.dg{width:100%;border-collapse:collapse;font-size:.78rem;min-width:700px}
-table.dg th{padding:9px 10px;background:var(--slate1);font-weight:700;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
-table.dg th.rh{text-align:left;background:var(--ink);color:#fff;min-width:90px}
-table.dg td{padding:7px 8px;border-bottom:1px solid var(--slate2);text-align:center;vertical-align:top;min-width:80px}
+table.dg{width:100%;border-collapse:collapse;font-size:.77rem;min-width:680px}
+table.dg th{padding:8px 8px;background:var(--slate1);font-weight:700;font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;color:var(--slate6);border-bottom:2px solid var(--slate3);text-align:center;white-space:nowrap}
+table.dg th.rh{text-align:left;background:var(--ink);color:#fff;min-width:100px}
+table.dg td{padding:7px 7px;border-bottom:1px solid var(--slate2);text-align:center;vertical-align:top;min-width:76px}
 table.dg tr:hover td{background:var(--slate1)}
-.td-row-id{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:600;color:var(--slate6);text-align:left;padding-left:10px}
-.td-bucket{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink)}
-.td-acct{font-size:.62rem;padding:1px 6px;border-radius:10px;font-weight:700;display:inline-block;margin-top:1px}
+.td-bucket{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--ink);font-size:.8rem}
+.td-acct{font-size:.58rem;padding:1px 5px;border-radius:8px;font-weight:700;display:inline-block;margin-top:2px}
 .td-acct.ex{background:var(--blue-l);color:var(--blue)}
 .td-acct.nw{background:var(--teal-l);color:var(--teal)}
-.cell-amt{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;line-height:1.3}
-.cell-src{font-size:.62rem;color:var(--slate5);margin-top:1px}
+.cell-amt{font-family:'JetBrains Mono',monospace;font-size:.74rem;font-weight:600;line-height:1.3}
+.cell-src{font-size:.6rem;color:var(--slate5);margin-top:1px;line-height:1.3}
 .cell-hold{color:var(--amber);font-weight:700}
+.cell-nd{color:var(--orange);font-weight:700}
 .cell-rel-ex{color:var(--blue)}
 .cell-rel-nw{color:var(--teal)}
 .cell-rem{color:var(--purple)}
 .cell-excl{color:var(--red)}
 .cell-none{color:var(--slate3)}
-.cell-pri{font-size:.6rem;font-weight:700;padding:1px 5px;border-radius:4px;background:var(--slate2);color:var(--slate6);margin-top:2px;display:inline-block}
+.cell-pri{font-size:.58rem;font-weight:700;padding:1px 4px;border-radius:4px;background:var(--slate2);color:var(--slate6);margin-top:2px;display:inline-block}
 
-/* ── DAY SUMMARY BAR ── */
-.day-summary{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-bottom:20px}
-.ds-col{border-radius:8px;overflow:hidden;border:1px solid var(--slate3)}
-.ds-head{padding:5px 4px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:600;background:var(--slate1);color:var(--slate6);border-bottom:1px solid var(--slate3)}
-.ds-body{padding:6px 4px;text-align:center;min-height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
-.ds-total{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700}
-.ds-total.has-ex{color:var(--blue)}
-.ds-total.has-nw{color:var(--teal)}
-.ds-total.has-hold{color:var(--amber)}
-.ds-rows{font-size:.58rem;color:var(--slate5)}
+/* DAY SUMMARY */
+.day-summary{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap}
+.ds-col{border-radius:7px;overflow:hidden;border:1px solid var(--slate3);min-width:70px;flex:1}
+.ds-head{padding:4px 3px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:600;background:var(--slate1);color:var(--slate6);border-bottom:1px solid var(--slate3)}
+.ds-body{padding:5px 3px;text-align:center;min-height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.ds-total{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700}
+.ds-total.has-ex{color:var(--blue)}.ds-total.has-nw{color:var(--teal)}.ds-total.has-hold{color:var(--amber)}
+.ds-rows{font-size:.56rem;color:var(--slate5)}
 
-/* ── SPLIT DETAIL ── */
+/* SPLIT DETAIL */
 .split-section{margin-bottom:20px}
-.split-title{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.split-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.split-card{border-radius:10px;border:1px solid var(--slate3);overflow:hidden}
-.sc-head{padding:8px 12px;font-size:.72rem;font-weight:700;letter-spacing:.03em;display:flex;align-items:center;justify-content:space-between}
-.sc-head.ex{background:var(--ink);color:#fff}
-.sc-head.nw{background:var(--teal);color:#fff}
-.sc-rows{padding:8px 12px;display:flex;flex-direction:column;gap:4px}
-.sc-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;padding:3px 0;border-bottom:1px solid var(--slate2)}
+.split-title{font-family:'Syne',sans-serif;font-size:.8rem;font-weight:700;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.split-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.split-card{border-radius:9px;border:1px solid var(--slate3);overflow:hidden}
+.sc-head{padding:7px 11px;font-size:.7rem;font-weight:700;letter-spacing:.03em;display:flex;align-items:center;justify-content:space-between}
+.sc-head.ex{background:var(--ink);color:#fff}.sc-head.nw{background:var(--teal);color:#fff}
+.sc-rows{padding:7px 11px;display:flex;flex-direction:column;gap:3px}
+.sc-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:.73rem;padding:3px 0;border-bottom:1px solid var(--slate2)}
 .sc-row:last-child{border-bottom:none}
-.sc-src{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--slate5)}
-.sc-amt{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.75rem}
-.sc-amt.rel-ex{color:var(--blue)}
-.sc-amt.rel-nw{color:var(--teal)}
-.sc-total-row{display:flex;justify-content:space-between;padding:6px 12px;background:var(--slate1);font-size:.75rem;font-weight:700}
+.sc-src{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--slate5)}
+.sc-amt{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.73rem}
+.sc-amt.rel-ex{color:var(--blue)}.sc-amt.rel-nw{color:var(--teal)}.sc-amt.nd{color:var(--orange)}
+.sc-total-row{display:flex;justify-content:space-between;padding:5px 11px;background:var(--slate1);font-size:.73rem;font-weight:700}
 
-/* ── COMPARE TABLE ── */
-table.cmp{width:100%;border-collapse:collapse;font-size:.78rem}
-table.cmp th{padding:9px 12px;background:var(--ink);color:#fff;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-align:left;white-space:nowrap}
-table.cmp td{padding:8px 12px;border-bottom:1px solid var(--slate2);vertical-align:top}
+/* COMPARE */
+table.cmp{width:100%;border-collapse:collapse;font-size:.77rem}
+table.cmp th{padding:8px 11px;background:var(--ink);color:#fff;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;text-align:left;white-space:nowrap}
+table.cmp td{padding:7px 11px;border-bottom:1px solid var(--slate2);vertical-align:top}
 table.cmp tr:hover td{background:var(--slate1)}
-.diff-chip{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:700;display:inline-block}
+.diff-chip{font-size:.63rem;padding:2px 6px;border-radius:8px;font-weight:700;display:inline-block}
 .diff-same{background:var(--slate2);color:var(--slate6)}
 .diff-earlier{background:var(--green-l);color:var(--green)}
 .diff-later{background:var(--amber-l);color:var(--amber)}
 .diff-special{background:var(--red-l);color:var(--red)}
 .diff-only{background:var(--purple-l);color:var(--purple)}
 
-/* ── EMPTY ── */
-.empty{text-align:center;padding:60px 20px;color:var(--slate4)}
-.empty-icon{font-size:2.8rem;margin-bottom:12px}
-.empty p{font-size:.85rem;line-height:1.7;color:var(--slate5)}
-
-/* ── ALERTS ── */
-.alert{padding:10px 14px;border-radius:8px;font-size:.78rem;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+/* ALERTS */
+.alert{padding:9px 13px;border-radius:8px;font-size:.76rem;margin-bottom:10px;display:flex;gap:9px;align-items:flex-start;line-height:1.5}
 .alert-amber{background:var(--amber-l);border:1px solid #fcd34d;color:var(--amber)}
 .alert-blue{background:var(--blue-l);border:1px solid #93c5fd;color:var(--blue)}
 .alert-red{background:var(--red-l);border:1px solid #fca5a5;color:var(--red)}
 .alert-green{background:var(--green-l);border:1px solid #86efac;color:var(--green)}
 
-/* ── PRIORITY NOTE ── */
-.pri-note{font-size:.7rem;color:var(--slate5);margin-top:8px;line-height:1.5;padding:8px 10px;background:var(--slate1);border-radius:7px;border:1px solid var(--slate3)}
+.pri-note{font-size:.68rem;color:var(--slate5);margin-top:8px;line-height:1.6;padding:8px 10px;background:var(--slate1);border-radius:7px;border:1px solid var(--slate3)}
+.section-divider{height:1px;background:var(--slate3);margin:16px 0}
+.empty{text-align:center;padding:60px 20px}
+.empty-icon{font-size:2.6rem;margin-bottom:12px}
+.empty p{font-size:.83rem;line-height:1.8;color:var(--slate5)}
 
-.section-divider{height:1px;background:var(--slate3);margin:18px 0}
-.sticky-left{position:sticky;top:20px}
+/* Legend pills */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.leg{font-size:.63rem;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.02em}
 </style>
 </head>
 <body>
@@ -199,78 +202,79 @@ table.cmp tr:hover td{background:var(--slate1)}
   <div class="hdr-icon">💰</div>
   <div>
     <div class="hdr-title">Funds Availability Calculator</div>
-    <div class="hdr-sub">Multi-row · Configurable thresholds · Priority buckets · Row-level split tracing</div>
+    <div class="hdr-sub">Configurable bucket days · Default / Extension / Tier1 / Tier2 · Next Day Release · Exclusion</div>
   </div>
-  <div class="hdr-right">
-    <span class="badge">INTERNAL · QA USE</span>
-  </div>
+  <div class="hdr-right"><span class="badge">INTERNAL · QA USE</span></div>
 </div>
 
 <div class="wrap">
 
-  <!-- ══ LEFT PANEL ══ -->
-  <div class="sticky-left" style="display:flex;flex-direction:column;gap:16px;">
+  <div class="sticky-left">
 
-    <!-- Config -->
     <div class="panel">
       <div class="panel-hd">
         <div class="ic" style="background:#eff6ff">⚙️</div>
-        <h3>Configuration</h3>
+        <h3>Global Configuration</h3>
       </div>
       <div class="panel-body">
-        <div class="config-grid">
+        <div class="cfg-row">
           <div class="field">
-            <label>Min Partial ($)</label>
-            <div class="pfx"><span>$</span><input type="number" id="cfgMin" value="275" min="1" step="0.01"></div>
+            <label>Cap / Max Threshold ($)</label>
+            <div class="pfx"><span>$</span><input type="number" id="cfgMax" value="6725" min="1" step="0.01"></div>
           </div>
           <div class="field">
-            <label>Max Threshold ($)</label>
-            <div class="pfx"><span>$</span><input type="number" id="cfgMax" value="6725" min="1" step="0.01"></div>
+            <label>ND Min Release ($)</label>
+            <div class="pfx"><span>$</span><input type="number" id="cfgNdMin" value="100" min="1" step="0.01" title="Amount released on Day 1 when Next Day is ON (existing account)"></div>
           </div>
         </div>
         <div class="field">
           <label>Account Type</label>
-          <select id="cfgAcct">
+          <select id="cfgAcct" onchange="renderBucketTable()">
             <option value="both">Both (Existing + New)</option>
             <option value="existing">Existing Account Only</option>
             <option value="new">New Account Only</option>
           </select>
         </div>
-      </div>
-    </div>
-
-    <!-- Bucket Priority -->
-    <div class="panel">
-      <div class="panel-hd">
-        <div class="ic" style="background:#f0fdf4">🎯</div>
-        <h3>Bucket Priority</h3>
-      </div>
-      <div class="panel-body">
-        <div class="bucket-priority-grid" id="bucketPriorityGrid"></div>
-        <div class="pri-note">
-          ✔ Check to include bucket. Set priority (1 = highest). Same priority → <strong>first-come-first-serve</strong> by row order.
+        <div class="pri-note" style="margin-top:10px">
+          <strong>ND Min Release</strong> — for <em>Existing</em> accounts only. When ⚡ND is checked for a bucket, the ND Min amount is released on <strong>Day 1</strong>; the remaining (up to cap) releases on the Default day. Acts as the single "Min Partial" threshold.
         </div>
       </div>
     </div>
 
-    <!-- Deposit Rows -->
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="ic" style="background:#f0fdf4">🎯</div>
+        <h3>Bucket Configuration</h3>
+      </div>
+      <div class="panel-body" style="padding:10px 14px">
+        <div id="bucketTableWrap"></div>
+        <div class="pri-note" style="margin-top:10px">
+          Enter release <strong>day numbers</strong> per bucket.<br>
+          <span style="color:var(--blue)">■ EX:</span> Default day (≤ cap) · Extension offset (> cap remaining)<br>
+          <span style="color:var(--teal)">■ NW:</span> Default+Tier1 day (first release) · Default+Tier2 day (remainder)<br>
+          <span style="color:var(--red)">■ Excl</span> (New) → skips Tier1, uses Default+Tier2 directly<br>
+          <span style="color:var(--orange)">■ ⚡ND</span> (Existing) → releases ND Min on Day 1, rest on Default day
+        </div>
+      </div>
+    </div>
+
     <div class="panel">
       <div class="panel-hd">
         <div class="ic" style="background:#fef3c7">📋</div>
         <h3>Deposit Rows</h3>
       </div>
       <div class="panel-body">
-        <div style="display:grid;grid-template-columns:28px 1fr 1fr 1fr 28px;gap:8px;margin-bottom:6px;padding:0 10px;">
-          <div></div>
-          <div style="font-size:.65rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em">Ref / ID</div>
-          <div style="font-size:.65rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em">Amount</div>
-          <div style="font-size:.65rem;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.05em">Bucket</div>
-          <div></div>
+        <div class="dep-header">
+          <span></span>
+          <span>Ref / Check ID</span>
+          <span>Amount</span>
+          <span>Bucket</span>
+          <span></span>
         </div>
         <div class="rows-wrap" id="rowsWrap"></div>
-        <button class="add-row-btn" onclick="addRow()">＋ Add Row</button>
+        <button class="add-row-btn" onclick="addRow()">＋ Add Deposit Row</button>
         <div class="btn-row">
-          <button class="btn btn-primary" onclick="calculate()">▶ Calculate</button>
+          <button class="btn btn-primary" onclick="calculate()">▶ Calculate Schedule</button>
           <button class="btn btn-clear" onclick="clearAll()">↺ Clear</button>
         </div>
       </div>
@@ -278,63 +282,71 @@ table.cmp tr:hover td{background:var(--slate1)}
 
   </div>
 
-  <!-- ══ RIGHT PANEL ══ -->
   <div>
     <div id="emptyState" class="empty">
       <div class="empty-icon">📊</div>
-      <p>Add deposit rows, configure bucket priorities,<br>and click <strong>Calculate</strong> to see the full<br>day-by-day funds release schedule.</p>
+      <p>Configure bucket day values, add deposit rows,<br>then click <strong>Calculate Schedule</strong>.</p>
     </div>
 
     <div class="out-panel" id="outPanel">
-
-      <!-- Tabs -->
       <div class="tabs-bar" id="tabsBar">
         <button class="tab-btn on-ex" id="tab-ex" onclick="showTab('ex')">🏦 Existing</button>
         <button class="tab-btn" id="tab-nw" onclick="showTab('nw')">🆕 New Account</button>
         <button class="tab-btn" id="tab-cmp" onclick="showTab('cmp')">⚖️ Compare</button>
       </div>
 
-      <!-- EXISTING TAB -->
       <div id="pane-ex">
-        <div class="panel" style="margin-bottom:16px">
+        <div class="panel" style="margin-bottom:14px">
           <div class="panel-hd" style="background:var(--ink)">
             <div class="ic" style="background:rgba(255,255,255,.1)">🏦</div>
             <h3 style="color:#fff">Existing Account — Day-by-Day Release</h3>
           </div>
           <div class="panel-body">
+            <div class="legend">
+              <span class="leg" style="background:var(--amber-l);color:var(--amber)">● HOLD</span>
+              <span class="leg" style="background:var(--orange-l);color:var(--orange)">⚡ND Min (Day 1)</span>
+              <span class="leg" style="background:var(--blue-ll);color:var(--blue)">● Default Release</span>
+              <span class="leg" style="background:var(--blue-ll);color:var(--blue)">● Default+Ext Release</span>
+              <span class="leg" style="background:var(--purple-l);color:var(--purple)">● Remaining</span>
+            </div>
             <div id="ex-alerts"></div>
             <div class="day-summary" id="ex-day-summary"></div>
             <div class="day-grid-wrap"><table class="dg" id="ex-table"><thead></thead><tbody></tbody></table></div>
             <div class="section-divider"></div>
             <div class="split-section">
-              <div class="split-title">💡 Split Detail by Day <span style="font-size:.7rem;font-weight:400;color:var(--slate5)">— which row contributes what amount on each day</span></div>
+              <div class="split-title">💡 Split Detail by Day</div>
               <div class="split-cards" id="ex-splits"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- NEW ACCOUNT TAB -->
       <div id="pane-nw" style="display:none">
-        <div class="panel" style="margin-bottom:16px">
+        <div class="panel" style="margin-bottom:14px">
           <div class="panel-hd" style="background:var(--teal)">
             <div class="ic" style="background:rgba(255,255,255,.1)">🆕</div>
             <h3 style="color:#fff">New Account — Day-by-Day Release</h3>
           </div>
           <div class="panel-body">
+            <div class="legend">
+              <span class="leg" style="background:var(--amber-l);color:var(--amber)">● HOLD</span>
+              <span class="leg" style="background:var(--teal-l);color:var(--teal)">● Default+Tier1 (1st)</span>
+              <span class="leg" style="background:var(--teal-l);color:var(--teal)">● Default+Tier2 (Rem)</span>
+              <span class="leg" style="background:var(--red-l);color:var(--red)">● Exclusion→D+T2</span>
+              <span class="leg" style="background:var(--purple-l);color:var(--purple)">● Remaining (over cap)</span>
+            </div>
             <div id="nw-alerts"></div>
             <div class="day-summary" id="nw-day-summary"></div>
             <div class="day-grid-wrap"><table class="dg" id="nw-table"><thead></thead><tbody></tbody></table></div>
             <div class="section-divider"></div>
             <div class="split-section">
-              <div class="split-title">💡 Split Detail by Day <span style="font-size:.7rem;font-weight:400;color:var(--slate5)">— which row contributes what amount on each day</span></div>
+              <div class="split-title">💡 Split Detail by Day</div>
               <div class="split-cards" id="nw-splits"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- COMPARE TAB -->
       <div id="pane-cmp" style="display:none">
         <div class="panel">
           <div class="panel-hd" style="background:var(--purple)">
@@ -343,12 +355,7 @@ table.cmp tr:hover td{background:var(--slate1)}
           </div>
           <div class="panel-body" style="padding:0;overflow-x:auto">
             <table class="cmp" id="cmp-table">
-              <thead>
-                <tr>
-                  <th>Row</th><th>Bucket</th><th>Day</th>
-                  <th>Existing Account</th><th>New Account</th><th>Difference</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Row</th><th>Bucket</th><th>Day</th><th>Existing Account</th><th>New Account</th><th>Diff</th></tr></thead>
               <tbody id="cmp-body"></tbody>
             </table>
           </div>
@@ -360,94 +367,117 @@ table.cmp tr:hover td{background:var(--slate1)}
 </div>
 
 <script>
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // STATE
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
 let rowId = 0;
-let rows = []; // {id, ref, amount, bucket}
-let bucketConfig = {}; // {2:{checked,priority}, 3:{...}, ...}
+let rows = [];
 let currentTab = 'ex';
 
+// Bucket definitions
 const BUCKETS = [2,3,4,5,6,7];
 
-// ── Init bucket config ──
-// Priority order: B2=1, B5=2, B6=3, B3=4, B4=5, B7=6
-const BUCKET_DEFAULT_PRIORITY = {2:1, 3:4, 4:5, 5:2, 6:3, 7:6};
-BUCKETS.forEach(b => {
-  bucketConfig[b] = { checked: true, priority: BUCKET_DEFAULT_PRIORITY[b] };
-});
+const BUCKET_DEFAULTS = {
+  2:{ label:'B2', note:'Cash / Next-Day',   priority:1, def:1,  ext:6,  t1:0,  t2:6,  ndOn:false, exclOn:false },
+  3:{ label:'B3', note:'Local Check',        priority:4, def:4,  ext:3,  t1:2,  t2:3,  ndOn:false, exclOn:false },
+  4:{ label:'B4', note:'Non-Local Check',    priority:5, def:2,  ext:5,  t1:0,  t2:5,  ndOn:false, exclOn:false },
+  5:{ label:'B5', note:'Teller / Govt',      priority:2, def:1,  ext:1,  t1:5,  t2:6,  ndOn:false, exclOn:false },
+  6:{ label:'B6', note:'New Acct / Special', priority:3, def:2,  ext:5,  t1:3,  t2:5,  ndOn:false, exclOn:true  },
+  7:{ label:'B7', note:'Out-of-State',       priority:6, def:3,  ext:5,  t1:0,  t2:5,  ndOn:false, exclOn:false },
+};
 
-// ── Render bucket priority grid ──
-function renderBucketGrid() {
-  const el = document.getElementById('bucketPriorityGrid');
-  const acctType = document.getElementById('cfgAcct')?.value || 'both';
-  el.innerHTML = BUCKETS.map(b => {
-    const cfg = bucketConfig[b];
-    const notes = bucketNotes(b);
-    return `<div class="bp-row" id="bprow-${b}">
-      <input type="checkbox" class="chk" ${cfg.checked?'checked':''} onchange="onBucketCheck(${b},this.checked)">
-      <div class="bp-label">Bucket ${b}<small>${notes}</small></div>
-      <input type="number" class="bp-pri" value="${cfg.priority}" min="1" max="99" ${cfg.checked?'':'disabled'}
-        onchange="onBucketPri(${b},this.value)" id="bppri-${b}">
-      <span class="acct-tag ${acctType==='new'?'nw':'ex'}">${acctType==='new'?'NW':'EX'}</span>
-    </div>`;
-  }).join('');
+// Live config
+let bucketCfg = {};
+BUCKETS.forEach(b => { bucketCfg[b] = { ...BUCKET_DEFAULTS[b], checked: true }; });
+
+// ═══════════════════════════════════════════
+// BUCKET TABLE RENDER
+// ═══════════════════════════════════════════
+function renderBucketTable() {
+  const acctType = document.getElementById('cfgAcct').value;
+  const showEx = acctType !== 'new';
+  const showNw = acctType !== 'existing';
+
+  let html = `<table class="bkt-table">
+    <thead>
+      <tr>
+        <th style="min-width:90px">Bucket</th>
+        <th>Pri</th>
+        ${showEx ? `<th><span class="col-ex">EX Default</span></th><th><span class="col-ex">EX +Ext</span></th>` : ''}
+        ${showNw ? `<th><span class="col-nw">NW +T1</span></th><th><span class="col-nw">NW +T2</span></th>` : ''}
+        ${showNw ? `<th><span class="col-excl">Excl</span></th>` : ''}
+        ${showEx ? `<th><span class="col-nd">⚡ND</span></th>` : ''}
+        <th>On</th>
+      </tr>
+    </thead>
+    <tbody>`;
+
+  BUCKETS.forEach(b => {
+    const c = bucketCfg[b];
+    const dis = c.checked ? '' : 'disabled';
+    const rowCls = c.checked ? '' : 'row-disabled';
+    html += `<tr class="${rowCls}" id="bktr-${b}">
+      <td class="bkt-cell">
+        <div class="bkt-name">${c.label}<small>${c.note}</small></div>
+      </td>
+      <td class="bkt-cell">
+        <input type="number" class="bkt-pri" value="${c.priority}" min="1" max="99" ${dis}
+          onchange="bucketCfg[${b}].priority=parseInt(this.value)||1" title="Priority (1=highest)">
+      </td>
+      ${showEx ? `
+        <td class="bkt-cell">
+          <input type="number" class="bkt-inp" value="${c.def}" min="0" max="30" ${dis}
+            onchange="bucketCfg[${b}].def=parseInt(this.value)||0" title="EX: Default release day">
+        </td>
+        <td class="bkt-cell">
+          <input type="number" class="bkt-inp" value="${c.ext}" min="0" max="30" ${dis}
+            onchange="bucketCfg[${b}].ext=parseInt(this.value)||0" title="EX: Extension offset (added to Default day)">
+        </td>` : ''}
+      ${showNw ? `
+        <td class="bkt-cell">
+          <input type="number" class="bkt-inp" value="${c.t1}" min="0" max="30" ${dis}
+            onchange="bucketCfg[${b}].t1=parseInt(this.value)||0" title="NW: Default+Tier1 day (first release)">
+        </td>
+        <td class="bkt-cell">
+          <input type="number" class="bkt-inp" value="${c.t2}" min="0" max="30" ${dis}
+            onchange="bucketCfg[${b}].t2=parseInt(this.value)||0" title="NW: Default+Tier2 day (remaining)">
+        </td>` : ''}
+      ${showNw ? `
+        <td class="bkt-cell" title="New Account Exclusion: skip Tier1, go straight to Default+Tier2">
+          <input type="checkbox" class="bkt-chk-excl" ${c.exclOn?'checked':''} ${dis}
+            onchange="bucketCfg[${b}].exclOn=this.checked">
+        </td>` : ''}
+      ${showEx ? `
+        <td class="bkt-cell" title="Next Day Release: release ND Min on Day 1, rest on Default day (Existing only)">
+          <input type="checkbox" class="bkt-chk-nd" ${c.ndOn?'checked':''} ${dis}
+            onchange="bucketCfg[${b}].ndOn=this.checked">
+        </td>` : ''}
+      <td class="bkt-cell">
+        <input type="checkbox" class="bkt-chk" ${c.checked?'checked':''}
+          onchange="onBucketToggle(${b},this.checked)">
+      </td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  document.getElementById('bucketTableWrap').innerHTML = html;
 }
 
-function bucketNotes(b) {
-  const notes = {
-    2:'Up to max → Day 1',
-    3:'Partial → Day 1, Extension → Day 4/7',
-    4:'Partial → Day 1, Extension → Day 2/7',
-    5:'All funds → Day 1',
-    6:'Partial → Day 1/2, Excl. ON (New)',
-    7:'Partial → Day 1, Extension → Day 3/8'
-  };
-  return notes[b]||'';
+function onBucketToggle(b, checked) {
+  bucketCfg[b].checked = checked;
+  if (!checked) { bucketCfg[b].ndOn = false; bucketCfg[b].exclOn = false; }
+  renderBucketTable();
 }
 
-function onBucketCheck(b, checked) {
-  bucketConfig[b].checked = checked;
-  const priEl = document.getElementById('bppri-'+b);
-  if(priEl) priEl.disabled = !checked;
-}
-function onBucketPri(b, val) {
-  bucketConfig[b].priority = parseInt(val)||1;
-}
-
-document.getElementById('cfgAcct').addEventListener('change', renderBucketGrid);
-
-// ── Rows ──
+// ═══════════════════════════════════════════
+// DEPOSIT ROWS
+// ═══════════════════════════════════════════
 function addRow() {
   rowId++;
-  rows.push({ id: rowId, ref: 'R'+String(rowId).padStart(3,'0'), amount: '', bucket: 2 });
+  rows.push({ id: rowId, ref: 'R'+String(rowId).padStart(3,'0'), amount: 0, bucket: 2 });
   renderRows();
 }
-
-function removeRow(id) {
-  rows = rows.filter(r => r.id !== id);
-  renderRows();
-}
-
-function renderRows() {
-  const el = document.getElementById('rowsWrap');
-  if (rows.length === 0) {
-    el.innerHTML = '<div style="text-align:center;color:var(--slate4);font-size:.8rem;padding:16px">No rows yet. Click Add Row.</div>';
-    return;
-  }
-  el.innerHTML = rows.map((r,i) => `
-    <div class="dep-row" id="deprow-${r.id}">
-      <div class="row-num">#${i+1}</div>
-      <input type="text" value="${r.ref}" placeholder="Ref / Check ID" onchange="updateRow(${r.id},'ref',this.value)" style="font-size:.75rem;min-width:0">
-      <input type="number" value="${r.amount}" placeholder="Amount" min="0" step="0.01"
-        onchange="updateRow(${r.id},'amount',this.value)" onkeydown="if(event.key==='Enter')calculate()">
-      <select onchange="updateRow(${r.id},'bucket',this.value)">
-        ${BUCKETS.map(b=>`<option value="${b}" ${r.bucket==b?'selected':''}>Bucket ${b}</option>`).join('')}
-      </select>
-      <button class="del-btn" onclick="removeRow(${r.id})">✕</button>
-    </div>`).join('');
-}
-
+function removeRow(id) { rows = rows.filter(r => r.id !== id); renderRows(); }
 function updateRow(id, field, val) {
   const r = rows.find(x => x.id === id);
   if (!r) return;
@@ -455,413 +485,278 @@ function updateRow(id, field, val) {
   else if (field === 'bucket') r.bucket = parseInt(val);
   else r[field] = val;
 }
-
 function clearAll() {
   rows = []; rowId = 0; renderRows();
   document.getElementById('outPanel').classList.remove('show');
   document.getElementById('emptyState').style.display = '';
 }
 
-// ════════════════════════════════════════════
-// BUSINESS LOGIC
-// ════════════════════════════════════════════
-
-function getThresholds() {
-  const mn = parseFloat(document.getElementById('cfgMin').value) || 275;
-  const mx = parseFloat(document.getElementById('cfgMax').value) || 6725;
-  return { min: mn, max: mx };
+function renderRows() {
+  const el = document.getElementById('rowsWrap');
+  if (rows.length === 0) {
+    el.innerHTML = '<div style="text-align:center;color:var(--slate4);font-size:.8rem;padding:16px 0">No rows yet. Click Add Deposit Row.</div>';
+    return;
+  }
+  el.innerHTML = rows.map((r, i) => {
+    const cfg = bucketCfg[r.bucket];
+    const acctType = document.getElementById('cfgAcct').value;
+    const ndLabel = (acctType !== 'new' && cfg?.ndOn) ? `<span style="color:var(--orange);font-weight:700;font-size:.65rem">⚡ND</span>` : '';
+    const exclLabel = (acctType !== 'existing' && cfg?.exclOn) ? `<span style="color:var(--red);font-weight:700;font-size:.65rem">EXCL</span>` : '';
+    const tags = [ndLabel, exclLabel].filter(Boolean).join(' ');
+    return `<div class="dep-row" id="deprow-${r.id}">
+      <div class="dep-row-top">
+        <div class="row-num">${i+1}</div>
+        <input type="text" class="dep-ref" value="${r.ref}" placeholder="Ref ID"
+          onchange="updateRow(${r.id},'ref',this.value)">
+        <div class="dep-amt-wrap">
+          <span>$</span>
+          <input type="number" class="dep-amt" value="${r.amount||''}" placeholder="0.00" min="0" step="0.01"
+            onchange="updateRow(${r.id},'amount',this.value)"
+            onkeydown="if(event.key==='Enter')calculate()">
+        </div>
+        <select class="dep-bkt" onchange="updateRow(${r.id},'bucket',this.value);renderRows()">
+          ${BUCKETS.filter(b=>bucketCfg[b].checked).map(b=>`<option value="${b}" ${r.bucket==b?'selected':''}>Bucket ${b}</option>`).join('')}
+        </select>
+        <button class="del-btn" onclick="removeRow(${r.id})">✕</button>
+      </div>
+      ${tags ? `<div class="dep-row-bot">${tags}&nbsp;active for this bucket</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
-// Sort rows by bucket priority (then original row order for ties = FCFS)
-function getSortedRows(inputRows) {
-  const checked = BUCKETS.filter(b => bucketConfig[b].checked);
-  const valid = inputRows.filter(r => checked.includes(r.bucket));
-  return valid.map((r,i) => ({...r, _idx: i}))
-    .sort((a,b) => {
-      const pa = bucketConfig[a.bucket].priority;
-      const pb = bucketConfig[b.bucket].priority;
-      if (pa !== pb) return pa - pb;
-      return a._idx - b._idx; // FCFS
+// ═══════════════════════════════════════════
+// BUSINESS LOGIC
+// ═══════════════════════════════════════════
+
+function getSortedRows() {
+  const checked = BUCKETS.filter(b => bucketCfg[b].checked);
+  return rows.filter(r => r.amount > 0 && checked.includes(r.bucket))
+    .map((r, i) => ({...r, _idx: i}))
+    .sort((a, b) => {
+      const pa = bucketCfg[a.bucket].priority;
+      const pb = bucketCfg[b.bucket].priority;
+      return pa !== pb ? pa - pb : a._idx - b._idx;
     });
 }
 
-// ── ACCOUNT-LEVEL SCHEDULER ──
-// Processes all rows in priority order, tracking a single $max cap across the account.
-// Bucket 5 releases ALL funds (no cap consumed from the pool for that row),
-// but those released dollars DO count toward the account cap for other rows.
-// The $275 partial release also counts toward the $6725 cap.
-
-function buildAccountSchedules(sortedRows, T, mode) {
-  // mode: 'existing' | 'new'
-  const { min, max } = T;
-  let capRemaining = max; // account-level cap pool
+function buildSchedules(sortedRows, mode) {
+  const cap = parseFloat(document.getElementById('cfgMax').value) || 6725;
+  const ndMin = parseFloat(document.getElementById('cfgNdMin').value) || 100;
+  let capRemaining = cap;
 
   return sortedRows.map(row => {
     const { amount, bucket } = row;
-    const s = [];
-    s.push({ day:0, action:'hold', amount });
-
-    if (mode === 'new' && bucket === 6) {
-      // Exclusion ON — all funds held to Day 7, does NOT consume cap
-      s.push({ day:7, action:'exclusion', amount, note:'All Funds (Excl. ON)' });
-      return { ...row, schedule: s, _capNote: 'exclusion — no cap consumed', _capUsed: 0, _capAfter: capRemaining };
-    }
-
-    // All other buckets: subject to account cap
-    // Partial amount (min threshold) also counts against the cap
-    let localCap = capRemaining; // how much this row can use from the pool
+    const cfg = bucketCfg[bucket];
+    const s = [{ day:0, action:'hold', amount }];
     let capUsed = 0;
+    let localCap = capRemaining;
 
     if (mode === 'existing') {
-      // Existing Account: Bucket 5 = ALL funds released Day 1, no cap
-      if (bucket === 5) {
-        s.push({ day:1, action:'release', amount, note:'All Funds (B5)' });
-        capRemaining = Math.max(0, capRemaining - amount);
-        return { ...row, schedule: s, _capUsed: amount, _capAfter: capRemaining };
-      }
-      if (bucket === 2) {
-        const rel = Math.min(amount, localCap);
-        if (rel > 0) {
-          s.push({ day:1, action: rel === amount ? 'release' : 'release', amount: rel,
-            note: rel < amount ? `Up to cap ($${fmt(rel)})` : 'Full Release' });
-          capUsed += rel;
-        }
-        const leftover = amount - rel;
-        if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
+      // ── EXISTING ACCOUNT ──
+      const extDay = cfg.def + cfg.ext; // Def + Ext added together
 
-      } else if (bucket === 3) {
-        const partial = Math.min(min, amount, localCap);
-        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
-        const rem1 = amount - partial;
-        const capAfterPartial = localCap - capUsed;
-        if (rem1 > 0 && capAfterPartial > 0) {
-          const rel = Math.min(rem1, capAfterPartial);
-          s.push({ day:4, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
-          capUsed += rel;
-          const leftover = rem1 - rel;
-          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
-        } else if (rem1 > 0) {
-          s.push({ day:7, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+      if (cfg.ndOn) {
+        // Day 1: release ND Min
+        const ndRel = Math.min(ndMin, amount, localCap);
+        if (ndRel > 0) {
+          s.push({ day:1, action:'nd', amount: ndRel, note:`⚡ND Min $${fmt(ndRel)}` });
+          capUsed += ndRel;
         }
-
-      } else if (bucket === 4) {
-        const partial = Math.min(min, amount, localCap);
-        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
-        const rem1 = amount - partial;
-        const capAfterPartial = localCap - capUsed;
-        if (rem1 > 0 && capAfterPartial > 0) {
-          const rel = Math.min(rem1, capAfterPartial);
-          s.push({ day:2, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
+        // Default day: rest up to cap
+        const capAfterNd = localCap - capUsed;
+        const remAmt = amount - ndRel;
+        if (remAmt > 0 && capAfterNd > 0) {
+          const rel = Math.min(remAmt, capAfterNd);
+          s.push({ day: cfg.def, action:'release', amount: rel, note: `Default D${cfg.def}${rel < remAmt ? ' (cap)' : ''}` });
           capUsed += rel;
-          const leftover = rem1 - rel;
-          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
-        } else if (rem1 > 0) {
-          s.push({ day:7, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+          const leftover = remAmt - rel;
+          if (leftover > 0) s.push({ day: extDay, action:'remaining', amount: leftover, note:`Ext D${extDay} (over cap)` });
+        } else if (remAmt > 0) {
+          s.push({ day: extDay, action:'remaining', amount: remAmt, note:`Ext D${extDay} (cap exhausted)` });
         }
-
-      } else if (bucket === 6) {
-        const partial = Math.min(min, amount, localCap);
-        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
-        const rem1 = amount - partial;
-        const capAfterPartial = localCap - capUsed;
-        if (rem1 > 0 && capAfterPartial > 0) {
-          const rel = Math.min(rem1, capAfterPartial);
-          s.push({ day:2, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
-          capUsed += rel;
-          const leftover = rem1 - rel;
-          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
-        } else if (rem1 > 0) {
-          s.push({ day:7, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
-        }
-
-      } else if (bucket === 7) {
-        const partial = Math.min(min, amount, localCap);
-        if (partial > 0) { s.push({ day:1, action:'partial', amount: partial, note:`Partial $${fmt(partial)}` }); capUsed += partial; }
-        const rem1 = amount - partial;
-        const capAfterPartial = localCap - capUsed;
-        if (rem1 > 0 && capAfterPartial > 0) {
-          const rel = Math.min(rem1, capAfterPartial);
-          s.push({ day:3, action:'release', amount: rel, note: rel < rem1 ? `Up to cap ($${fmt(rel)})` : 'Full Remaining' });
-          capUsed += rel;
-          const leftover = rem1 - rel;
-          if (leftover > 0) s.push({ day:8, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
-        } else if (rem1 > 0) {
-          s.push({ day:8, action:'remaining', amount: rem1, note:'Remaining (cap exhausted)' });
+      } else {
+        if (amount <= localCap) {
+          s.push({ day: cfg.def, action:'release', amount, note:`Default D${cfg.def}` });
+          capUsed = amount;
+        } else {
+          if (localCap > 0) {
+            s.push({ day: cfg.def, action:'release', amount: localCap, note:`Default D${cfg.def} (≤ cap)` });
+            capUsed = localCap;
+          }
+          const leftover = amount - localCap;
+          s.push({ day: extDay, action:'remaining', amount: leftover, note:`Ext D${extDay} (> cap remaining)` });
         }
       }
 
     } else {
-      // mode === 'new'
-      if (bucket === 2) {
-        const rel = Math.min(amount, localCap);
-        if (rel > 0) {
-          s.push({ day:1, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})` : 'Full Release' });
+      // ── NEW ACCOUNT ──
+      if (cfg.exclOn) {
+        const exclDay = cfg.def + cfg.t2;
+        s.push({ day: exclDay, action:'exclusion', amount, note:`Excl → D${cfg.def}+T2=D${exclDay}` });
+        capUsed = 0;
+      } else {
+        const t1Day = cfg.def + cfg.t1;
+        const t2Day = cfg.def + cfg.t2;
+        if (localCap > 0) {
+          const rel = Math.min(amount, localCap);
+          s.push({ day: t1Day, action:'release', amount: rel, note:`D+T1 = D${t1Day}` });
           capUsed += rel;
-        }
-        const leftover = amount - rel;
-        if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
-
-      } else if (bucket === 3) {
-        const capAfter = localCap - capUsed;
-        if (capAfter > 0) {
-          const rel = Math.min(amount, capAfter);
-          s.push({ day:6, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D4+T1-2)` : 'Full Release\n(D4+T1-2)' });
-          capUsed += rel;
-          const leftover = amount - rel;
-          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)\n(D4+T2-3)' });
+          const rem = amount - rel;
+          if (rem > 0) s.push({ day: t2Day, action:'remaining', amount: rem, note:`D+T2 = D${t2Day} (remainder)` });
         } else {
-          s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
-        }
-
-      } else if (bucket === 4) {
-        const capAfter = localCap - capUsed;
-        if (capAfter > 0) {
-          const rel = Math.min(amount, capAfter);
-          s.push({ day:2, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D2+T1-0)` : 'Full Release\n(D2+T1-0)' });
-          capUsed += rel;
-          const leftover = amount - rel;
-          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)\n(D2+T2-5)' });
-        } else {
-          s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
-        }
-
-      } else if (bucket === 5) {
-        // New Account B5: Up to cap Day 6 (Default(1)+Tier1(5)), Remaining Day 7
-        const capAfter5 = localCap - capUsed;
-        if (capAfter5 > 0) {
-          const rel = Math.min(amount, capAfter5);
-          s.push({ day:6, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D1+T1-5)` : 'Full Release\n(D1+T1-5)' });
-          capUsed += rel;
-          const leftover = amount - rel;
-          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining\n(D1+T2-6)' });
-        } else {
-          s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
-        }
-
-      } else if (bucket === 7) {
-        const capAfter = localCap - capUsed;
-        if (capAfter > 0) {
-          const rel = Math.min(amount, capAfter);
-          s.push({ day:3, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D3+T1-0)` : 'Full Release\n(D3+T1-0)' });
-          capUsed += rel;
-          const leftover = amount - rel;
-          if (leftover > 0) s.push({ day:8, action:'remaining', amount: leftover, note:'Remaining (over cap)' });
-        } else {
-          s.push({ day:8, action:'remaining', amount, note:'Remaining (cap exhausted)' });
+          s.push({ day: t2Day, action:'remaining', amount, note:`D+T2 = D${t2Day} (cap exhausted)` });
         }
       }
     }
 
-    // Deduct this row's consumed amount from the account cap
     capRemaining = Math.max(0, capRemaining - capUsed);
     return { ...row, schedule: s, _capUsed: capUsed, _capAfter: capRemaining };
   });
 }
 
-// ════════════════════════════════════════════
-// CALCULATE
-// ════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// UI CORE
+// ═══════════════════════════════════════════
 function calculate() {
   if (rows.length === 0) { alert('Please add at least one deposit row.'); return; }
-
   const validRows = rows.filter(r => r.amount > 0);
-  if (validRows.length === 0) { alert('Please enter amounts for your rows.'); return; }
+  if (validRows.length === 0) { alert('Please enter amounts.'); return; }
 
-  const T = getThresholds();
   const acctType = document.getElementById('cfgAcct').value;
-  const sortedRows = getSortedRows(validRows);
+  const sortedRows = getSortedRows();
 
-  // Build per-account-level schedules (cap shared across all rows)
-  const exData = buildAccountSchedules(sortedRows, T, 'existing');
-  const nwData = buildAccountSchedules(sortedRows, T, 'new');
+  const exData = buildSchedules(sortedRows, 'existing');
+  const nwData = buildSchedules(sortedRows, 'new');
 
-  // Show/hide tabs based on account type
   document.getElementById('tab-ex').style.display = acctType === 'new' ? 'none' : '';
   document.getElementById('tab-nw').style.display = acctType === 'existing' ? 'none' : '';
-
   if (acctType === 'existing') currentTab = 'ex';
   if (acctType === 'new') currentTab = 'nw';
 
-  renderOutput(exData, nwData, T, acctType, sortedRows);
+  if (acctType !== 'new') renderTable(exData, 'existing');
+  if (acctType !== 'existing') renderTable(nwData, 'new');
+  renderCompare(exData, nwData, acctType);
 
   document.getElementById('outPanel').classList.add('show');
   document.getElementById('emptyState').style.display = 'none';
   showTab(currentTab);
 }
 
-function renderOutput(exData, nwData, T, acctType, sortedRows) {
-  if (acctType !== 'new') renderTable(exData, 'existing', T);
-  if (acctType !== 'existing') renderTable(nwData, 'new', T);
-  renderCompare(exData, nwData, acctType);
+function getAllDays(data) {
+  const days = new Set();
+  data.forEach(r => r.schedule.forEach(s => days.add(s.day)));
+  return [...days].sort((a,b) => a-b);
 }
 
-function renderTable(data, type, T) {
+function renderTable(data, type) {
   const prefix = type === 'existing' ? 'ex' : 'nw';
-  const colorClass = type === 'existing' ? 'rel-ex' : 'rel-nw';
-  const days = [0,1,2,3,4,5,6,7,8];
+  const cap = parseFloat(document.getElementById('cfgMax').value) || 6725;
+  const days = getAllDays(data);
 
-  // ── Alerts ──
   const alertEl = document.getElementById(prefix+'-alerts');
-  const mode = type; // alias for clarity
-  let alerts = '';
-  const totalChecks = data.length;
-  const totalAmount = data.reduce((s,r) => s+r.amount, 0);
-  alerts += `<div class="alert alert-blue">ℹ️ <span><strong>${totalChecks} check(s) — Total: $${fmt(totalAmount)}</strong> · Account cap: $${fmt(T.max)} shared across all checks in priority order. Partial ($${fmt(T.min)}) counts toward the cap.</span></div>`;
+  const totalAmt = data.reduce((s,r)=>s+r.amount,0);
+  let alerts = `<div class="alert alert-blue">ℹ️ <span><strong>${data.length} check(s) · Total $${fmt(totalAmt)}</strong> · Account cap $${fmt(cap)} shared in priority order.</span></div>`;
+
   data.forEach(r => {
     const capUsed = r._capUsed ?? 0;
     const capAfter = r._capAfter ?? 0;
-    if (mode === 'new' && r.bucket === 6) {
-      alerts += `<div class="alert alert-red">🚫 <span><strong>${r.ref} · B6 (New):</strong> Exclusion ON — $${fmt(r.amount)} held to Day 7. No cap consumed.</span></div>`;
-    } else if (r.bucket === 5) {
-      alerts += `<div class="alert alert-green">⚡ <span><strong>${r.ref} · B5:</strong> $${fmt(r.amount)} fully released (no cap limit for B5). Cap remaining for subsequent rows: $${fmt(capAfter)}.</span></div>`;
+    const ndEntry = r.schedule.find(s => s.action === 'nd');
+    const exclEntry = r.schedule.find(s => s.action === 'exclusion');
+    if (exclEntry) {
+      alerts += `<div class="alert alert-red">🚫 <span><strong>${r.ref} · B${r.bucket} (Excl):</strong> $${fmt(r.amount)} → D${exclEntry.day} (Excl, no cap).</span></div>`;
+    } else if (ndEntry) {
+      alerts += `<div class="alert alert-amber">⚡ <span><strong>${r.ref} · B${r.bucket} (ND):</strong> $${fmt(ndEntry.amount)} on Day 1 · $${fmt(r.amount - ndEntry.amount)} on Default day. Cap left: $${fmt(capAfter)}.</span></div>`;
     } else if (capUsed < r.amount) {
-      alerts += `<div class="alert alert-amber">⚠️ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} — only $${fmt(capUsed)} released (cap used), $${fmt(r.amount - capUsed)} to remaining schedule. Cap left after: $${fmt(capAfter)}.</span></div>`;
+      alerts += `<div class="alert alert-amber">⚠️ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} — $${fmt(capUsed)} released (cap), $${fmt(r.amount-capUsed)} to extension/Tier2 day. Cap left: $${fmt(capAfter)}.</span></div>`;
     } else {
-      alerts += `<div class="alert alert-green">✅ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} — fully covered by cap. Cap left after: $${fmt(capAfter)}.</span></div>`;
+      alerts += `<div class="alert alert-green">✅ <span><strong>${r.ref} · B${r.bucket}:</strong> $${fmt(r.amount)} fully within cap. Cap left: $${fmt(capAfter)}.</span></div>`;
     }
   });
   alertEl.innerHTML = alerts;
 
-  // ── Day Summary Bar ──
   const dsEl = document.getElementById(prefix+'-day-summary');
-  let dsHtml = '';
-  days.forEach(d => {
-    // Aggregate all rows for this day
-    let total = 0;
-    let rowRefs = [];
+  dsEl.innerHTML = days.map(d => {
+    let total = 0, refs = [];
     data.forEach(r => {
       const e = r.schedule.find(s => s.day === d);
-      if (e && e.action !== 'none') {
-        total += e.amount;
-        rowRefs.push(r.ref);
-      }
+      if (e && e.action !== 'none') { total += e.amount; refs.push(r.ref); }
     });
-    const hasAction = total > 0;
-    const isHold = data.some(r => { const e = r.schedule.find(s => s.day === d); return e && e.action === 'hold'; });
-    const isExcl = data.some(r => { const e = r.schedule.find(s => s.day === d); return e && e.action === 'exclusion'; });
-    const amtClass = isHold ? 'has-hold' : (isExcl ? '' : hasAction ? (type==='existing'?'has-ex':'has-nw') : '');
-    dsHtml += `<div class="ds-col">
+    const hasHold = data.some(r => { const e = r.schedule.find(s=>s.day===d); return e?.action==='hold'; });
+    const cls = hasHold ? 'has-hold' : total > 0 ? (type==='existing'?'has-ex':'has-nw') : '';
+    return `<div class="ds-col">
       <div class="ds-head">D${d}</div>
       <div class="ds-body">
-        ${hasAction ? `<div class="ds-total ${amtClass}">$${fmtShort(total)}</div><div class="ds-rows">${rowRefs.join(', ')}</div>` : '<div style="color:var(--slate3);font-size:.8rem">—</div>'}
+        ${total > 0 ? `<div class="ds-total ${cls}">$${fmtShort(total)}</div><div class="ds-rows">${refs.join(', ')}</div>` : '<div style="color:var(--slate3);font-size:.75rem">—</div>'}
       </div>
     </div>`;
-  });
-  dsEl.innerHTML = dsHtml;
+  }).join('');
 
-  // ── Main Table ──
   const tbl = document.getElementById(prefix+'-table');
   const thead = tbl.querySelector('thead');
   const tbody = tbl.querySelector('tbody');
-
-  thead.innerHTML = `<tr>
-    <th class="rh" style="min-width:80px">Row / Bucket</th>
-    <th class="rh" style="background:var(--slate6);min-width:60px">Priority</th>
-    ${days.map(d=>`<th>Day ${d}</th>`).join('')}
-  </tr>`;
+  thead.innerHTML = `<tr><th class="rh">Row / Bucket</th><th class="rh" style="background:var(--slate6)">Priority</th>${days.map(d=>`<th>Day ${d}</th>`).join('')}</tr>`;
 
   tbody.innerHTML = data.map(r => {
-    const pri = bucketConfig[r.bucket].priority;
+    const cfg = bucketCfg[r.bucket];
     const cells = days.map(d => {
       const e = r.schedule.find(s => s.day === d);
-      if (!e || e.action === 'none' || e.action === undefined) return `<td><span class="cell-none cell-amt">—</span></td>`;
-      let cls = '', label = '';
-      if (e.action === 'hold') { cls='cell-hold'; label='HOLD'; }
-      else if (e.action === 'partial') { cls=`cell-${type==='existing'?'rel-ex':'rel-nw'}`; label=`$${fmt(e.amount)}`; }
-      else if (e.action === 'release') { cls=`cell-${type==='existing'?'rel-ex':'rel-nw'}`; label=`$${fmt(e.amount)}`; }
-      else if (e.action === 'remaining') { cls='cell-rem'; label=`$${fmt(e.amount)}`; }
-      else if (e.action === 'exclusion') { cls='cell-excl'; label=`$${fmt(e.amount)}`; }
-      const noteLine = e.note ? `<div class="cell-src">${e.note.split('\n')[0]}</div>` : '';
-      return `<td><span class="cell-amt ${cls}">${label}</span>${noteLine}<div class="cell-src">from ${r.ref}</div></td>`;
+      if (!e || e.action === 'none') return `<td><span class="cell-none">—</span></td>`;
+      let cls='', label='';
+      if (e.action==='hold') { cls='cell-hold'; label='HOLD'; }
+      else if (e.action==='nd') { cls='cell-nd'; label=`$${fmt(e.amount)}`; }
+      else if (e.action==='release') { cls=`cell-rel-${type==='existing'?'ex':'nw'}`; label=`$${fmt(e.amount)}`; }
+      else if (e.action==='remaining') { cls='cell-rem'; label=`$${fmt(e.amount)}`; }
+      else if (e.action==='exclusion') { cls='cell-excl'; label=`$${fmt(e.amount)}`; }
+      return `<td><span class="cell-amt ${cls}">${label}</span>${e.note ? `<div class="cell-src">${e.note}</div>` : ''}<div class="cell-src">${r.ref}</div></td>`;
     }).join('');
-    return `<tr>
-      <td>
-        <div class="td-bucket">B${r.bucket}</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--slate5)">${r.ref}</div>
-        <span class="td-acct ${type==='existing'?'ex':'nw'}">${type==='existing'?'EX':'NW'}</span>
-      </td>
-      <td>
-        <div class="cell-pri">P${pri}</div>
-        <div style="font-size:.62rem;color:var(--slate5);margin-top:3px">$${fmt(r.amount)}</div>
-      </td>
-      ${cells}
-    </tr>`;
+    return `<tr><td><div class="td-bucket">B${r.bucket}</div><div style="font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--slate5)">${r.ref}</div><span class="td-acct ${type==='existing'?'ex':'nw'}">${type==='existing'?'EX':'NW'}</span></td><td><div class="cell-pri">P${cfg.priority}</div><div style="font-size:.6rem;color:var(--slate5);margin-top:2px">$${fmt(r.amount)}</div></td>${cells}</tr>`;
   }).join('');
 
-  // ── Split Detail ──
   const splitsEl = document.getElementById(prefix+'-splits');
   let splitsHtml = '';
   days.forEach(d => {
     const entries = [];
     data.forEach(r => {
       const e = r.schedule.find(s => s.day === d);
-      if (e && !['none','hold'].includes(e.action)) {
-        entries.push({ ref: r.ref, bucket: r.bucket, amount: e.amount, action: e.action, note: e.note });
-      }
+      if (e && !['none','hold'].includes(e.action)) entries.push({...e, ref:r.ref, bucket:r.bucket});
     });
-    if (entries.length === 0) return;
-    const total = entries.reduce((a,c) => a+c.amount, 0);
-    const isExcl = entries.some(e => e.action === 'exclusion');
+    if (!entries.length) return;
+    const total = entries.reduce((a,c)=>a+c.amount,0);
     splitsHtml += `<div class="split-card">
-      <div class="sc-head ${type==='existing'?'ex':'nw'}">
-        Day ${d}
-        <span style="font-size:.65rem;opacity:.8">${entries.length} row${entries.length>1?'s':''}</span>
-      </div>
-      <div class="sc-rows">
-        ${entries.map(e => `
-          <div class="sc-row">
-            <div>
-              <span class="sc-src">${e.ref} · B${e.bucket}</span>
-              <div style="font-size:.62rem;color:var(--slate4);line-height:1.2">${e.note?.split('\n')[0]||''}</div>
-            </div>
-            <span class="sc-amt ${isExcl?'':colorClass}">$${fmt(e.amount)}</span>
-          </div>`).join('')}
-      </div>
-      <div class="sc-total-row">
-        <span>Day ${d} Total</span>
-        <span style="font-family:'JetBrains Mono',monospace;color:${type==='existing'?'var(--blue)':'var(--teal)'}">$${fmt(total)}</span>
-      </div>
+      <div class="sc-head ${type==='existing'?'ex':'nw'}">Day ${d} <span style="font-size:.62rem;opacity:.75">${entries.length} item${entries.length>1?'s':''}</span></div>
+      <div class="sc-rows">${entries.map(e=>{
+          const amtCls = e.action==='nd'?'nd':(type==='existing'?'rel-ex':'rel-nw');
+          return `<div class="sc-row"><div><span class="sc-src">${e.ref} · B${e.bucket}</span><div style="font-size:.58rem;color:var(--slate4)">${e.note||''}</div></div><span class="sc-amt ${amtCls}">$${fmt(e.amount)}</span></div>`;
+        }).join('')}</div>
+      <div class="sc-total-row"><span>Day ${d} Total</span><span style="font-family:'JetBrains Mono',monospace;color:${type==='existing'?'var(--blue)':'var(--teal)'}">$${fmt(total)}</span></div>
     </div>`;
   });
-  splitsEl.innerHTML = splitsHtml || '<div style="color:var(--slate4);font-size:.8rem">No release events found.</div>';
+  splitsEl.innerHTML = splitsHtml || '<div style="color:var(--slate4);font-size:.8rem">No release events.</div>';
 }
 
 function renderCompare(exData, nwData, acctType) {
-  if (acctType !== 'both') {
-    document.getElementById('tab-cmp').style.display = 'none';
-    return;
-  }
-  document.getElementById('tab-cmp').style.display = '';
-  const days = [0,1,2,3,4,5,6,7,8];
+  if (acctType !== 'both') { document.getElementById('tab-cmp').style.display='none'; return; }
+  document.getElementById('tab-cmp').style.display='';
+  const days = [...new Set([...exData, ...nwData].flatMap(r=>r.schedule.map(s=>s.day)))].sort((a,b)=>a-b);
   const tbody = document.getElementById('cmp-body');
   let html = '';
-
-  exData.forEach((exRow, i) => {
+  exData.forEach((exRow,i) => {
     const nwRow = nwData[i];
     days.forEach(d => {
-      const ex = exRow.schedule.find(s => s.day === d);
-      const nw = nwRow?.schedule.find(s => s.day === d);
-      const exA = ex?.action || 'none';
-      const nwA = nw?.action || 'none';
-      if (exA === 'none' && nwA === 'none') return;
-      const exTxt = exA === 'none' ? '—' : exA === 'hold' ? `HOLD ($${fmt(ex.amount)})` : `$${fmt(ex.amount)} · ${ex.note?.split('\n')[0]}`;
-      const nwTxt = nwA === 'none' ? '—' : nwA === 'hold' ? `HOLD ($${fmt(nw.amount)})` : `$${fmt(nw.amount)} · ${nw.note?.split('\n')[0]}`;
-      let diffLabel = 'Same', diffCls = 'diff-same';
-      if (exA === 'hold' && nwA === 'hold') { diffLabel='Same (Hold)'; diffCls='diff-same'; }
-      else if (exA !== 'none' && nwA === 'none') { diffLabel='Existing Only'; diffCls='diff-only'; }
-      else if (exA === 'none' && nwA !== 'none') { diffLabel='New Only'; diffCls='diff-only'; }
-      else if (nwA === 'exclusion') { diffLabel='Excl. Rule'; diffCls='diff-special'; }
-      else if (exA === nwA && Math.abs((ex?.amount||0)-(nw?.amount||0)) < 0.01) { diffLabel='Same'; diffCls='diff-same'; }
-      else if ((ex?.amount||0) > (nw?.amount||0)) { diffLabel='Ex > New'; diffCls='diff-later'; }
-      else { diffLabel='New > Ex'; diffCls='diff-earlier'; }
-      html += `<tr>
-        <td style="font-family:'JetBrains Mono',monospace;font-size:.75rem">${exRow.ref}</td>
-        <td style="font-weight:700;font-family:'JetBrains Mono',monospace">B${exRow.bucket}</td>
-        <td style="color:var(--slate5);font-size:.75rem">Day ${d}</td>
-        <td style="color:var(--blue);font-size:.78rem">${exTxt}</td>
-        <td style="color:var(--teal);font-size:.78rem">${nwTxt}</td>
-        <td><span class="diff-chip ${diffCls}">${diffLabel}</span></td>
-      </tr>`;
+      const ex = exRow.schedule.find(s=>s.day===d);
+      const nw = nwRow?.schedule.find(s=>s.day===d);
+      const exA = ex?.action||'none', nwA = nw?.action||'none';
+      if (exA==='none' && nwA==='none') return;
+      const exTxt = exA==='none'?'—':exA==='hold'?`HOLD $${fmt(ex.amount)}`:`$${fmt(ex.amount)} ${ex.note||''}`;
+      const nwTxt = nwA==='none'?'—':nwA==='hold'?`HOLD $${fmt(nw.amount)}`:`$${fmt(nw.amount)} ${nw.note||''}`;
+      let label='Same', cls='diff-same';
+      if (exA!=='none'&&nwA==='none'){label='Ex Only';cls='diff-only';}
+      else if (exA==='none'&&nwA!=='none'){label='NW Only';cls='diff-only';}
+      else if (nwA==='exclusion'){label='Excl';cls='diff-special';}
+      else if (exA===nwA&&Math.abs((ex?.amount||0)-(nw?.amount||0))<.01){label='Same';cls='diff-same';}
+      else if ((ex?.amount||0)>(nw?.amount||0)){label='Ex > NW';cls='diff-later';}
+      else{label='NW > Ex';cls='diff-earlier';}
+      html+=`<tr><td style="font-family:'JetBrains Mono',monospace;font-size:.74rem">${exRow.ref}</td><td style="font-weight:700;font-family:'JetBrains Mono',monospace">B${exRow.bucket}</td><td style="color:var(--slate5);font-size:.74rem">D${d}</td><td style="color:var(--blue);font-size:.76rem">${exTxt}</td><td style="color:var(--teal);font-size:.76rem">${nwTxt}</td><td><span class="diff-chip ${cls}">${label}</span></td></tr>`;
     });
   });
   tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--slate4);padding:20px">No data</td></tr>';
@@ -870,23 +765,19 @@ function renderCompare(exData, nwData, acctType) {
 function showTab(tab) {
   currentTab = tab;
   ['ex','nw','cmp'].forEach(t => {
-    document.getElementById('pane-'+t).style.display = t===tab?'block':'none';
+    const el = document.getElementById('pane-'+t);
+    if (el) el.style.display = t===tab?'block':'none';
     const btn = document.getElementById('tab-'+t);
-    if (btn) btn.className = 'tab-btn' + (t===tab ? ` on-${t}` : '');
+    if (btn) btn.className = 'tab-btn'+(t===tab?` on-${t}`:'');
   });
 }
 
-// ── Utils ──
-function fmt(n) { return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-function fmtShort(n) {
-  if (n >= 1000) return (n/1000).toFixed(1)+'k';
-  return Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-}
+function fmt(n){return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function fmtShort(n){return n>=1000?(n/1000).toFixed(1)+'k':Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})}
 
-// ── Boot ──
-renderBucketGrid();
-addRow(); addRow(); addRow(); // start with 3 sample rows
-// Pre-fill sample data
+// Boot
+renderBucketTable();
+addRow(); addRow(); addRow();
 rows[0].amount = 5000; rows[0].bucket = 2; rows[0].ref = 'R001';
 rows[1].amount = 8500; rows[1].bucket = 4; rows[1].ref = 'R002';
 rows[2].amount = 6725; rows[2].bucket = 6; rows[2].ref = 'R003';
