@@ -504,17 +504,7 @@ function buildAccountSchedules(sortedRows, T, mode) {
     if (mode === 'new' && bucket === 6) {
       // Exclusion ON — all funds held to Day 7, does NOT consume cap
       s.push({ day:7, action:'exclusion', amount, note:'All Funds (Excl. ON)' });
-      return { ...row, schedule: s, _capNote: 'exclusion — no cap consumed' };
-    }
-
-    if (bucket === 5) {
-      // Bucket 5: ALL funds released immediately, no cap limit applied to this row.
-      // However the released amount reduces the account cap for other rows.
-      const releaseDay = mode === 'existing' ? 1 : 6;
-      s.push({ day: releaseDay, action:'release', amount, note:'All Funds (B5 — No Cap)' });
-      // Bucket 5 DOES consume cap for other rows
-      capRemaining = Math.max(0, capRemaining - amount);
-      return { ...row, schedule: s, _capNote: `B5 full release; cap remaining after: $${fmt(capRemaining)}` };
+      return { ...row, schedule: s, _capNote: 'exclusion — no cap consumed', _capUsed: 0, _capAfter: capRemaining };
     }
 
     // All other buckets: subject to account cap
@@ -523,6 +513,12 @@ function buildAccountSchedules(sortedRows, T, mode) {
     let capUsed = 0;
 
     if (mode === 'existing') {
+      // Existing Account: Bucket 5 = ALL funds released Day 1, no cap
+      if (bucket === 5) {
+        s.push({ day:1, action:'release', amount, note:'All Funds (B5)' });
+        capRemaining = Math.max(0, capRemaining - amount);
+        return { ...row, schedule: s, _capUsed: amount, _capAfter: capRemaining };
+      }
       if (bucket === 2) {
         const rel = Math.min(amount, localCap);
         if (rel > 0) {
@@ -625,6 +621,19 @@ function buildAccountSchedules(sortedRows, T, mode) {
           capUsed += rel;
           const leftover = amount - rel;
           if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining (over cap)\n(D2+T2-5)' });
+        } else {
+          s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
+        }
+
+      } else if (bucket === 5) {
+        // New Account B5: Up to cap Day 6 (Default(1)+Tier1(5)), Remaining Day 7
+        const capAfter5 = localCap - capUsed;
+        if (capAfter5 > 0) {
+          const rel = Math.min(amount, capAfter5);
+          s.push({ day:6, action:'release', amount: rel, note: rel < amount ? `Up to cap ($${fmt(rel)})\n(D1+T1-5)` : 'Full Release\n(D1+T1-5)' });
+          capUsed += rel;
+          const leftover = amount - rel;
+          if (leftover > 0) s.push({ day:7, action:'remaining', amount: leftover, note:'Remaining\n(D1+T2-6)' });
         } else {
           s.push({ day:7, action:'remaining', amount, note:'Remaining (cap exhausted)' });
         }
