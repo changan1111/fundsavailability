@@ -3,109 +3,640 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Funds Availability — v5.9.4</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Funds Availability Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ink:#0d1b2a; --blue:#1d4ed8; --blue-l:#dbeafe; --blue-ll:#eff6ff;
-  --teal:#0f766e; --teal-l:#ccfbf1; --amber:#b45309; --amber-l:#fef3c7;
-  --red:#b91c1c; --red-l:#fee2e2; --slate1:#f8fafc; --slate2:#f1f5f9;
-  --slate3:#e2e8f0; --slate4:#cbd5e1; --slate5:#94a3b8; --slate6:#64748b;
-  --white:#fff; --shadow:0 4px 16px rgba(13,27,42,.06); --r:12px;
+:root {
+  --bg: #0e1117;
+  --surface: #161b25;
+  --surface2: #1d2535;
+  --surface3: #252e42;
+  --border: #2a3347;
+  --border2: #354060;
+  --text: #e8edf5;
+  --text2: #8b96b0;
+  --text3: #5a6480;
+  --accent: #4f8ef7;
+  --accent-dim: rgba(79,142,247,0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.12);
+  --amber: #f59e0b;
+  --amber-dim: rgba(245,158,11,0.12);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.12);
+  --green: #4ade80;
+  --green-dim: rgba(74,222,128,0.12);
+  --b2:#6366f1; --b3:#8b5cf6; --b4:#a855f7; --b5:#ec4899; --b6:#f43f5e; --b7:#fb923c;
+  --r: 10px;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#f0f4fb;color:var(--ink);min-height:100vh}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 
-.hdr{background:var(--ink);padding:18px 30px;display:flex;align-items:center;gap:15px;color:#fff}
-.hdr-icon{font-size:1.5rem;background:linear-gradient(135deg,#1d4ed8,#0f766e);padding:8px;border-radius:10px}
-.hdr-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem}
+/* HEADER */
+.hdr {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.hdr-left { display: flex; align-items: center; gap: 12px; }
+.hdr-logo {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.hdr-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.hdr-badge {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  background: var(--surface3);
+  color: var(--text3);
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.cap-meter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+@media(max-width:600px){
+  .cap-meter { gap: 6px; padding: 5px 10px; }
+  .cap-bar-wrap { display: none; }
+  .hdr-badge { display: none; }
+}
+.cap-label { font-size: .65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+.cap-values { display: flex; gap: 6px; align-items: baseline; }
+.cap-used { font-family: var(--font-mono); font-size: .85rem; font-weight: 500; color: var(--accent); }
+.cap-sep { color: var(--text3); font-size: .75rem; }
+.cap-total { font-family: var(--font-mono); font-size: .75rem; color: var(--text2); }
+.cap-bar-wrap { width: 80px; height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+.cap-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--teal)); border-radius: 2px; transition: width .3s ease; }
+.cap-bar.over { background: linear-gradient(90deg, var(--amber), var(--red)); }
 
-.wrap{max-width:1440px;margin:0 auto;padding:20px;display:grid;grid-template-columns:420px 1fr;gap:20px}
-@media(max-width:1100px){.wrap{grid-template-columns:1fr}}
-.sticky-side{position:sticky;top:20px;display:flex;flex-direction:column;gap:15px}
+/* LAYOUT */
+.wrap {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media(max-width:1000px){
+  .wrap { grid-template-columns: 1fr; padding: 10px; gap: 12px; }
+}
 
-.panel{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--slate3)}
-.panel-hd{padding:12px 18px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;gap:10px;background:var(--slate1)}
-.panel-hd h3{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--ink)}
+.sticky-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* Only sticky on desktop */
+@media(min-width:1001px){
+  .sticky-col {
+    position: sticky;
+    top: 64px;
+    max-height: calc(100vh - 84px);
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .sticky-col::-webkit-scrollbar { width: 4px; }
+  .sticky-col::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+}
 
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:.62rem;font-weight:800;color:var(--slate6);text-transform:uppercase;letter-spacing:.05em}
-.field input, .field select{padding:8px;border:1.5px solid var(--slate3);border-radius:8px;font-size:.85rem;outline:none;background:var(--slate1);font-family:'Inter'}
+/* PANELS */
+.panel {
+  background: var(--surface);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.panel-hd {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.panel-hd h3 {
+  font-family: var(--font-display);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--text2);
+  letter-spacing: .01em;
+}
+.panel-body { padding: 14px 16px; }
 
-/* Bucket Config Table */
-.bkt-table{width:100%;border-collapse:collapse;font-size:.68rem}
-.bkt-table th{padding:6px;background:var(--slate2);font-weight:700;border-bottom:2px solid var(--slate3)}
-.bkt-table td{padding:5px 2px;text-align:center;border-bottom:1px solid var(--slate2)}
-.bkt-inp{width:34px;text-align:center;padding:3px;border:1px solid var(--slate3);border-radius:4px;font-family:'JetBrains Mono'}
+/* GLOBAL CONFIG */
+.cfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: .6rem;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.field input, .field select {
+  padding: 8px 10px;
+  border: 1.5px solid var(--border2);
+  border-radius: 7px;
+  font-size: .82rem;
+  outline: none;
+  background: var(--surface2);
+  color: var(--text);
+  font-family: var(--font-body);
+  transition: border-color .15s;
+}
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.field select { cursor: pointer; }
 
-/* TRANSACTION ROW - UNIFIED INPUT STYLE */
-.dep-header{display:grid;grid-template-columns:25px 95px 95px 75px 25px;gap:10px;padding:0 10px 8px;font-size:.6rem;font-weight:800;color:var(--slate5);text-transform:uppercase}
-.rows-wrap{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px}
-.dep-row{background:var(--white);border-radius:10px;border:1.5px solid var(--slate3);overflow:hidden}
-.dep-row-top{display:grid;grid-template-columns:25px 95px 95px 75px 25px;gap:10px;padding:10px;align-items:center}
-.row-num{font-family:'JetBrains Mono';font-size:.7rem;color:var(--slate5);font-weight:700}
-
-/* Standardized Inputs */
-.dep-ref, .dep-amt, .dep-bkt {
-  width: 100% !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 0.75rem !important;
-  padding: 8px !important;
-  border: 1.5px solid var(--slate3) !important;
-  border-radius: 6px !important;
-  background: var(--slate1) !important;
+/* BUCKET TABLE */
+.bkt-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.bkt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .68rem;
+  min-width: 260px;
+}
+.bkt-table th {
+  padding: 7px 5px;
+  background: var(--surface2);
+  font-weight: 600;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.bkt-table td {
+  padding: 5px 3px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.bkt-table tr:last-child td { border-bottom: none; }
+.bkt-name {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 500;
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+.bkt-inp {
+  width: 36px;
+  text-align: center;
+  padding: 4px 3px;
+  border: 1.5px solid var(--border2);
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  background: var(--surface2);
+  color: var(--text);
   outline: none;
 }
-.dep-amt { color: var(--ink) !important; text-align: left; }
-.dep-bkt { cursor: pointer; font-weight: 700; color: var(--ink); }
+.bkt-inp:focus { border-color: var(--accent); }
+.bkt-check { width: 14px; height: 14px; cursor: pointer; accent-color: var(--accent); }
 
-.dep-row-bot{padding:0 10px 8px 45px;display:flex;gap:6px}
-.tag{font-size:.55rem;font-weight:800;padding:2px 5px;border-radius:4px;text-transform:uppercase}
-.tag-nd{background:var(--amber-l);color:var(--amber)}
-.tag-excl{background:var(--red-l);color:var(--red)}
+/* TRANSACTIONS */
+.txn-header {
+  display: grid;
+  grid-template-columns: 22px 1fr 1fr 64px 24px;
+  gap: 6px;
+  padding: 0 10px 8px;
+  font-size: .58rem;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+@media(max-width:400px){
+  .txn-header { grid-template-columns: 20px 1fr 1fr 54px 20px; gap: 4px; padding: 0 8px 8px; }
+}
+.rows-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 2px;
+  margin-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+/* On mobile, don't cap height — show all rows so Process button is always visible */
+@media(max-width:1000px){
+  .rows-wrap { max-height: none; overflow-y: visible; }
+}
 
-/* Results UI */
-.tabs-bar{display:flex;gap:5px;margin-bottom:15px;background:var(--slate2);padding:5px;border-radius:10px;width:fit-content}
-.tab-btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-weight:700;font-size:.75rem;font-family:'Syne';color:var(--slate6);background:transparent}
-.tab-btn.active{background:var(--ink);color:#fff}
-.tab-btn.active.nw-mode{background:var(--teal)}
+.dep-row {
+  background: var(--surface2);
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  overflow: hidden;
+  transition: border-color .15s;
+}
+.dep-row:hover { border-color: var(--border2); }
+.dep-row.capped { border-color: rgba(248,113,113,0.3); }
+.dep-row-top {
+  display: grid;
+  grid-template-columns: 22px 1fr 1fr 64px 24px;
+  gap: 6px;
+  padding: 8px 10px;
+  align-items: center;
+}
+@media(max-width:400px){
+  .dep-row-top { grid-template-columns: 20px 1fr 1fr 54px 20px; gap: 4px; padding: 7px 8px; }
+}
+.row-num {
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  color: var(--text3);
+  font-weight: 500;
+}
+.dep-ref, .dep-amt, .dep-bkt {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  padding: 6px 8px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color .15s;
+}
+.dep-ref:focus, .dep-amt:focus, .dep-bkt:focus { border-color: var(--accent); }
+.dep-bkt { cursor: pointer; font-weight: 500; }
+.dep-row-tags {
+  padding: 0 10px 8px 40px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.tag {
+  font-size: .55rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.tag-nd { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.tag-excl { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
+.tag-cap { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
+.tag-zero { background: var(--surface3); color: var(--text3); border: 1px solid var(--border); }
 
-.day-summary{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto}
-.ds-box{background:#fff;border:1px solid var(--slate3);border-radius:8px;min-width:95px;flex:1;text-align:center}
-.ds-day{background:var(--slate1);font-size:.6rem;font-weight:800;padding:5px;border-bottom:1px solid var(--slate3)}
-.ds-amt{padding:10px;font-family:'JetBrains Mono';font-weight:700;font-size:.85rem}
+.del-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text3);
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.del-btn:hover { background: var(--red-dim); color: var(--red); }
 
-table.dg{width:100%;border-collapse:collapse;font-size:.75rem}
-table.dg th{padding:10px;background:var(--slate1);border-bottom:2px solid var(--slate3);text-transform:uppercase;font-size:.6rem;letter-spacing:.05em}
-table.dg td{padding:12px 10px;border-bottom:1px solid var(--slate2);text-align:center}
-.cell-val{font-family:'JetBrains Mono';font-weight:700;font-size:.8rem}
-.cell-tag{font-size:.5rem;font-weight:800;padding:2px 4px;border-radius:4px;display:inline-block;margin-top:4px}
+/* BUTTONS */
+.btn-add {
+  width: 100%;
+  padding: 9px;
+  background: var(--surface3);
+  color: var(--text2);
+  border: 1.5px dashed var(--border2);
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: .75rem;
+  transition: all .15s;
+  margin-bottom: 10px;
+}
+.btn-add:hover { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+.btn-run {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--accent), #3b82f6);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: .9rem;
+  transition: all .2s;
+  letter-spacing: .01em;
+}
+.btn-run:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(79,142,247,.4); }
+.btn-run:active { transform: translateY(0); }
 
-.btn-main{width:100%;padding:14px;background:var(--ink);color:#fff;border:none;border-radius:10px;font-weight:800;cursor:pointer;font-family:'Syne';margin-top:10px;transition:0.2s}
-.btn-main:hover{background:var(--blue);transform:translateY(-1px)}
-.del-btn{background:none;border:none;cursor:pointer;color:var(--slate4);font-size:1rem;display:flex;justify-content:center}
-.del-btn:hover{color:var(--red)}
+/* RESULTS */
+.results-col { display: flex; flex-direction: column; gap: 14px; }
+.mode-toggle {
+  display: flex;
+  gap: 6px;
+  background: var(--surface);
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+.mode-btn {
+  padding: 7px 16px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: .72rem;
+  font-family: var(--font-body);
+  color: var(--text3);
+  background: transparent;
+  transition: all .15s;
+}
+.mode-btn.active { background: var(--surface3); color: var(--text); }
+
+/* SIDE BY SIDE */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.results-grid.single { grid-template-columns: 1fr; }
+@media(max-width:800px){ .results-grid { grid-template-columns: 1fr; } }
+
+/* SCHEDULE PANEL */
+.sched-panel {
+  background: var(--surface);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.sched-hd {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.sched-title {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 600;
+}
+.sched-title.ex { color: var(--accent); }
+.sched-title.nw { color: var(--teal); }
+.sched-total {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  color: var(--text2);
+}
+
+/* TIMELINE / GANTT STYLE */
+.timeline-wrap { padding: 14px 16px; }
+.tl-days-header {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding-left: 100px;
+}
+.tl-day-col {
+  flex: 1;
+  min-width: 60px;
+  text-align: center;
+}
+.tl-day-label {
+  font-size: .6rem;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.tl-day-amt {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--text);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.tl-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.tl-row:last-child { border-bottom: none; }
+.tl-row-info {
+  width: 94px;
+  flex-shrink: 0;
+}
+.tl-ref {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tl-bkt-badge {
+  font-size: .55rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-top: 2px;
+}
+.tl-cells {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+.tl-cell {
+  flex: 1;
+  min-width: 60px;
+  text-align: center;
+  position: relative;
+}
+.tl-cell-bar {
+  padding: 5px 4px;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  font-weight: 500;
+  min-height: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.tl-cell-amt { font-weight: 700; font-size: .68rem; }
+.tl-cell-tag { font-size: .48rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; opacity: .8; }
+.tl-cell-empty { min-height: 28px; }
+
+/* tag color variants */
+.bar-nd { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.bar-default { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(79,142,247,.2); }
+.bar-ext { background: var(--surface3); color: var(--text2); border: 1px solid var(--border); }
+.bar-t1 { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(45,212,191,.2); }
+.bar-t2 { background: var(--surface3); color: var(--text2); border: 1px solid var(--border); }
+.bar-excl { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
+.bar-capped { background: var(--red-dim); color: var(--red); border: 1px dashed rgba(248,113,113,.4); opacity: .6; }
+
+/* TOTALS ROW */
+.tl-summary-line {
+  font-size: .65rem;
+  color: var(--text3);
+  padding: 3px 0 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-body);
+  line-height: 1.4;
+}
+.tl-summary-line:last-child { border-bottom: none; }
+.tl-totals-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 2px solid var(--border2);
+}
+.tl-totals-label {
+  width: 94px;
+  flex-shrink: 0;
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding-top: 4px;
+}
+.tl-totals-cells {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+.tl-total-cell {
+  flex: 1;
+  min-width: 60px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface2);
+  border-radius: 5px;
+  padding: 5px 4px;
+  border: 1px solid var(--border2);
+}
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text3);
+}
+.empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: .4; }
+.empty-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
+.empty-sub { font-size: .78rem; line-height: 1.5; }
+
+/* TOOLTIP */
+.tooltip-wrap { position: relative; display: inline-flex; }
+.tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: var(--surface3); color: var(--text3); font-size: .55rem; display: inline-flex; align-items: center; justify-content: center; cursor: help; border: 1px solid var(--border2); }
+.tooltip-box {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface3);
+  color: var(--text);
+  font-size: .65rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border2);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .15s;
+  z-index: 200;
+  font-family: var(--font-body);
+  line-height: 1.4;
+  max-width: 200px;
+  white-space: normal;
+  text-align: center;
+}
+.tooltip-wrap:hover .tooltip-box { opacity: 1; }
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-icon">🏛️</div>
-  <div class="hdr-title">Funds Availablity Calculator</div>
+  <div class="hdr-left">
+    <div class="hdr-logo">🏛</div>
+    <div class="hdr-title">Funds Availability</div>
+    <div class="hdr-badge">v6.0</div>
+  </div>
+  <div class="cap-meter" id="capMeter">
+    <div class="cap-label">Cap Used</div>
+    <div class="cap-values">
+      <span class="cap-used" id="capUsedVal">$0</span>
+      <span class="cap-sep">/</span>
+      <span class="cap-total" id="capTotalVal">$6,725</span>
+    </div>
+    <div class="cap-bar-wrap"><div class="cap-bar" id="capBarEl" style="width:0%"></div></div>
+  </div>
 </div>
 
 <div class="wrap">
-  <div class="sticky-side">
+  <!-- LEFT COLUMN -->
+  <div class="sticky-col">
+
     <div class="panel">
-      <div class="panel-hd"><h3>⚙️ Global Configuration</h3></div>
+      <div class="panel-hd"><h3>⚙ Global Config</h3></div>
       <div class="panel-body">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-          <div class="field"><label>Release Cap ($)</label><input type="number" id="cfgMax" value="6725"></div>
-          <div class="field"><label>ND Min ($)</label><input type="number" id="cfgNdMin" value="275"></div>
+        <div class="cfg-grid">
+          <div class="field">
+            <label>Release Cap ($)</label>
+            <input type="number" id="cfgMax" value="6725" oninput="liveUpdate()">
+          </div>
+          <div class="field">
+            <label>ND Min ($)</label>
+            <input type="number" id="cfgNdMin" value="275" oninput="liveUpdate()">
+          </div>
         </div>
-        <div class="field"><label>Environment Mode</label>
-          <select id="acctType" onchange="renderBucketTable(); renderRows();">
-            <option value="both">Compare View</option>
+        <div class="field">
+          <label>View Mode</label>
+          <select id="acctType" onchange="renderBucketTable(); renderRows(); liveUpdate();">
+            <option value="both">Compare (Both)</option>
             <option value="existing">Existing Only</option>
             <option value="new">New Account Only</option>
           </select>
@@ -114,184 +645,412 @@ table.dg td{padding:12px 10px;border-bottom:1px solid var(--slate2);text-align:c
     </div>
 
     <div class="panel">
-      <div class="panel-hd"><h3>🎯 Bucket Logic</h3></div>
-      <div class="panel-body" id="bucketTableWrap"></div>
+      <div class="panel-hd">
+        <h3>🎯 Bucket Logic</h3>
+        <div style="display:flex;gap:8px;font-size:.6rem;color:var(--text3)">
+          <span style="display:flex;align-items:center;gap:3px">
+            <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-box">Pri = sort order. Def = default hold days. Ext = extended days added on top (Existing). T1/T2 = tier offsets added to Def (New). ND = next-day release flag. Excl = exclusion: bypasses Tier 1.</span></span>
+            Hover ? for help
+          </span>
+        </div>
+      </div>
+      <div class="panel-body" style="padding:10px 12px">
+        <div class="bkt-wrap" id="bucketTableWrap"></div>
+      </div>
     </div>
 
     <div class="panel">
       <div class="panel-hd"><h3>📋 Transactions</h3></div>
-      <div class="panel-body">
-        <div class="dep-header"><span>#</span><span>Ref ID</span><span>Amount ($)</span><span>Bkt</span><span></span></div>
+      <div class="panel-body" style="padding:12px 14px">
+        <div class="txn-header">
+          <span>#</span><span>Ref ID</span><span>Amount ($)</span><span>Bucket</span><span></span>
+        </div>
         <div id="rowsWrap" class="rows-wrap"></div>
-        <button class="btn-main" style="background:var(--slate2);color:var(--ink);font-size:.7rem;padding:8px" onclick="addRow()">＋ Add Deposit Row</button>
-        <button class="btn-main" onclick="calculate()">▶ Process Results</button>
+        <button class="btn-add" onclick="addRow()">＋ Add Transaction</button>
+        <button class="btn-run" onclick="calculate()">▶ Process Schedule</button>
       </div>
     </div>
+
   </div>
 
-  <div id="outPanel" style="display:none">
-    <div class="tabs-bar">
-      <button class="tab-btn active" id="tab-ex" onclick="showTab('ex')">Existing Account</button>
-      <button class="tab-btn" id="tab-nw" onclick="showTab('nw')">New Account</button>
-    </div>
-
-    <div id="pane-ex" class="panel">
-      <div class="panel-hd" style="background:var(--ink)"><h3 style="color:#fff">Schedule: Existing</h3></div>
-      <div class="panel-body">
-        <div class="day-summary" id="ex-summary"></div>
-        <table class="dg" id="ex-table"><thead></thead><tbody></tbody></table>
+  <!-- RIGHT COLUMN -->
+  <div class="results-col" id="resultsCol">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div class="mode-toggle" id="modeToggle" style="display:none">
+        <button class="mode-btn active" id="tab-ex" onclick="showTab('ex')">Existing Account</button>
+        <button class="mode-btn" id="tab-nw" onclick="showTab('nw')">New Account</button>
       </div>
     </div>
 
-    <div id="pane-nw" class="panel" style="display:none">
-      <div class="panel-hd" style="background:var(--teal)"><h3 style="color:#fff">Schedule: New</h3></div>
-      <div class="panel-body">
-        <div class="day-summary" id="nw-summary"></div>
-        <table class="dg" id="nw-table"><thead></thead><tbody></tbody></table>
+    <div id="resultsGrid" class="results-grid single">
+      <div class="empty-state">
+        <div class="empty-icon">📊</div>
+        <div class="empty-title">No schedule yet</div>
+        <div class="empty-sub">Add transactions and press<br>Process Schedule to see results.</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
 let rows = [];
-let nextUniqueId = 1;
+let nextId = 1;
+let lastResults = null;
+
 const BUCKETS = [2,3,4,5,6,7];
+const BKT_COLORS = {2:'#6366f1',3:'#8b5cf6',4:'#a855f7',5:'#ec4899',6:'#f43f5e',7:'#fb923c'};
+
 const bucketCfg = {
-    2:{pri:1, def:1, ext:6, t1:0, t2:6, nd:false, excl:false},
-    3:{pri:4, def:4, ext:3, t1:2, t2:3, nd:false, excl:false},
-    4:{pri:5, def:2, ext:5, t1:0, t2:5, nd:false, excl:false},
-    5:{pri:2, def:1, ext:1, t1:5, t2:6, nd:true,  excl:false},
-    6:{pri:3, def:2, ext:5, t1:3, t2:5, nd:false, excl:true },
-    7:{pri:6, def:3, ext:5, t1:0, t2:5, nd:false, excl:false}
+  2:{pri:1, def:1, ext:6, t1:0, t2:6, nd:false, excl:false},
+  3:{pri:4, def:4, ext:3, t1:2, t2:3, nd:false, excl:false},
+  4:{pri:5, def:2, ext:5, t1:0, t2:5, nd:false, excl:false},
+  5:{pri:2, def:1, ext:1, t1:5, t2:6, nd:true,  excl:false},
+  6:{pri:3, def:2, ext:5, t1:3, t2:5, nd:false, excl:true },
+  7:{pri:6, def:3, ext:5, t1:0, t2:5, nd:false, excl:false}
 };
 
+// ─── BUCKET TABLE ─────────────────────────────────────────────────────────────
 function renderBucketTable() {
-    const type = document.getElementById('acctType').value;
-    let html = `<table class="bkt-table"><thead><tr><th>Bkt</th><th>Pri</th><th>Def</th>`;
-    if(type !== 'new') html += `<th>Ext</th><th>ND</th>`;
-    if(type !== 'existing') html += `<th>T1</th><th>T2</th><th>Exc</th>`;
-    html += `</tr></thead><tbody>`;
-    BUCKETS.forEach(b => {
-        const c = bucketCfg[b];
-        html += `<tr><td><b>B${b}</b></td>
-            <td><input class="bkt-inp" type="number" value="${c.pri}" onchange="bucketCfg[${b}].pri=parseInt(this.value)"></td>
-            <td><input class="bkt-inp" type="number" value="${c.def}" onchange="bucketCfg[${b}].def=parseInt(this.value)"></td>`;
-        if(type !== 'new') html += `
-            <td><input class="bkt-inp" type="number" value="${c.ext}" onchange="bucketCfg[${b}].ext=parseInt(this.value)"></td>
-            <td><input type="checkbox" ${c.nd?'checked':''} onchange="bucketCfg[${b}].nd=this.checked; renderRows();"></td>`;
-        if(type !== 'existing') html += `
-            <td><input class="bkt-inp" type="number" value="${c.t1}" onchange="bucketCfg[${b}].t1=parseInt(this.value)"></td>
-            <td><input class="bkt-inp" type="number" value="${c.t2}" onchange="bucketCfg[${b}].t2=parseInt(this.value)"></td>
-            <td><input type="checkbox" ${c.excl?'checked':''} onchange="bucketCfg[${b}].excl=this.checked; renderRows();"></td>`;
-        html += `</tr>`;
-    });
-    document.getElementById('bucketTableWrap').innerHTML = html + `</tbody></table>`;
+  const type = document.getElementById('acctType').value;
+  let html = `<table class="bkt-table"><thead><tr>
+    <th>Bkt</th><th>Pri</th><th>Def</th>`;
+  if(type !== 'new')      html += `<th>Ext</th><th title="Next-day flag">ND</th>`;
+  if(type !== 'existing') html += `<th>T1</th><th>T2</th><th title="Exclusion flag">Excl</th>`;
+  html += `</tr></thead><tbody>`;
+  BUCKETS.forEach(b => {
+    const c = bucketCfg[b];
+    const col = BKT_COLORS[b];
+    html += `<tr>
+      <td><span class="tl-bkt-badge" style="background:${col}22;color:${col};border:1px solid ${col}44">B${b}</span></td>
+      <td><input class="bkt-inp" type="number" min="1" max="10" value="${c.pri}" onchange="bucketCfg[${b}].pri=parseInt(this.value)||1; liveUpdate()"></td>
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.def}" onchange="bucketCfg[${b}].def=parseInt(this.value)||0; liveUpdate()"></td>`;
+    if(type !== 'new') html += `
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.ext}" onchange="bucketCfg[${b}].ext=parseInt(this.value)||0; liveUpdate()"></td>
+      <td><input class="bkt-check" type="checkbox" ${c.nd?'checked':''} onchange="bucketCfg[${b}].nd=this.checked; renderRows(); liveUpdate()"></td>`;
+    if(type !== 'existing') html += `
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.t1}" onchange="bucketCfg[${b}].t1=parseInt(this.value)||0; liveUpdate()"></td>
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.t2}" onchange="bucketCfg[${b}].t2=parseInt(this.value)||0; liveUpdate()"></td>
+      <td><input class="bkt-check" type="checkbox" ${c.excl?'checked':''} onchange="bucketCfg[${b}].excl=this.checked; renderRows(); liveUpdate()"></td>`;
+    html += `</tr>`;
+  });
+  document.getElementById('bucketTableWrap').innerHTML = html + `</tbody></table>`;
 }
 
+// ─── ROWS ─────────────────────────────────────────────────────────────────────
 function addRow() {
-    rows.push({id: Date.now(), ref: 'CK' + String(nextUniqueId).padStart(4,'0'), amt: 0, bkt: 2});
-    nextUniqueId++;
-    renderRows();
+  rows.push({id: Date.now(), ref: 'CK' + String(nextId).padStart(4,'0'), amt: 0, bkt: 2});
+  nextId++;
+  renderRows();
+  liveUpdate();
 }
 
 function updateRow(idx, field, val) {
-    if(field === 'amt') rows[idx].amt = parseFloat(val) || 0;
-    else if(field === 'ref') rows[idx].ref = val;
-    else if(field === 'bkt') rows[idx].bkt = parseInt(val);
+  if(field === 'amt') { rows[idx].amt = parseFloat(val) || 0; liveUpdate(); }
+  else if(field === 'ref') { rows[idx].ref = val; }
+  else if(field === 'bkt') { rows[idx].bkt = parseInt(val); renderRows(); liveUpdate(); }
 }
 
 function renderRows() {
-    const type = document.getElementById('acctType').value;
-    document.getElementById('rowsWrap').innerHTML = rows.map((r,i) => {
-        const c = bucketCfg[r.bkt];
-        let tags = '';
-        if(type !== 'new' && c.nd) tags += `<span class="tag tag-nd">⚡ ND</span>`;
-        if(type !== 'existing' && c.excl) tags += `<span class="tag tag-excl">Exclusion</span>`;
-        
-        return `
-        <div class="dep-row">
-            <div class="dep-row-top">
-                <span class="row-num">${i+1}</span>
-                <input type="text" class="dep-ref" value="${r.ref}" placeholder="REFID" onchange="updateRow(${i},'ref',this.value)">
-                <input type="number" class="dep-amt" value="${r.amt||''}" placeholder="0.00" onchange="updateRow(${i},'amt',this.value)">
-                <select class="dep-bkt" onchange="updateRow(${i},'bkt',this.value); renderRows();">
-                    ${BUCKETS.map(b => `<option value="${b}" ${r.bkt==b?'selected':''}>B${b}</option>`).join('')}
-                </select>
-                <button class="del-btn" onclick="rows.splice(${i},1);renderRows()">✕</button>
-            </div>
-            ${tags ? `<div class="dep-row-bot">${tags}</div>` : ''}
-        </div>`;
-    }).join('');
+  const type = document.getElementById('acctType').value;
+  const cap = parseFloat(document.getElementById('cfgMax').value) || 0;
+
+  // Compute which rows are capped in existing mode (for visual indicator)
+  const sorted = [...rows]
+    .map((r,i) => ({...r, origIdx:i}))
+    .filter(r => r.amt > 0)
+    .sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
+  let rem = cap;
+  const cappedIdx = new Set();
+  for(const r of sorted) {
+    if(rem <= 0) { cappedIdx.add(r.origIdx); continue; }
+    const canRelease = Math.min(r.amt, rem);
+    rem -= canRelease;
+    if(canRelease < r.amt) cappedIdx.add(r.origIdx);
+  }
+
+  document.getElementById('rowsWrap').innerHTML = rows.map((r,i) => {
+    const c = bucketCfg[r.bkt];
+    const col = BKT_COLORS[r.bkt];
+    let tags = '';
+    if(type !== 'new' && c.nd) tags += `<span class="tag tag-nd">⚡ Next-Day</span>`;
+    if(type !== 'existing' && c.excl) tags += `<span class="tag tag-excl">Exclusion</span>`;
+    if(r.amt === 0) tags += `<span class="tag tag-zero">Zero — excluded from output</span>`;
+    else if(cappedIdx.has(i)) tags += `<span class="tag tag-cap">⚠ Partially/fully beyond cap</span>`;
+    const isCapped = cappedIdx.has(i) && r.amt > 0;
+    return `
+      <div class="dep-row${isCapped?' capped':''}">
+        <div class="dep-row-top">
+          <span class="row-num">${i+1}</span>
+          <input type="text" class="dep-ref" value="${escHtml(r.ref)}" placeholder="REFID"
+            onchange="rows[${i}].ref=this.value" onblur="renderRows()">
+          <input type="number" class="dep-amt" value="${r.amt||''}" placeholder="0.00"
+            oninput="updateRow(${i},'amt',this.value)">
+          <select class="dep-bkt" style="border-color:${col}44"
+            onchange="updateRow(${i},'bkt',this.value)">
+            ${BUCKETS.map(b=>`<option value="${b}" ${r.bkt==b?'selected':''}>B${b}</option>`).join('')}
+          </select>
+          <button class="del-btn" onclick="rows.splice(${i},1); renderRows(); liveUpdate()">✕</button>
+        </div>
+        ${tags ? `<div class="dep-row-tags">${tags}</div>` : ''}
+      </div>`;
+  }).join('');
 }
 
-function calculate() {
-    const type = document.getElementById('acctType').value;
-    const sorted = [...rows].filter(r => r.amt > 0).sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
-    if(sorted.length === 0) return;
-    
-    renderResults(sorted, 'ex');
-    renderResults(sorted, 'nw');
-    document.getElementById('outPanel').style.display = 'block';
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-    if (type === 'new') showTab('nw');
-    else showTab('ex');
+// ─── CAP METER ────────────────────────────────────────────────────────────────
+function updateCapMeter() {
+  const cap = parseFloat(document.getElementById('cfgMax').value) || 0;
+  document.getElementById('capTotalVal').textContent = '$' + cap.toLocaleString();
+  const sorted = [...rows]
+    .filter(r => r.amt > 0)
+    .sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
+  let used = 0;
+  for(const r of sorted) {
+    if(used >= cap) break;
+    used += Math.min(r.amt, cap - used);
+  }
+  document.getElementById('capUsedVal').textContent = '$' + used.toLocaleString();
+  const pct = cap > 0 ? Math.min(100, (used/cap)*100) : 0;
+  const bar = document.getElementById('capBarEl');
+  bar.style.width = pct + '%';
+  bar.className = 'cap-bar' + (pct >= 100 ? ' over' : '');
 }
 
-function renderResults(data, mode) {
-    const cap = parseFloat(document.getElementById('cfgMax').value);
-    const ndMin = parseFloat(document.getElementById('cfgNdMin').value);
-    let rem = cap, ndDone = false, totals = {};
-    
-    const processed = data.map(r => {
-        const c = bucketCfg[r.bkt], s = [];
-        let rAmt = r.amt;
+// ─── PROCESS ──────────────────────────────────────────────────────────────────
+// ND POOL RULE:
+//   There is ONE shared ND pool = ndMin ($275).
+//   Processed in priority order across ALL ND-flagged buckets.
+//   Each ND bucket draws from what remains in the pool until pool = 0.
+//   Example: B2($100,nd) B3($100,nd) B6($75,nd) with pool=$275
+//     B2 takes $100 → pool=$175
+//     B3 takes $100 → pool=$75
+//     B6 takes $75  → pool=$0  (fully used across 3 transactions)
+//   All ND releases also deduct from the main release cap (rem).
 
-        if(mode === 'ex') {
-            if(c.nd && !ndDone && rem > 0) {
-                let release = Math.min(ndMin, rAmt, rem);
-                s.push({d: 1, amt: release, tag: '⚡ ND'});
-                rAmt -= release; rem -= release; ndDone = true;
-            }
-            let defRel = Math.min(rAmt, rem);
-            if(defRel > 0) { s.push({d: c.def, amt: defRel, tag: 'DEFAULT'}); rAmt -= defRel; rem -= defRel; }
-            if(rAmt > 0) s.push({d: c.def + c.ext, amt: rAmt, tag: 'EXT'});
-        } else {
-            if(c.excl) s.push({d: c.def + c.t2, amt: rAmt, tag: 'EXCL'});
-            else {
-                let t1Rel = Math.min(rAmt, rem);
-                if(t1Rel > 0) { s.push({d: c.def + c.t1, amt: t1Rel, tag: 'TIER 1'}); rAmt -= t1Rel; rem -= t1Rel; }
-                if(rAmt > 0) s.push({d: c.def + c.t2, amt: rAmt, tag: 'TIER 2'});
-            }
+function computeSchedule(data, mode) {
+  const cap   = parseFloat(document.getElementById('cfgMax').value)  || 0;
+  const ndMin = parseFloat(document.getElementById('cfgNdMin').value) || 0;
+  let rem    = cap;   // shared release cap
+  let ndPool = ndMin; // shared ND pool, drained in priority order
+
+  return data.map(r => {
+    const c = bucketCfg[r.bkt];
+    const segments = [];
+    let rAmt = r.amt;
+
+    if(mode === 'ex') {
+      // ND: draw from shared pool (also constrained by rAmt and rem)
+      if(c.nd && ndPool > 0 && rem > 0 && rAmt > 0) {
+        const release = Math.min(ndPool, rAmt, rem);
+        if(release > 0) {
+          segments.push({d:1, amt:release, tag:'ND'});
+          rAmt   -= release;
+          rem    -= release;
+          ndPool -= release; // consume from the shared pool
         }
-        s.forEach(e => totals[e.d] = (totals[e.d] || 0) + e.amt);
-        return { ref: r.ref, bkt: r.bkt, s };
-    });
+      }
+      // Default hold release (capped by rem)
+      if(rAmt > 0 && rem > 0) {
+        const release = Math.min(rAmt, rem);
+        segments.push({d:c.def, amt:release, tag:'DEFAULT'});
+        rAmt -= release;
+        rem  -= release;
+      }
+      // Extended: remainder — delayed, not denied, not capped
+      if(rAmt > 0) {
+        segments.push({d:c.def + c.ext, amt:rAmt, tag:'EXT'});
+      }
 
-    const days = [...new Set(processed.flatMap(p => p.s.map(x => x.d)))].sort((a,b)=>a-b);
-    const table = document.getElementById(mode+'-table');
-    table.querySelector('thead').innerHTML = `<tr><th>Ref ID</th>${days.map(d=>`<th>Day ${d}</th>`).join('')}</tr>`;
-    table.querySelector('tbody').innerHTML = processed.map(p => `
-        <tr><td><b>${p.ref}</b><br><small>B${p.bkt}</small></td>
-        ${days.map(d => {
-            const e = p.s.find(x => x.d === d);
-            const tagCls = e?.tag.includes('ND') ? 'tag-nd' : e?.tag.includes('TIER 1') ? 'tag-t1' : e?.tag === 'EXCL' ? 'tag-excl' : 'tag-ext';
-            return e ? `<td><div class="cell-val">$${e.amt.toLocaleString()}</div><div class="cell-tag ${tagCls}">${e.tag}</div></td>` : `<td>—</td>`;
-        }).join('')}</tr>`).join('');
+    } else {
+      // New account
+      if(c.excl) {
+        // Exclusion: straight to Def+T2, not subject to cap
+        segments.push({d:c.def + c.t2, amt:rAmt, tag:'EXCL'});
+      } else {
+        // Tier 1 (capped by rem)
+        if(rAmt > 0 && rem > 0) {
+          const release = Math.min(rAmt, rem);
+          segments.push({d:c.def + c.t1, amt:release, tag:'TIER1'});
+          rAmt -= release;
+          rem  -= release;
+        }
+        // Tier 2 (remainder — delayed, not denied)
+        if(rAmt > 0) {
+          segments.push({d:c.def + c.t2, amt:rAmt, tag:'TIER2'});
+        }
+      }
+    }
 
-    document.getElementById(mode+'-summary').innerHTML = days.map(d => `
-        <div class="ds-box"><div class="ds-day">DAY ${d}</div><div class="ds-amt">$${totals[d].toLocaleString()}</div></div>`).join('');
+    // Build a human-readable one-liner summary for this transaction
+    const summary = buildSummaryLine(r, segments, mode);
+    return { ref:r.ref, bkt:r.bkt, amt:r.amt, segments, summary };
+  });
+}
+
+// One-liner readme per transaction
+function buildSummaryLine(r, segments, mode) {
+  if(segments.length === 0) return 'No release scheduled.';
+  const parts = segments.map(s => {
+    const label = {
+      'ND':'Next-Day','DEFAULT':'Default hold','EXT':'Extended hold',
+      'TIER1':'Tier 1','TIER2':'Tier 2','EXCL':'Exclusion'
+    }[s.tag] || s.tag;
+    return `$${s.amt.toLocaleString()} on Day ${s.d} (${label})`;
+  });
+  const total = segments.reduce((a,s)=>a+s.amt,0);
+  const held  = r.amt - total;
+  let line = parts.join(', ');
+  if(held > 0) line += `; $${held.toLocaleString()} beyond cap → Extended hold`;
+  return line;
+}
+
+function liveUpdate() {
+  // Only update the cap meter live — do NOT auto-recalc the schedule.
+  // Reason: schedule depends on priority-sorted order; adding a higher-priority
+  // transaction later would retroactively shift cap allocation, giving misleading
+  // intermediate results while the user is still entering data.
+  updateCapMeter();
+}
+
+function calculate(silent=false) {
+  const type = document.getElementById('acctType').value;
+  const validRows = [...rows]
+    .filter(r => r.amt > 0)
+    .sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
+
+  updateCapMeter();
+
+  if(validRows.length === 0) {
+    if(!silent) {
+      document.getElementById('resultsGrid').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">📋</div>
+          <div class="empty-title">No valid transactions</div>
+          <div class="empty-sub">Add transactions with amounts greater than $0.</div>
+        </div>`;
+    }
+    return;
+  }
+
+  const exData = computeSchedule(validRows, 'ex');
+  const nwData = computeSchedule(validRows, 'nw');
+  lastResults = {exData, nwData, type};
+
+  const grid = document.getElementById('resultsGrid');
+  const toggle = document.getElementById('modeToggle');
+
+  if(type === 'both') {
+    grid.className = 'results-grid';
+    toggle.style.display = 'none';
+    grid.innerHTML = buildSchedulePanel(exData,'ex') + buildSchedulePanel(nwData,'nw');
+  } else if(type === 'existing') {
+    grid.className = 'results-grid single';
+    toggle.style.display = 'none';
+    grid.innerHTML = buildSchedulePanel(exData,'ex');
+  } else {
+    grid.className = 'results-grid single';
+    toggle.style.display = 'none';
+    grid.innerHTML = buildSchedulePanel(nwData,'nw');
+  }
+}
+
+function buildSchedulePanel(data, mode) {
+  const isEx = mode === 'ex';
+  const title = isEx ? 'Existing Account' : 'New Account';
+  const cls = isEx ? 'ex' : 'nw';
+  const accent = isEx ? 'var(--accent)' : 'var(--teal)';
+
+  // Collect all unique days
+  const allDays = [...new Set(data.flatMap(r => r.segments.map(s => s.d)))].sort((a,b)=>a-b);
+  if(allDays.length === 0) return '';
+
+  // Day totals
+  const dayTotals = {};
+  allDays.forEach(d => dayTotals[d] = 0);
+  data.forEach(r => r.segments.forEach(s => dayTotals[s.d] = (dayTotals[s.d]||0) + s.amt));
+
+  // Grand total released through cap
+  const grandTotal = Object.values(dayTotals).reduce((a,b)=>a+b,0);
+
+  // Tag styling map
+  const tagStyle = {
+    'ND':      {cls:'bar-nd',    label:'Next-Day'},
+    'DEFAULT': {cls:'bar-default',label:'Default'},
+    'EXT':     {cls:'bar-ext',   label:'Extended'},
+    'TIER1':   {cls:'bar-t1',    label:'Tier 1'},
+    'TIER2':   {cls:'bar-t2',    label:'Tier 2'},
+    'EXCL':    {cls:'bar-excl',  label:'Excl'},
+  };
+
+  // Build rows
+  const rowsHtml = data.map(r => {
+    const col = BKT_COLORS[r.bkt];
+    const cells = allDays.map(d => {
+      const seg = r.segments.find(s => s.d === d);
+      if(!seg) return `<div class="tl-cell"><div class="tl-cell-empty"></div></div>`;
+      const ts = tagStyle[seg.tag] || {cls:'bar-default',label:seg.tag};
+      return `<div class="tl-cell">
+        <div class="tl-cell-bar ${ts.cls}">
+          <div class="tl-cell-amt">$${seg.amt.toLocaleString()}</div>
+          <div class="tl-cell-tag">${ts.label}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return `<div class="tl-row">
+      <div class="tl-row-info">
+        <div class="tl-ref">${escHtml(r.ref)}</div>
+        <span class="tl-bkt-badge" style="background:${col}22;color:${col};border:1px solid ${col}44">B${r.bkt} · $${r.amt.toLocaleString()}</span>
+      </div>
+      <div class="tl-cells">${cells}</div>
+    </div>
+    <div class="tl-summary-line">📌 ${escHtml(r.ref)}: ${r.summary}</div>`;
+  }).join('');
+
+  const dayHeadersHtml = allDays.map(d => `
+    <div class="tl-day-col">
+      <div class="tl-day-label">Day ${d}</div>
+      <div class="tl-day-amt">$${dayTotals[d].toLocaleString()}</div>
+    </div>`).join('');
+
+  const totalCellsHtml = allDays.map(d => `
+    <div class="tl-total-cell">$${dayTotals[d].toLocaleString()}</div>`).join('');
+
+  return `<div class="sched-panel">
+    <div class="sched-hd">
+      <div class="sched-title ${cls}">${title}</div>
+      <div class="sched-total">Total: $${grandTotal.toLocaleString()}</div>
+    </div>
+    <div class="timeline-wrap" style="overflow-x:auto">
+      <div style="min-width:400px">
+        <div style="display:flex;gap:6px;margin-bottom:10px">
+          <div style="width:94px;flex-shrink:0"></div>
+          <div class="tl-days-header" style="flex:1;padding-left:0;margin-bottom:0">
+            ${dayHeadersHtml}
+          </div>
+        </div>
+        ${rowsHtml}
+        <div class="tl-totals-row">
+          <div class="tl-totals-label">Totals</div>
+          <div class="tl-totals-cells">${totalCellsHtml}</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
 }
 
 function showTab(t) {
-    document.getElementById('pane-ex').style.display = t === 'ex' ? 'block' : 'none';
-    document.getElementById('pane-nw').style.display = t === 'nw' ? 'block' : 'none';
-    document.getElementById('tab-ex').className = 'tab-btn' + (t === 'ex' ? ' active' : '');
-    document.getElementById('tab-nw').className = 'tab-btn' + (t === 'nw' ? ' active nw-mode' : '');
+  document.getElementById('pane-ex').style.display = t === 'ex' ? 'block' : 'none';
+  document.getElementById('pane-nw').style.display = t === 'nw' ? 'block' : 'none';
+  document.getElementById('tab-ex').className = 'mode-btn' + (t==='ex'?' active':'');
+  document.getElementById('tab-nw').className = 'mode-btn' + (t==='nw'?' active':'');
 }
 
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 renderBucketTable();
 addRow();
+updateCapMeter();
 </script>
 </body>
 </html>
