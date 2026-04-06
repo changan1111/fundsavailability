@@ -7,25 +7,25 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0e1117;
-  --surface: #161b25;
-  --surface2: #1d2535;
-  --surface3: #252e42;
-  --border: #2a3347;
-  --border2: #354060;
-  --text: #e8edf5;
-  --text2: #8b96b0;
-  --text3: #5a6480;
-  --accent: #4f8ef7;
-  --accent-dim: rgba(79,142,247,0.12);
-  --teal: #2dd4bf;
-  --teal-dim: rgba(45,212,191,0.12);
-  --amber: #f59e0b;
-  --amber-dim: rgba(245,158,11,0.12);
-  --red: #f87171;
-  --red-dim: rgba(248,113,113,0.12);
-  --green: #4ade80;
-  --green-dim: rgba(74,222,128,0.12);
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface2: #f0f2f7;
+  --surface3: #e4e8f0;
+  --border: #dde1eb;
+  --border2: #c8cfe0;
+  --text: #1a2035;
+  --text2: #4a5575;
+  --text3: #8892ab;
+  --accent: #3b7ef6;
+  --accent-dim: rgba(59,126,246,0.10);
+  --teal: #0da89a;
+  --teal-dim: rgba(13,168,154,0.10);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.10);
+  --red: #e03e3e;
+  --red-dim: rgba(224,62,62,0.10);
+  --green: #16a34a;
+  --green-dim: rgba(22,163,74,0.10);
   --b2:#6366f1; --b3:#8b5cf6; --b4:#a855f7; --b5:#ec4899; --b6:#f43f5e; --b7:#fb923c;
   --r: 10px;
   --font-display: 'Fraunces', serif;
@@ -46,6 +46,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
 }
 .hdr-left { display: flex; align-items: center; gap: 12px; }
 .hdr-logo {
@@ -132,6 +133,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   border-radius: var(--r);
   border: 1px solid var(--border);
   overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
 }
 .panel-hd {
   padding: 10px 16px;
@@ -165,7 +167,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   border-radius: 7px;
   font-size: .82rem;
   outline: none;
-  background: var(--surface2);
+  background: #fff;
   color: var(--text);
   font-family: var(--font-body);
   transition: border-color .15s;
@@ -213,7 +215,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   border-radius: 5px;
   font-family: var(--font-mono);
   font-size: .72rem;
-  background: var(--surface2);
+  background: #fff;
   color: var(--text);
   outline: none;
 }
@@ -258,7 +260,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   transition: border-color .15s;
 }
 .dep-row:hover { border-color: var(--border2); }
-.dep-row.capped { border-color: rgba(248,113,113,0.3); }
+.dep-row.capped { border-color: rgba(224,62,62,0.35); }
 .dep-row-top {
   display: grid;
   grid-template-columns: 22px 1fr 1fr 64px 24px;
@@ -282,7 +284,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   padding: 6px 8px;
   border: 1.5px solid var(--border);
   border-radius: 6px;
-  background: var(--bg);
+  background: #fff;
   color: var(--text);
   outline: none;
   transition: border-color .15s;
@@ -362,7 +364,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .mode-toggle {
   display: flex;
   gap: 6px;
-  background: var(--surface);
+  background: var(--surface2);
   padding: 5px;
   border-radius: 10px;
   border: 1px solid var(--border);
@@ -380,7 +382,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   background: transparent;
   transition: all .15s;
 }
-.mode-btn.active { background: var(--surface3); color: var(--text); }
+.mode-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
 /* SIDE BY SIDE */
 .results-grid {
@@ -397,6 +399,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   border-radius: var(--r);
   border: 1px solid var(--border);
   overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
 }
 .sched-hd {
   padding: 12px 16px;
@@ -419,7 +422,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 }
 
 /* TIMELINE / GANTT STYLE */
-.timeline-wrap { padding: 14px 16px; }
+.timeline-wrap { padding: 14px 16px; overflow-x: auto; }
 .tl-days-header {
   display: flex;
   gap: 6px;
@@ -456,7 +459,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 }
 .tl-row:last-child { border-bottom: none; }
 .tl-row-info {
-  width: 94px;
+  width: 100px;
   flex-shrink: 0;
 }
 .tl-ref {
@@ -531,7 +534,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   border-top: 2px solid var(--border2);
 }
 .tl-totals-label {
-  width: 94px;
+  width: 100px;
   flex-shrink: 0;
   font-size: .65rem;
   font-weight: 700;
@@ -577,8 +580,8 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   bottom: calc(100% + 6px);
   left: 50%;
   transform: translateX(-50%);
-  background: var(--surface3);
-  color: var(--text);
+  background: var(--text);
+  color: #fff;
   font-size: .65rem;
   padding: 6px 10px;
   border-radius: 6px;
@@ -1022,10 +1025,10 @@ function buildSchedulePanel(data, mode) {
       <div class="sched-title ${cls}">${title}</div>
       <div class="sched-total">Total: $${grandTotal.toLocaleString()}</div>
     </div>
-    <div class="timeline-wrap" style="overflow-x:auto">
-      <div style="min-width:400px">
+    <div class="timeline-wrap">
+      <div style="min-width:520px">
         <div style="display:flex;gap:6px;margin-bottom:10px">
-          <div style="width:94px;flex-shrink:0"></div>
+          <div style="width:100px;flex-shrink:0"></div>
           <div class="tl-days-header" style="flex:1;padding-left:0;margin-bottom:0">
             ${dayHeadersHtml}
           </div>
