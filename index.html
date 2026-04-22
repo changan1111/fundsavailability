@@ -568,7 +568,142 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .empty-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
 .empty-sub { font-size: .78rem; line-height: 1.5; }
 
-/* TOOLTIP */
+/* SYSTEM DATE PANEL */
+.sysdate-panel {
+  background: linear-gradient(135deg, rgba(59,126,246,0.06), rgba(13,168,154,0.06));
+  border: 1.5px solid rgba(59,126,246,0.25);
+}
+.sysdate-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.sysdate-row .field { flex: 1; min-width: 140px; }
+.sysdate-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: .7rem;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  transition: all .2s;
+}
+.sysdate-status.idle    { background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
+.sysdate-status.loading { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.25); }
+.sysdate-status.ok      { background: var(--green-dim); color: var(--green); border: 1px solid rgba(22,163,74,.25); }
+.sysdate-status.err     { background: var(--red-dim);   color: var(--red);   border: 1px solid rgba(224,62,62,.25); }
+.sysdate-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.sysdate-status.idle    .sysdate-dot { background: var(--text3); }
+.sysdate-status.loading .sysdate-dot { background: var(--amber); animation: pulse-dot 1s infinite; }
+.sysdate-status.ok      .sysdate-dot { background: var(--green); }
+.sysdate-status.err     .sysdate-dot { background: var(--red); }
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* HOLIDAY LIST */
+.holiday-list-wrap {
+  margin-top: 10px;
+  border-top: 1px solid rgba(59,126,246,0.15);
+  padding-top: 10px;
+}
+.holiday-list-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 2px;
+}
+.holiday-list-label {
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.holiday-count-badge {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(59,126,246,.2);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.holiday-chevron {
+  font-size: .65rem;
+  color: var(--text3);
+  transition: transform .2s;
+}
+.holiday-chevron.open { transform: rotate(180deg); }
+.holiday-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-top: 8px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease;
+}
+.holiday-grid.open { max-height: 600px; }
+.holiday-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+.holiday-item.is-skipped {
+  background: rgba(217,119,6,0.07);
+  border-color: rgba(217,119,6,0.2);
+}
+.holiday-dot-h { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
+.holiday-item.is-skipped .holiday-dot-h { background: var(--amber); }
+.holiday-date-h {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+.holiday-item.is-skipped .holiday-date-h { color: var(--amber); }
+.holiday-name-h {
+  font-size: .62rem;
+  font-weight: 500;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.holiday-item.is-skipped .holiday-name-h { color: var(--amber); font-weight: 600; }
+.holiday-skipped-tag {
+  font-size: .5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--amber);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+
+.tl-day-date {
+  font-family: var(--font-mono);
+  font-size: .52rem;
+  color: var(--accent);
+  margin-top: 1px;
+  font-weight: 500;
+}
+
+
 .tooltip-wrap { position: relative; display: inline-flex; }
 .tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: var(--surface3); color: var(--text3); font-size: .55rem; display: inline-flex; align-items: center; justify-content: center; cursor: help; border: 1px solid var(--border2); }
 .tooltip-box {
@@ -602,7 +737,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   <div class="hdr-left">
     <div class="hdr-logo">🏛</div>
     <div class="hdr-title">Funds Availability</div>
-    <div class="hdr-badge">v6.0</div>
+    <div class="hdr-badge">v7.0</div>
   </div>
   <div class="cap-meter" id="capMeter">
     <div class="cap-label">Cap Used</div>
@@ -618,6 +753,33 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 <div class="wrap">
   <!-- LEFT COLUMN -->
   <div class="sticky-col">
+
+    <!-- SYSTEM DATE -->
+    <div class="panel sysdate-panel">
+      <div class="panel-hd"><h3>📅 System Date</h3></div>
+      <div class="panel-body">
+        <div class="sysdate-row">
+          <div class="field">
+            <label>System Date</label>
+            <input type="date" id="systemDate" oninput="onSystemDateChange()" style="font-family:var(--font-mono);font-size:.82rem">
+          </div>
+        </div>
+        <div class="sysdate-status idle" id="sysdateStatus">
+          <div class="sysdate-dot"></div>
+          <span id="sysdateMsg">Enter a system date to load federal holidays</span>
+        </div>
+        <div class="holiday-list-wrap" id="holidayListWrap" style="display:none">
+          <div class="holiday-list-toggle" onclick="toggleHolidayList()">
+            <div class="holiday-list-label">
+              🗓 Federal Holidays
+              <span class="holiday-count-badge" id="holidayCountBadge">0</span>
+            </div>
+            <span class="holiday-chevron" id="holidayChevron">▼</span>
+          </div>
+          <div class="holiday-grid" id="holidayGrid"></div>
+        </div>
+      </div>
+    </div>
 
     <div class="panel">
       <div class="panel-hd"><h3>⚙ Global Config</h3></div>
@@ -696,6 +858,149 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 let rows = [];
 let nextId = 1;
 let lastResults = null;
+
+// ─── SYSTEM DATE & FEDERAL HOLIDAYS ──────────────────────────────────────────
+let systemDate    = null;   // "YYYY-MM-DD" string
+let fedHolidays   = [];     // ["YYYY-MM-DD", ...]
+let holidayYear   = null;   // year we last fetched for
+let holidayFetch  = null;   // in-flight Promise
+
+function setDateStatus(state, msg) {
+  const el  = document.getElementById('sysdateStatus');
+  const txt = document.getElementById('sysdateMsg');
+  el.className = 'sysdate-status ' + state;
+  txt.textContent = msg;
+}
+
+
+async function onSystemDateChange() {
+  const val = document.getElementById('systemDate').value;
+  if (!val) {
+    systemDate  = null;
+    fedHolidays = [];
+    holidayYear = null;
+    setDateStatus('idle', 'Enter a system date to load federal holidays');
+    document.getElementById('holidayListWrap').style.display = 'none';
+    return;
+  }
+  systemDate = val;
+  const yr = parseInt(val.split('-')[0]);
+
+  if (yr === holidayYear) {
+    const fmt = fmtDate(val);
+    setDateStatus('ok', `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`);
+    renderHolidayList();
+    return;
+  }
+
+  document.getElementById('holidayListWrap').style.display = 'none';
+  setDateStatus('loading', `Fetching ${yr} US federal holidays…`);
+  try {
+    // Fetch full objects so we have names too
+    const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/US`);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const fed  = data.filter(h => h.global === true);
+    fedHolidayObjects = fed;                      // [{date, localName, name}, ...]
+    fedHolidays       = fed.map(h => h.date);
+    holidayYear       = yr;
+    const fmt = fmtDate(val);
+    setDateStatus('ok', `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`);
+    renderHolidayList();
+  } catch(e) {
+    fedHolidays       = [];
+    fedHolidayObjects = [];
+    setDateStatus('err', `Could not fetch holidays (${e.message}). Day dates unavailable.`);
+  }
+}
+
+// ─── HOLIDAY LIST RENDER ──────────────────────────────────────────────────────
+let fedHolidayObjects = [];   // full objects with .name
+let holidayListOpen   = true; // expanded by default
+
+function renderHolidayList() {
+  if (!fedHolidayObjects.length) {
+    document.getElementById('holidayListWrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('holidayListWrap').style.display = 'block';
+  document.getElementById('holidayCountBadge').textContent = fedHolidayObjects.length;
+
+  // Which holidays fall within the "relevant window"?
+  // Mark any that are within ~30 business days of the system date so user can see what's close
+  const relevantWindow = systemDate ? addCalDays(systemDate, 90) : null;
+
+  const items = fedHolidayObjects.map(h => {
+    const isClose = relevantWindow && h.date >= systemDate && h.date <= relevantWindow;
+    const dateLabel = fmtDateShort(h.date);
+    const fullDate  = fmtDate(h.date);
+    return `<div class="holiday-item${isClose ? ' is-skipped' : ''}" title="${fullDate}">
+      <div class="holiday-dot-h"></div>
+      <div class="holiday-date-h">${dateLabel}</div>
+      <div class="holiday-name-h">${escHtml(h.localName || h.name)}</div>
+      ${isClose ? '<span class="holiday-skipped-tag">↷ skip</span>' : ''}
+    </div>`;
+  }).join('');
+
+  const grid = document.getElementById('holidayGrid');
+  grid.innerHTML = items;
+  // Restore open state
+  if (holidayListOpen) {
+    grid.classList.add('open');
+    document.getElementById('holidayChevron').classList.add('open');
+  }
+}
+
+function toggleHolidayList() {
+  holidayListOpen = !holidayListOpen;
+  document.getElementById('holidayGrid').classList.toggle('open', holidayListOpen);
+  document.getElementById('holidayChevron').classList.toggle('open', holidayListOpen);
+}
+
+// ─── BUSINESS-DAY HELPERS ────────────────────────────────────────────────────
+function isWeekend(dateStr) {
+  // Use noon UTC to avoid DST shifts
+  const d = new Date(dateStr + 'T12:00:00Z');
+  const dow = d.getUTCDay();
+  return dow === 0 || dow === 6;
+}
+
+function addCalDays(dateStr, n) {
+  const d = new Date(dateStr + 'T12:00:00Z');
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().split('T')[0];
+}
+
+// Advance forward until a day is neither weekend nor federal holiday
+function nextBizDay(dateStr) {
+  let cur = dateStr;
+  while (isWeekend(cur) || fedHolidays.includes(cur)) {
+    cur = addCalDays(cur, 1);
+  }
+  return cur;
+}
+
+// Return the actual calendar date for business-day offset N from systemDate.
+// Day 1 = next biz day on or after systemDate.
+// Each subsequent business day skips weekends & holidays.
+function bizDayDate(n) {
+  if (!systemDate || fedHolidays === null) return null;
+  let cur = nextBizDay(systemDate);
+  for (let i = 1; i < n; i++) {
+    cur = nextBizDay(addCalDays(cur, 1));
+  }
+  return cur;   // "YYYY-MM-DD"
+}
+
+function fmtDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00Z');
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric', timeZone:'UTC' });
+}
+
+function fmtDateShort(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00Z');
+  return d.toLocaleDateString('en-US', { month:'numeric', day:'numeric', timeZone:'UTC' });
+}
 
 const BUCKETS = [2,3,4,5,6,7];
 const BKT_COLORS = {2:'#6366f1',3:'#8b5cf6',4:'#a855f7',5:'#ec4899',6:'#f43f5e',7:'#fb923c'};
@@ -888,7 +1193,6 @@ function computeSchedule(data, mode) {
   });
 }
 
-// One-liner readme per transaction
 function buildSummaryLine(r, segments, mode) {
   if(segments.length === 0) return 'No release scheduled.';
   const parts = segments.map(s => {
@@ -896,7 +1200,9 @@ function buildSummaryLine(r, segments, mode) {
       'ND':'Next-Day','DEFAULT':'Default hold','EXT':'Extended hold',
       'TIER1':'Tier 1','TIER2':'Tier 2','EXCL':'Exclusion'
     }[s.tag] || s.tag;
-    return `$${s.amt.toLocaleString()} on Day ${s.d} (${label})`;
+    const calDate = bizDayDate(s.d);
+    const dateStr = calDate ? ` · ${fmtDate(calDate)}` : '';
+    return `$${s.amt.toLocaleString()} on Day ${s.d}${dateStr} (${label})`;
   });
   const total = segments.reduce((a,s)=>a+s.amt,0);
   const held  = r.amt - total;
@@ -1007,11 +1313,18 @@ function buildSchedulePanel(data, mode) {
     <div class="tl-summary-line">📌 ${escHtml(r.ref)}: ${r.summary}</div>`;
   }).join('');
 
-  const dayHeadersHtml = allDays.map(d => `
+  const dayHeadersHtml = allDays.map(d => {
+    const calDate = bizDayDate(d);
+    const dateSub = calDate
+      ? `<div class="tl-day-date">${fmtDateShort(calDate)}</div>`
+      : '';
+    return `
     <div class="tl-day-col">
       <div class="tl-day-label">Day ${d}</div>
+      ${dateSub}
       <div class="tl-day-amt">$${dayTotals[d].toLocaleString()}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 
   const totalCellsHtml = allDays.map(d => `
     <div class="tl-total-cell">$${dayTotals[d].toLocaleString()}</div>`).join('');
@@ -1050,6 +1363,17 @@ function showTab(t) {
 renderBucketTable();
 addRow();
 updateCapMeter();
+
+// Pre-fill system date with today and fetch holidays
+(function initSystemDate() {
+  const today = new Date();
+  const yyyy  = today.getFullYear();
+  const mm    = String(today.getMonth() + 1).padStart(2, '0');
+  const dd    = String(today.getDate()).padStart(2, '0');
+  const iso   = `${yyyy}-${mm}-${dd}`;
+  document.getElementById('systemDate').value = iso;
+  onSystemDateChange();
+})();
 </script>
 </body>
 </html>
