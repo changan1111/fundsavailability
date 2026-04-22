@@ -644,15 +644,21 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 }
 .holiday-chevron.open { transform: rotate(180deg); }
 .holiday-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   margin-top: 8px;
   max-height: 0;
   overflow: hidden;
-  transition: max-height .3s ease;
+  transition: max-height .35s ease;
 }
-.holiday-grid.open { max-height: 600px; }
+.holiday-grid.open { max-height: 900px; }
+.holiday-grid-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.holiday-grid-next { margin-top: 4px; }
 .holiday-item {
   display: flex;
   align-items: center;
@@ -684,7 +690,27 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   text-overflow: ellipsis;
 }
 .holiday-item.is-skipped .holiday-name-h { color: var(--amber); font-weight: 600; }
-.holiday-skipped-tag {
+.holiday-year-sep {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 4px;
+  font-size: .6rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.holiday-year-sep::before,
+.holiday-year-sep::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(59,126,246,0.2);
+}
+
+
   font-size: .5rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -860,10 +886,10 @@ let nextId = 1;
 let lastResults = null;
 
 // ─── SYSTEM DATE & FEDERAL HOLIDAYS ──────────────────────────────────────────
-let systemDate    = null;   // "YYYY-MM-DD" string
-let fedHolidays   = [];     // ["YYYY-MM-DD", ...]
-let holidayYear   = null;   // year we last fetched for
-let holidayFetch  = null;   // in-flight Promise
+let systemDate        = null;  // "YYYY-MM-DD"
+let fedHolidays       = [];    // ["YYYY-MM-DD", ...] — merged across years if needed
+let fedHolidayObjects = [];    // [{date, localName, name, _nextYear?}, ...]
+let loadedYears       = [];    // years already fetched, e.g. [2025] or [2025, 2026]
 
 function setDateStatus(state, msg) {
   const el  = document.getElementById('sysdateStatus');
@@ -872,65 +898,112 @@ function setDateStatus(state, msg) {
   txt.textContent = msg;
 }
 
+// Fetch federal holidays for one year, returns array of full objects
+async function fetchYearHolidays(yr) {
+  const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/US`);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  return data.filter(h => h.global === true);
+}
+
+// Does this date risk spilling into the next year?
+// True when date is in December AND day >= 15  (worst case: Dec 15 + ~15 biz days ≈ early Jan)
+function needsNextYear(dateStr) {
+  if (!dateStr) return false;
+  const [, mm, dd] = dateStr.split('-').map(Number);
+  return mm === 12 && dd >= 15;
+}
 
 async function onSystemDateChange() {
   const val = document.getElementById('systemDate').value;
   if (!val) {
-    systemDate  = null;
-    fedHolidays = [];
-    holidayYear = null;
+    systemDate        = null;
+    fedHolidays       = [];
+    fedHolidayObjects = [];
+    loadedYears       = [];
     setDateStatus('idle', 'Enter a system date to load federal holidays');
     document.getElementById('holidayListWrap').style.display = 'none';
     return;
   }
-  systemDate = val;
-  const yr = parseInt(val.split('-')[0]);
 
-  if (yr === holidayYear) {
+  systemDate    = val;
+  const yr      = parseInt(val.split('-')[0]);
+  const needsNY = needsNextYear(val);
+  const nextYr  = yr + 1;
+
+  // Check if we already have everything we need
+  const hasThisYr = loadedYears.includes(yr);
+  const hasNextYr = loadedYears.includes(nextYr);
+  if (hasThisYr && (!needsNY || hasNextYr)) {
     const fmt = fmtDate(val);
-    setDateStatus('ok', `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`);
+    const label = needsNY
+      ? `System date: ${fmt} · holidays loaded for ${yr} + ${nextYr} (year-end spillover)`
+      : `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`;
+    setDateStatus('ok', label);
     renderHolidayList();
     return;
   }
 
   document.getElementById('holidayListWrap').style.display = 'none';
-  setDateStatus('loading', `Fetching ${yr} US federal holidays…`);
+  const loadMsg = needsNY
+    ? `Fetching ${yr} & ${nextYr} US federal holidays (year-end spillover)…`
+    : `Fetching ${yr} US federal holidays…`;
+  setDateStatus('loading', loadMsg);
+
   try {
-    // Fetch full objects so we have names too
-    const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/US`);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const fed  = data.filter(h => h.global === true);
-    fedHolidayObjects = fed;                      // [{date, localName, name}, ...]
-    fedHolidays       = fed.map(h => h.date);
-    holidayYear       = yr;
+    const yearsToFetch = [];
+    if (!hasThisYr) yearsToFetch.push(yr);
+    if (needsNY && !hasNextYr) yearsToFetch.push(nextYr);
+
+    const fetched = await Promise.all(yearsToFetch.map(y => fetchYearHolidays(y)));
+    yearsToFetch.forEach((y, i) => {
+      loadedYears.push(y);
+      // Tag next-year objects so the list can group them
+      fetched[i].forEach(h => { if (y !== yr) h._nextYear = true; });
+      fedHolidayObjects = [...fedHolidayObjects.filter(h => {
+        const hy = parseInt(h.date.split('-')[0]);
+        return hy !== y; // replace any stale entries for this year
+      }), ...fetched[i]];
+    });
+
+    // Re-sort by date
+    fedHolidayObjects.sort((a, b) => a.date.localeCompare(b.date));
+    fedHolidays = fedHolidayObjects.map(h => h.date);
+
     const fmt = fmtDate(val);
-    setDateStatus('ok', `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`);
+    const label = needsNY
+      ? `System date: ${fmt} · holidays loaded for ${yr} + ${nextYr} ✦ year-end spillover handled`
+      : `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`;
+    setDateStatus('ok', label);
     renderHolidayList();
   } catch(e) {
     fedHolidays       = [];
     fedHolidayObjects = [];
+    loadedYears       = [];
     setDateStatus('err', `Could not fetch holidays (${e.message}). Day dates unavailable.`);
   }
 }
 
 // ─── HOLIDAY LIST RENDER ──────────────────────────────────────────────────────
-let fedHolidayObjects = [];   // full objects with .name
-let holidayListOpen   = true; // expanded by default
+let holidayListOpen = true;
 
 function renderHolidayList() {
   if (!fedHolidayObjects.length) {
     document.getElementById('holidayListWrap').style.display = 'none';
     return;
   }
-  document.getElementById('holidayListWrap').style.display = 'block';
-  document.getElementById('holidayCountBadge').textContent = fedHolidayObjects.length;
 
-  // Which holidays fall within the "relevant window"?
-  // Mark any that are within ~30 business days of the system date so user can see what's close
+  const yr = systemDate ? parseInt(systemDate.split('-')[0]) : null;
   const relevantWindow = systemDate ? addCalDays(systemDate, 90) : null;
 
-  const items = fedHolidayObjects.map(h => {
+  const thisYearItems = fedHolidayObjects.filter(h => !h._nextYear);
+  const nextYearItems = fedHolidayObjects.filter(h =>  h._nextYear);
+
+  document.getElementById('holidayListWrap').style.display = 'block';
+  document.getElementById('holidayCountBadge').textContent =
+    nextYearItems.length ? `${thisYearItems.length}+${nextYearItems.length}` : thisYearItems.length;
+
+  function buildItem(h) {
     const isClose = relevantWindow && h.date >= systemDate && h.date <= relevantWindow;
     const dateLabel = fmtDateShort(h.date);
     const fullDate  = fmtDate(h.date);
@@ -940,11 +1013,19 @@ function renderHolidayList() {
       <div class="holiday-name-h">${escHtml(h.localName || h.name)}</div>
       ${isClose ? '<span class="holiday-skipped-tag">↷ skip</span>' : ''}
     </div>`;
-  }).join('');
+  }
+
+  // Build inner HTML: this year's grid, then optional next-year section
+  let inner = `<div class="holiday-grid-inner">${thisYearItems.map(buildItem).join('')}</div>`;
+
+  if (nextYearItems.length) {
+    const nextYr = yr + 1;
+    inner += `<div class="holiday-year-sep"><span>📅 ${nextYr} — Year-end spillover</span></div>
+              <div class="holiday-grid-inner holiday-grid-next">${nextYearItems.map(buildItem).join('')}</div>`;
+  }
 
   const grid = document.getElementById('holidayGrid');
-  grid.innerHTML = items;
-  // Restore open state
+  grid.innerHTML = inner;
   if (holidayListOpen) {
     grid.classList.add('open');
     document.getElementById('holidayChevron').classList.add('open');
