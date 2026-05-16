@@ -26,7 +26,6 @@
   --red-dim: rgba(224,62,62,0.10);
   --green: #16a34a;
   --green-dim: rgba(22,163,74,0.10);
-  --b2:#6366f1; --b3:#8b5cf6; --b4:#a855f7; --b5:#ec4899; --b6:#f43f5e; --b7:#fb923c;
   --r: 10px;
   --font-display: 'Fraunces', serif;
   --font-body: 'DM Sans', sans-serif;
@@ -35,7 +34,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
 
-/* HEADER */
 .hdr {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -47,555 +45,179 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   top: 0;
   z-index: 100;
   box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+  flex-wrap: wrap;
+  gap: 10px;
 }
-.hdr-left { display: flex; align-items: center; gap: 12px; }
+.hdr-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .hdr-logo {
   width: 34px; height: 34px;
   background: linear-gradient(135deg, var(--accent), var(--teal));
   border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1rem;
+  font-size: 1rem; flex-shrink: 0;
 }
-.hdr-title {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
-  letter-spacing: -0.01em;
-}
-.hdr-badge {
-  font-family: var(--font-mono);
-  font-size: .6rem;
-  background: var(--surface3);
-  color: var(--text3);
-  padding: 2px 7px;
+.hdr-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--text); letter-spacing: -0.01em; }
+.hdr-badge { font-family: var(--font-mono); font-size: .6rem; background: var(--surface3); color: var(--text3); padding: 2px 7px; border-radius: 20px; border: 1px solid var(--border); }
+.client-pill {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 12px;
+  background: rgba(59,126,246,0.09);
+  border: 1.5px solid rgba(59,126,246,0.2);
   border-radius: 20px;
-  border: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: .65rem; font-weight: 600; color: var(--accent);
+  transition: all .2s;
 }
+.client-pill.none { background: var(--surface2); border-color: var(--border); color: var(--text3); }
+.client-pill-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.client-pill.none .client-pill-dot { background: var(--text3); }
+
 .cap-meter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 6px 14px;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px;
 }
-@media(max-width:600px){
-  .cap-meter { gap: 6px; padding: 5px 10px; }
-  .cap-bar-wrap { display: none; }
-  .hdr-badge { display: none; }
-}
+@media(max-width:600px){ .cap-meter { gap: 6px; padding: 5px 10px; } .cap-bar-wrap,.hdr-badge { display: none; } }
 .cap-label { font-size: .65rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
 .cap-values { display: flex; gap: 6px; align-items: baseline; }
-.cap-used { font-family: var(--font-mono); font-size: .85rem; font-weight: 500; color: var(--accent); }
-.cap-sep { color: var(--text3); font-size: .75rem; }
+.cap-used  { font-family: var(--font-mono); font-size: .85rem; font-weight: 500; color: var(--accent); }
+.cap-sep   { color: var(--text3); font-size: .75rem; }
 .cap-total { font-family: var(--font-mono); font-size: .75rem; color: var(--text2); }
 .cap-bar-wrap { width: 80px; height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
 .cap-bar { height: 100%; background: linear-gradient(90deg, var(--accent), var(--teal)); border-radius: 2px; transition: width .3s ease; }
 .cap-bar.over { background: linear-gradient(90deg, var(--amber), var(--red)); }
 
-/* LAYOUT */
 .wrap {
-  max-width: 1600px;
-  margin: 0 auto;
-  padding: 16px;
-  display: grid;
-  grid-template-columns: 380px 1fr;
-  gap: 16px;
-  align-items: start;
+  max-width: 1600px; margin: 0 auto; padding: 16px;
+  display: grid; grid-template-columns: 380px 1fr; gap: 16px; align-items: start;
 }
-@media(max-width:1000px){
-  .wrap { grid-template-columns: 1fr; padding: 10px; gap: 12px; }
-}
+@media(max-width:1000px){ .wrap { grid-template-columns: 1fr; padding: 10px; gap: 12px; } }
+.sticky-col { display: flex; flex-direction: column; gap: 14px; }
+@media(min-width:1001px){ .sticky-col { position: sticky; top: 64px; align-self: start; } }
 
-.sticky-col {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-/* Only sticky on desktop */
-@media(min-width:1001px){
-  .sticky-col {
-    position: sticky;
-    top: 64px;
-    align-self: start;
-  }
-}
-
-/* PANELS */
-.panel {
-  background: var(--surface);
-  border-radius: var(--r);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-}
-.panel-hd {
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.panel-hd h3 {
-  font-family: var(--font-display);
-  font-size: .8rem;
-  font-weight: 600;
-  color: var(--text2);
-  letter-spacing: .01em;
-}
+.panel { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.panel-hd { padding: 10px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-hd h3 { font-family: var(--font-display); font-size: .8rem; font-weight: 600; color: var(--text2); letter-spacing: .01em; }
 .panel-body { padding: 14px 16px; }
 
-/* GLOBAL CONFIG */
+/* CLIENT PANEL */
+.client-panel {
+  background: linear-gradient(135deg, rgba(59,126,246,0.05), rgba(99,102,241,0.07));
+  border: 1.5px solid rgba(59,126,246,0.25);
+}
+.client-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.client-btn {
+  padding: 11px 8px; border: 2px solid var(--border2); border-radius: 9px;
+  background: var(--surface); cursor: pointer;
+  font-family: var(--font-body); font-size: .72rem; font-weight: 600; color: var(--text2);
+  text-align: center; transition: all .18s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.client-btn:hover { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+.client-btn.active { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); box-shadow: 0 0 0 3px rgba(59,126,246,0.12); }
+.client-btn .client-icon { font-size: 1.25rem; }
+.client-btn .client-name { font-family: var(--font-display); font-size: .8rem; font-weight: 600; letter-spacing: -.01em; }
+.client-btn .client-meta { font-family: var(--font-mono); font-size: .56rem; color: var(--text3); font-weight: 400; }
+.client-btn.active .client-meta { color: var(--accent); opacity: .75; }
+.client-hint { margin-top: 10px; font-size: .68rem; color: var(--text3); text-align: center; padding: 4px 0; }
+
+/* CONFIG */
 .cfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .field { display: flex; flex-direction: column; gap: 5px; }
-.field label {
-  font-size: .6rem;
-  font-weight: 600;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-}
-.field input, .field select {
-  padding: 8px 10px;
-  border: 1.5px solid var(--border2);
-  border-radius: 7px;
-  font-size: .82rem;
-  outline: none;
-  background: #fff;
-  color: var(--text);
-  font-family: var(--font-body);
-  transition: border-color .15s;
-}
+.field label { font-size: .6rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; }
+.field input, .field select { padding: 8px 10px; border: 1.5px solid var(--border2); border-radius: 7px; font-size: .82rem; outline: none; background: #fff; color: var(--text); font-family: var(--font-body); transition: border-color .15s; }
 .field input:focus, .field select:focus { border-color: var(--accent); }
 .field select { cursor: pointer; }
 
 /* BUCKET TABLE */
 .bkt-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.bkt-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: .68rem;
-  min-width: 260px;
-}
-.bkt-table th {
-  padding: 7px 5px;
-  background: var(--surface2);
-  font-weight: 600;
-  color: var(--text3);
-  border-bottom: 1px solid var(--border);
-  text-align: center;
-  font-size: .6rem;
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-.bkt-table td {
-  padding: 5px 3px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-}
+.bkt-table { width: 100%; border-collapse: collapse; font-size: .68rem; min-width: 260px; }
+.bkt-table th { padding: 7px 5px; background: var(--surface2); font-weight: 600; color: var(--text3); border-bottom: 1px solid var(--border); text-align: center; font-size: .6rem; text-transform: uppercase; letter-spacing: .05em; }
+.bkt-table td { padding: 5px 3px; text-align: center; border-bottom: 1px solid var(--border); }
 .bkt-table tr:last-child td { border-bottom: none; }
-.bkt-name {
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  font-weight: 500;
-  padding: 3px 7px;
-  border-radius: 5px;
-}
-.bkt-inp {
-  width: 36px;
-  text-align: center;
-  padding: 4px 3px;
-  border: 1.5px solid var(--border2);
-  border-radius: 5px;
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  background: #fff;
-  color: var(--text);
-  outline: none;
-}
+.bkt-inp { width: 36px; text-align: center; padding: 4px 3px; border: 1.5px solid var(--border2); border-radius: 5px; font-family: var(--font-mono); font-size: .72rem; background: #fff; color: var(--text); outline: none; }
 .bkt-inp:focus { border-color: var(--accent); }
 .bkt-check { width: 14px; height: 14px; cursor: pointer; accent-color: var(--accent); }
 
 /* TRANSACTIONS */
-.txn-header {
-  display: grid;
-  grid-template-columns: 22px 1fr 1fr 64px 24px;
-  gap: 6px;
-  padding: 0 10px 8px;
-  font-size: .58rem;
-  font-weight: 600;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: .07em;
-}
-@media(max-width:400px){
-  .txn-header { grid-template-columns: 20px 1fr 1fr 54px 20px; gap: 4px; padding: 0 8px 8px; }
-}
-.rows-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 320px;
-  overflow-y: auto;
-  padding-right: 2px;
-  margin-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-}
-/* On mobile, don't cap height — show all rows so Process button is always visible */
-@media(max-width:1000px){
-  .rows-wrap { max-height: none; overflow-y: visible; }
-}
-
-.dep-row {
-  background: var(--surface2);
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-  overflow: hidden;
-  transition: border-color .15s;
-}
+.txn-header { display: grid; grid-template-columns: 22px 1fr 1fr 64px 24px; gap: 6px; padding: 0 10px 8px; font-size: .58rem; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; }
+.rows-wrap { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; padding-right: 2px; margin-bottom: 10px; -webkit-overflow-scrolling: touch; }
+@media(max-width:1000px){ .rows-wrap { max-height: none; overflow-y: visible; } }
+.dep-row { background: var(--surface2); border-radius: 8px; border: 1.5px solid var(--border); overflow: hidden; transition: border-color .15s; }
 .dep-row:hover { border-color: var(--border2); }
 .dep-row.capped { border-color: rgba(224,62,62,0.35); }
-.dep-row-top {
-  display: grid;
-  grid-template-columns: 22px 1fr 1fr 64px 24px;
-  gap: 6px;
-  padding: 8px 10px;
-  align-items: center;
-}
-@media(max-width:400px){
-  .dep-row-top { grid-template-columns: 20px 1fr 1fr 54px 20px; gap: 4px; padding: 7px 8px; }
-}
-.row-num {
-  font-family: var(--font-mono);
-  font-size: .65rem;
-  color: var(--text3);
-  font-weight: 500;
-}
-.dep-ref, .dep-amt, .dep-bkt {
-  width: 100%;
-  font-family: var(--font-mono);
-  font-size: .75rem;
-  padding: 6px 8px;
-  border: 1.5px solid var(--border);
-  border-radius: 6px;
-  background: #fff;
-  color: var(--text);
-  outline: none;
-  transition: border-color .15s;
-}
+.dep-row-top { display: grid; grid-template-columns: 22px 1fr 1fr 64px 24px; gap: 6px; padding: 8px 10px; align-items: center; }
+.row-num { font-family: var(--font-mono); font-size: .65rem; color: var(--text3); font-weight: 500; }
+.dep-ref, .dep-amt, .dep-bkt { width: 100%; font-family: var(--font-mono); font-size: .75rem; padding: 6px 8px; border: 1.5px solid var(--border); border-radius: 6px; background: #fff; color: var(--text); outline: none; transition: border-color .15s; }
 .dep-ref:focus, .dep-amt:focus, .dep-bkt:focus { border-color: var(--accent); }
 .dep-bkt { cursor: pointer; font-weight: 500; }
-.dep-row-tags {
-  padding: 0 10px 8px 40px;
-  display: flex;
-  gap: 5px;
-  align-items: center;
-}
-.tag {
-  font-size: .55rem;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-}
-.tag-nd { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.dep-row-tags { padding: 0 10px 8px 40px; display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.tag { font-size: .55rem; font-weight: 600; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: .04em; }
+.tag-nd   { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
 .tag-excl { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
-.tag-cap { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
+.tag-cap  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
 .tag-zero { background: var(--surface3); color: var(--text3); border: 1px solid var(--border); }
-
-.del-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text3);
-  font-size: .9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  transition: all .15s;
-}
+.del-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: .9rem; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: all .15s; }
 .del-btn:hover { background: var(--red-dim); color: var(--red); }
 
-/* BUTTONS */
-.btn-add {
-  width: 100%;
-  padding: 9px;
-  background: var(--surface3);
-  color: var(--text2);
-  border: 1.5px dashed var(--border2);
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: .75rem;
-  transition: all .15s;
-  margin-bottom: 10px;
-}
+.btn-add { width: 100%; padding: 9px; background: var(--surface3); color: var(--text2); border: 1.5px dashed var(--border2); border-radius: 8px; font-weight: 600; cursor: pointer; font-family: var(--font-body); font-size: .75rem; transition: all .15s; margin-bottom: 10px; }
 .btn-add:hover { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-.btn-run {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, var(--accent), #3b82f6);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: var(--font-display);
-  font-size: .9rem;
-  transition: all .2s;
-  letter-spacing: .01em;
-}
+.btn-run { width: 100%; padding: 12px; background: linear-gradient(135deg, var(--accent), #3b82f6); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-family: var(--font-display); font-size: .9rem; transition: all .2s; letter-spacing: .01em; }
 .btn-run:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(79,142,247,.4); }
 .btn-run:active { transform: translateY(0); }
 
-/* RESULTS */
 .results-col { display: flex; flex-direction: column; gap: 14px; }
-.mode-toggle {
-  display: flex;
-  gap: 6px;
-  background: var(--surface2);
-  padding: 5px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  width: fit-content;
-}
-.mode-btn {
-  padding: 7px 16px;
-  border-radius: 7px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: .72rem;
-  font-family: var(--font-body);
-  color: var(--text3);
-  background: transparent;
-  transition: all .15s;
-}
-.mode-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-
-/* SIDE BY SIDE */
-.results-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
+.results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .results-grid.single { grid-template-columns: 1fr; }
 @media(max-width:800px){ .results-grid { grid-template-columns: 1fr; } }
 
-/* SCHEDULE PANEL */
-.sched-panel {
-  background: var(--surface);
-  border-radius: var(--r);
-  border: 1px solid var(--border);
-  overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-}
-.sched-hd {
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-.sched-title {
-  font-family: var(--font-display);
-  font-size: .95rem;
-  font-weight: 600;
-}
+.sched-panel { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.sched-hd { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.sched-title { font-family: var(--font-display); font-size: .95rem; font-weight: 600; }
 .sched-title.ex { color: var(--accent); }
 .sched-title.nw { color: var(--teal); }
-.sched-total {
-  font-family: var(--font-mono);
-  font-size: .75rem;
-  color: var(--text2);
-}
+.sched-total { font-family: var(--font-mono); font-size: .75rem; color: var(--text2); }
 
-/* TIMELINE / GANTT STYLE */
 .timeline-wrap { padding: 14px 16px; overflow-x: auto; }
-.tl-days-header {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 10px;
-  padding-left: 100px;
-}
-.tl-day-col {
-  flex: 1;
-  min-width: 60px;
-  text-align: center;
-}
-.tl-day-label {
-  font-size: .6rem;
-  font-weight: 700;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: .05em;
-}
-.tl-day-amt {
-  font-family: var(--font-mono);
-  font-size: .7rem;
-  color: var(--text);
-  font-weight: 500;
-  margin-top: 2px;
-}
-
-.tl-row {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin-bottom: 6px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border);
-}
+.tl-day-col { flex: 1; min-width: 60px; text-align: center; }
+.tl-day-label { font-size: .6rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; }
+.tl-day-amt { font-family: var(--font-mono); font-size: .7rem; color: var(--text); font-weight: 500; margin-top: 2px; }
+.tl-day-date { font-family: var(--font-mono); font-size: .52rem; color: var(--accent); margin-top: 1px; font-weight: 500; }
+.tl-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; padding: 6px 0; border-bottom: 1px solid var(--border); }
 .tl-row:last-child { border-bottom: none; }
-.tl-row-info {
-  width: 100px;
-  flex-shrink: 0;
-}
-.tl-ref {
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  font-weight: 500;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tl-bkt-badge {
-  font-size: .55rem;
-  font-weight: 600;
-  padding: 1px 5px;
-  border-radius: 3px;
-  display: inline-block;
-  margin-top: 2px;
-}
-.tl-cells {
-  display: flex;
-  gap: 6px;
-  flex: 1;
-}
-.tl-cell {
-  flex: 1;
-  min-width: 60px;
-  text-align: center;
-  position: relative;
-}
-.tl-cell-bar {
-  padding: 5px 4px;
-  border-radius: 5px;
-  font-family: var(--font-mono);
-  font-size: .65rem;
-  font-weight: 500;
-  min-height: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-}
+.tl-row-info { width: 100px; flex-shrink: 0; }
+.tl-ref { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tl-bkt-badge { font-size: .55rem; font-weight: 600; padding: 1px 5px; border-radius: 3px; display: inline-block; margin-top: 2px; }
+.tl-cells { display: flex; gap: 6px; flex: 1; }
+.tl-cell { flex: 1; min-width: 60px; text-align: center; }
+.tl-cell-bar { padding: 5px 4px; border-radius: 5px; font-family: var(--font-mono); font-size: .65rem; font-weight: 500; min-height: 28px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
 .tl-cell-amt { font-weight: 700; font-size: .68rem; }
 .tl-cell-tag { font-size: .48rem; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; opacity: .8; }
 .tl-cell-empty { min-height: 28px; }
 
-/* tag color variants */
-.bar-nd { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
+.bar-nd      { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.2); }
 .bar-default { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(79,142,247,.2); }
-.bar-ext { background: var(--surface3); color: var(--text2); border: 1px solid var(--border); }
-.bar-t1 { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(45,212,191,.2); }
-.bar-t2 { background: var(--surface3); color: var(--text2); border: 1px solid var(--border); }
-.bar-excl { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
-.bar-capped { background: var(--red-dim); color: var(--red); border: 1px dashed rgba(248,113,113,.4); opacity: .6; }
+.bar-ext     { background: var(--surface3); color: var(--text2); border: 1px solid var(--border); }
+.bar-t1      { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(45,212,191,.2); }
+.bar-t2      { background: var(--surface3); color: var(--text2); border: 1px solid var(--border); }
+.bar-excl    { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,113,113,.2); }
 
-/* TOTALS ROW */
-.tl-summary-line {
-  font-size: .65rem;
-  color: var(--text3);
-  padding: 3px 0 8px 0;
-  border-bottom: 1px solid var(--border);
-  font-family: var(--font-body);
-  line-height: 1.4;
-}
-.tl-summary-line:last-child { border-bottom: none; }
-.tl-totals-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 2px solid var(--border2);
-}
-.tl-totals-label {
-  width: 100px;
-  flex-shrink: 0;
-  font-size: .65rem;
-  font-weight: 700;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: .05em;
-  padding-top: 4px;
-}
-.tl-totals-cells {
-  display: flex;
-  gap: 6px;
-  flex: 1;
-}
-.tl-total-cell {
-  flex: 1;
-  min-width: 60px;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: .72rem;
-  font-weight: 700;
-  color: var(--text);
-  background: var(--surface2);
-  border-radius: 5px;
-  padding: 5px 4px;
-  border: 1px solid var(--border2);
-}
+.tl-summary-line { font-size: .65rem; color: var(--text3); padding: 3px 0 8px 0; border-bottom: 1px solid var(--border); font-family: var(--font-body); line-height: 1.4; }
+.tl-totals-row { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--border2); }
+.tl-totals-label { width: 100px; flex-shrink: 0; font-size: .65rem; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .05em; padding-top: 4px; }
+.tl-totals-cells { display: flex; gap: 6px; flex: 1; }
+.tl-total-cell { flex: 1; min-width: 60px; text-align: center; font-family: var(--font-mono); font-size: .72rem; font-weight: 700; color: var(--text); background: var(--surface2); border-radius: 5px; padding: 5px 4px; border: 1px solid var(--border2); }
 
-/* EMPTY STATE */
-.empty-state {
-  text-align: center;
-  padding: 50px 20px;
-  color: var(--text3);
-}
-.empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: .4; }
+.empty-state { text-align: center; padding: 50px 20px; color: var(--text3); }
+.empty-icon  { font-size: 2.5rem; margin-bottom: 12px; opacity: .4; }
 .empty-title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--text2); margin-bottom: 6px; }
-.empty-sub { font-size: .78rem; line-height: 1.5; }
+.empty-sub   { font-size: .78rem; line-height: 1.5; }
 
-/* SYSTEM DATE PANEL */
-.sysdate-panel {
-  background: linear-gradient(135deg, rgba(59,126,246,0.06), rgba(13,168,154,0.06));
-  border: 1.5px solid rgba(59,126,246,0.25);
-}
-.sysdate-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
+.sysdate-panel { background: linear-gradient(135deg, rgba(59,126,246,0.06), rgba(13,168,154,0.06)); border: 1.5px solid rgba(59,126,246,0.25); }
 .sysdate-row .field { flex: 1; min-width: 140px; }
-.sysdate-status {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 10px;
-  padding: 7px 10px;
-  border-radius: 7px;
-  font-size: .7rem;
-  font-weight: 500;
-  font-family: var(--font-mono);
-  transition: all .2s;
-}
+.sysdate-status { display: flex; align-items: center; gap: 7px; margin-top: 10px; padding: 7px 10px; border-radius: 7px; font-size: .7rem; font-weight: 500; font-family: var(--font-mono); transition: all .2s; }
 .sysdate-status.idle    { background: var(--surface2); color: var(--text3); border: 1px solid var(--border); }
 .sysdate-status.loading { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,.25); }
 .sysdate-status.ok      { background: var(--green-dim); color: var(--green); border: 1px solid rgba(22,163,74,.25); }
-.sysdate-status.err     { background: var(--red-dim);   color: var(--red);   border: 1px solid rgba(224,62,62,.25); }
+.sysdate-status.err     { background: var(--red-dim); color: var(--red); border: 1px solid rgba(224,62,62,.25); }
 .sysdate-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .sysdate-status.idle    .sysdate-dot { background: var(--text3); }
 .sysdate-status.loading .sysdate-dot { background: var(--amber); animation: pulse-dot 1s infinite; }
@@ -603,157 +225,30 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .sysdate-status.err     .sysdate-dot { background: var(--red); }
 @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-/* HOLIDAY LIST */
-.holiday-list-wrap {
-  margin-top: 10px;
-  border-top: 1px solid rgba(59,126,246,0.15);
-  padding-top: 10px;
-}
-.holiday-list-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  user-select: none;
-  padding: 4px 2px;
-}
-.holiday-list-label {
-  font-size: .65rem;
-  font-weight: 700;
-  color: var(--text2);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.holiday-count-badge {
-  font-family: var(--font-mono);
-  font-size: .58rem;
-  background: var(--accent-dim);
-  color: var(--accent);
-  border: 1px solid rgba(59,126,246,.2);
-  padding: 1px 6px;
-  border-radius: 10px;
-  font-weight: 600;
-}
-.holiday-chevron {
-  font-size: .65rem;
-  color: var(--text3);
-  transition: transform .2s;
-}
+.holiday-list-wrap { margin-top: 10px; border-top: 1px solid rgba(59,126,246,0.15); padding-top: 10px; }
+.holiday-list-toggle { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; padding: 4px 2px; }
+.holiday-list-label { font-size: .65rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; display: flex; align-items: center; gap: 6px; }
+.holiday-count-badge { font-family: var(--font-mono); font-size: .58rem; background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(59,126,246,.2); padding: 1px 6px; border-radius: 10px; font-weight: 600; }
+.holiday-chevron { font-size: .65rem; color: var(--text3); transition: transform .2s; }
 .holiday-chevron.open { transform: rotate(180deg); }
-.holiday-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 8px;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .35s ease;
-}
+.holiday-grid { display: flex; flex-direction: column; gap: 0; margin-top: 8px; max-height: 0; overflow: hidden; transition: max-height .35s ease; }
 .holiday-grid.open { max-height: 900px; }
-.holiday-grid-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-}
+.holiday-grid-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .holiday-grid-next { margin-top: 4px; }
-.holiday-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 7px;
-  border-radius: 6px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-}
-.holiday-item.is-skipped {
-  background: rgba(217,119,6,0.07);
-  border-color: rgba(217,119,6,0.2);
-}
+.holiday-item { display: flex; align-items: center; gap: 6px; padding: 5px 7px; border-radius: 6px; background: var(--surface2); border: 1px solid var(--border); }
+.holiday-item.is-skipped { background: rgba(217,119,6,0.07); border-color: rgba(217,119,6,0.2); }
 .holiday-dot-h { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
 .holiday-item.is-skipped .holiday-dot-h { background: var(--amber); }
-.holiday-date-h {
-  font-family: var(--font-mono);
-  font-size: .6rem;
-  color: var(--text3);
-  flex-shrink: 0;
-}
+.holiday-date-h { font-family: var(--font-mono); font-size: .6rem; color: var(--text3); flex-shrink: 0; }
 .holiday-item.is-skipped .holiday-date-h { color: var(--amber); }
-.holiday-name-h {
-  font-size: .62rem;
-  font-weight: 500;
-  color: var(--text2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.holiday-name-h { font-size: .62rem; font-weight: 500; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .holiday-item.is-skipped .holiday-name-h { color: var(--amber); font-weight: 600; }
-.holiday-year-sep {
-  grid-column: 1 / -1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 6px 0 4px;
-  font-size: .6rem;
-  font-weight: 700;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-}
-.holiday-year-sep::before,
-.holiday-year-sep::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(59,126,246,0.2);
-}
-
-
-  font-size: .5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: var(--amber);
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
-
-.tl-day-date {
-  font-family: var(--font-mono);
-  font-size: .52rem;
-  color: var(--accent);
-  margin-top: 1px;
-  font-weight: 500;
-}
-
+.holiday-year-sep { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin: 6px 0 4px; font-size: .6rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.holiday-year-sep::before, .holiday-year-sep::after { content: ''; flex: 1; height: 1px; background: rgba(59,126,246,0.2); }
 
 .tooltip-wrap { position: relative; display: inline-flex; }
 .tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: var(--surface3); color: var(--text3); font-size: .55rem; display: inline-flex; align-items: center; justify-content: center; cursor: help; border: 1px solid var(--border2); }
-.tooltip-box {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--text);
-  color: #fff;
-  font-size: .65rem;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--border2);
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .15s;
-  z-index: 200;
-  font-family: var(--font-body);
-  line-height: 1.4;
-  max-width: 200px;
-  white-space: normal;
-  text-align: center;
-}
+.tooltip-box { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; font-size: .65rem; padding: 6px 10px; border-radius: 6px; white-space: normal; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 200; font-family: var(--font-body); line-height: 1.4; max-width: 200px; text-align: center; }
 .tooltip-wrap:hover .tooltip-box { opacity: 1; }
 </style>
 </head>
@@ -763,32 +258,42 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   <div class="hdr-left">
     <div class="hdr-logo">🏛</div>
     <div class="hdr-title">Funds Availability</div>
-    <div class="hdr-badge">v7.0</div>
+    <div class="hdr-badge">v8.0</div>
+    <div class="client-pill none" id="hdrClientPill">
+      <div class="client-pill-dot"></div>
+      <span id="hdrClientName">No Client Selected</span>
+    </div>
   </div>
-  <div class="cap-meter" id="capMeter">
+  <div class="cap-meter">
     <div class="cap-label">Cap Used</div>
     <div class="cap-values">
       <span class="cap-used" id="capUsedVal">$0</span>
       <span class="cap-sep">/</span>
-      <span class="cap-total" id="capTotalVal">$6,725</span>
+      <span class="cap-total" id="capTotalVal">$0</span>
     </div>
     <div class="cap-bar-wrap"><div class="cap-bar" id="capBarEl" style="width:0%"></div></div>
   </div>
 </div>
 
 <div class="wrap">
-  <!-- LEFT COLUMN -->
   <div class="sticky-col">
+
+    <!-- CLIENT SELECTOR -->
+    <div class="panel client-panel">
+      <div class="panel-hd"><h3>👤 Select Client</h3></div>
+      <div class="panel-body">
+        <div class="client-btns" id="clientBtns"></div>
+        <div class="client-hint" id="clientHint">Select a client to load their configuration</div>
+      </div>
+    </div>
 
     <!-- SYSTEM DATE -->
     <div class="panel sysdate-panel">
       <div class="panel-hd"><h3>📅 System Date</h3></div>
       <div class="panel-body">
-        <div class="sysdate-row">
-          <div class="field">
-            <label>System Date</label>
-            <input type="date" id="systemDate" oninput="onSystemDateChange()" style="font-family:var(--font-mono);font-size:.82rem">
-          </div>
+        <div class="field">
+          <label>System Date</label>
+          <input type="date" id="systemDate" oninput="onSystemDateChange()" style="font-family:var(--font-mono);font-size:.82rem">
         </div>
         <div class="sysdate-status idle" id="sysdateStatus">
           <div class="sysdate-dot"></div>
@@ -796,10 +301,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         </div>
         <div class="holiday-list-wrap" id="holidayListWrap" style="display:none">
           <div class="holiday-list-toggle" onclick="toggleHolidayList()">
-            <div class="holiday-list-label">
-              🗓 Federal Holidays
-              <span class="holiday-count-badge" id="holidayCountBadge">0</span>
-            </div>
+            <div class="holiday-list-label">🗓 Federal Holidays <span class="holiday-count-badge" id="holidayCountBadge">0</span></div>
             <span class="holiday-chevron" id="holidayChevron">▼</span>
           </div>
           <div class="holiday-grid" id="holidayGrid"></div>
@@ -807,17 +309,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       </div>
     </div>
 
+    <!-- GLOBAL CONFIG -->
     <div class="panel">
       <div class="panel-hd"><h3>⚙ Global Config</h3></div>
       <div class="panel-body">
         <div class="cfg-grid">
           <div class="field">
             <label>Release Cap ($)</label>
-            <input type="number" id="cfgMax" value="6725" oninput="liveUpdate()">
+            <input type="number" id="cfgMax" value="0" oninput="liveUpdate()">
           </div>
           <div class="field">
             <label>ND Min ($)</label>
-            <input type="number" id="cfgNdMin" value="275" oninput="liveUpdate()">
+            <input type="number" id="cfgNdMin" value="0" oninput="liveUpdate()">
           </div>
         </div>
         <div class="field">
@@ -831,21 +334,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
       </div>
     </div>
 
+    <!-- BUCKET LOGIC -->
     <div class="panel">
       <div class="panel-hd">
         <h3>🎯 Bucket Logic</h3>
-        <div style="display:flex;gap:8px;font-size:.6rem;color:var(--text3)">
-          <span style="display:flex;align-items:center;gap:3px">
-            <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-box">Pri = sort order. Def = default hold days. Ext = extended days added on top (Existing). T1/T2 = tier offsets added to Def (New). ND = next-day release flag. Excl = exclusion: bypasses Tier 1.</span></span>
-            Hover ? for help
-          </span>
-        </div>
+        <span class="tooltip-wrap"><span class="tooltip-icon">?</span><span class="tooltip-box">Pri=sort order. Def=default hold days. Ext=extended days added on top (Existing). T1/T2=tier offsets added to Def (New). ND=next-day flag. Excl=exclusion (bypasses Tier 1).</span></span>
       </div>
       <div class="panel-body" style="padding:10px 12px">
         <div class="bkt-wrap" id="bucketTableWrap"></div>
       </div>
     </div>
 
+    <!-- TRANSACTIONS -->
     <div class="panel">
       <div class="panel-hd"><h3>📋 Transactions</h3></div>
       <div class="panel-body" style="padding:12px 14px">
@@ -861,53 +361,163 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
   </div>
 
   <!-- RIGHT COLUMN -->
-  <div class="results-col" id="resultsCol">
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <div class="mode-toggle" id="modeToggle" style="display:none">
-        <button class="mode-btn active" id="tab-ex" onclick="showTab('ex')">Existing Account</button>
-        <button class="mode-btn" id="tab-nw" onclick="showTab('nw')">New Account</button>
-      </div>
-    </div>
-
+  <div class="results-col">
     <div id="resultsGrid" class="results-grid single">
       <div class="empty-state">
-        <div class="empty-icon">📊</div>
-        <div class="empty-title">No schedule yet</div>
-        <div class="empty-sub">Add transactions and press<br>Process Schedule to see results.</div>
+        <div class="empty-icon">👤</div>
+        <div class="empty-title">Select a client first</div>
+        <div class="empty-sub">Choose a client above to load their configuration,<br>then add transactions and process.</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+//  CLIENT CONFIGURATIONS
+//  ─ To rename a client: change the `name` field.
+//  ─ To update values: change cap, ndMin, or any bucket field.
+//  ─ To add a client: add a new numeric key following the same shape.
+//  ─ LOGIC IS NEVER TOUCHED HERE — only config values live in this object.
+// ══════════════════════════════════════════════════════════════════════════════
+const CLIENT_CONFIGS = {
+  1: {
+    name:  'Client 1',
+    icon:  '🏦',
+    cap:   6725,
+    ndMin:  275,
+    buckets: {
+      2: { pri:1, def:1, ext:6, t1:0, t2:6, nd:false, excl:false },
+      3: { pri:4, def:4, ext:3, t1:2, t2:3, nd:false, excl:false },
+      4: { pri:5, def:2, ext:5, t1:0, t2:5, nd:false, excl:false },
+      5: { pri:2, def:1, ext:1, t1:5, t2:6, nd:true,  excl:false },
+      6: { pri:3, def:2, ext:5, t1:3, t2:5, nd:false, excl:true  },
+      7: { pri:6, def:3, ext:5, t1:0, t2:5, nd:false, excl:false },
+    }
+  },
+  2: {
+    name:  'Client 2',
+    icon:  '🏢',
+    cap:   5000,
+    ndMin:  200,
+    buckets: {
+      2: { pri:1, def:1, ext:5, t1:0, t2:5, nd:false, excl:false },
+      3: { pri:3, def:3, ext:4, t1:1, t2:4, nd:false, excl:false },
+      4: { pri:4, def:2, ext:4, t1:0, t2:4, nd:false, excl:false },
+      5: { pri:2, def:1, ext:2, t1:4, t2:5, nd:true,  excl:false },
+      6: { pri:5, def:2, ext:4, t1:2, t2:4, nd:false, excl:true  },
+      7: { pri:6, def:3, ext:4, t1:0, t2:4, nd:false, excl:false },
+    }
+  },
+  3: {
+    name:  'Client 3',
+    icon:  '🏗',
+    cap:   8500,
+    ndMin:  350,
+    buckets: {
+      2: { pri:1, def:1, ext:7, t1:0, t2:7, nd:false, excl:false },
+      3: { pri:5, def:5, ext:2, t1:3, t2:2, nd:false, excl:false },
+      4: { pri:6, def:2, ext:6, t1:0, t2:6, nd:false, excl:false },
+      5: { pri:2, def:1, ext:1, t1:6, t2:7, nd:true,  excl:false },
+      6: { pri:3, def:2, ext:6, t1:4, t2:6, nd:false, excl:true  },
+      7: { pri:4, def:4, ext:6, t1:0, t2:6, nd:false, excl:false },
+    }
+  }
+};
+
+// ─── RUNTIME STATE ────────────────────────────────────────────────────────────
+let activeClient = null;
 let rows = [];
 let nextId = 1;
-let lastResults = null;
 
-// ─── SYSTEM DATE & FEDERAL HOLIDAYS ──────────────────────────────────────────
-let systemDate        = null;  // "YYYY-MM-DD"
-let fedHolidays       = [];    // ["YYYY-MM-DD", ...] — merged across years if needed
-let fedHolidayObjects = [];    // [{date, localName, name, _nextYear?}, ...]
-let loadedYears       = [];    // years already fetched, e.g. [2025] or [2025, 2026]
+// Live working copy of bucket config (mutated by inline table inputs)
+const bucketCfg = {
+  2:{pri:1,def:1,ext:6,t1:0,t2:6,nd:false,excl:false},
+  3:{pri:4,def:4,ext:3,t1:2,t2:3,nd:false,excl:false},
+  4:{pri:5,def:2,ext:5,t1:0,t2:5,nd:false,excl:false},
+  5:{pri:2,def:1,ext:1,t1:5,t2:6,nd:true, excl:false},
+  6:{pri:3,def:2,ext:5,t1:3,t2:5,nd:false,excl:true },
+  7:{pri:6,def:3,ext:5,t1:0,t2:5,nd:false,excl:false}
+};
 
-function setDateStatus(state, msg) {
-  const el  = document.getElementById('sysdateStatus');
-  const txt = document.getElementById('sysdateMsg');
-  el.className = 'sysdate-status ' + state;
-  txt.textContent = msg;
+const BUCKETS    = [2,3,4,5,6,7];
+const BKT_COLORS = {2:'#6366f1',3:'#8b5cf6',4:'#a855f7',5:'#ec4899',6:'#f43f5e',7:'#fb923c'};
+
+// ─── CLIENT SELECTOR ──────────────────────────────────────────────────────────
+function renderClientBtns() {
+  document.getElementById('clientBtns').innerHTML =
+    Object.entries(CLIENT_CONFIGS).map(([id, cfg]) => {
+      const isActive = activeClient == id;
+      return `<button class="client-btn${isActive ? ' active' : ''}" onclick="selectClient(${id})">
+        <div class="client-icon">${cfg.icon}</div>
+        <div class="client-name">${cfg.name}</div>
+        <div class="client-meta">Cap $${cfg.cap.toLocaleString()} · ND $${cfg.ndMin}</div>
+      </button>`;
+    }).join('');
 }
 
-// Fetch federal holidays for one year, returns array of full objects
+function selectClient(id) {
+  activeClient = id;
+  const cfg = CLIENT_CONFIGS[id];
+
+  // Load cap + ndMin
+  document.getElementById('cfgMax').value   = cfg.cap;
+  document.getElementById('cfgNdMin').value = cfg.ndMin;
+
+  // Deep-copy bucket config into live bucketCfg
+  BUCKETS.forEach(b => {
+    const src = cfg.buckets[b];
+    bucketCfg[b].pri  = src.pri;
+    bucketCfg[b].def  = src.def;
+    bucketCfg[b].ext  = src.ext;
+    bucketCfg[b].t1   = src.t1;
+    bucketCfg[b].t2   = src.t2;
+    bucketCfg[b].nd   = src.nd;
+    bucketCfg[b].excl = src.excl;
+  });
+
+  // Update header pill
+  const pill = document.getElementById('hdrClientPill');
+  pill.className = 'client-pill';
+  document.getElementById('hdrClientName').textContent = cfg.name;
+
+  // Hide hint
+  document.getElementById('clientHint').style.display = 'none';
+
+  // Re-render UI
+  renderClientBtns();
+  renderBucketTable();
+  renderRows();
+  liveUpdate();
+
+  // Clear stale results
+  document.getElementById('resultsGrid').className = 'results-grid single';
+  document.getElementById('resultsGrid').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">${cfg.icon}</div>
+      <div class="empty-title">${cfg.name} loaded</div>
+      <div class="empty-sub">Configuration ready. Add transactions and<br>press Process Schedule to see the schedule.</div>
+    </div>`;
+}
+
+// ─── SYSTEM DATE & FEDERAL HOLIDAYS ──────────────────────────────────────────
+let systemDate        = null;
+let fedHolidays       = [];
+let fedHolidayObjects = [];
+let loadedYears       = [];
+
+function setDateStatus(state, msg) {
+  const el = document.getElementById('sysdateStatus');
+  el.className = 'sysdate-status ' + state;
+  document.getElementById('sysdateMsg').textContent = msg;
+}
+
 async function fetchYearHolidays(yr) {
   const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/US`);
   if (!res.ok) throw new Error('HTTP ' + res.status);
-  const data = await res.json();
-  return data.filter(h => h.global === true);
+  return (await res.json()).filter(h => h.global === true);
 }
 
-// Does this date risk spilling into the next year?
-// True when date is in December AND day >= 15  (worst case: Dec 15 + ~15 biz days ≈ early Jan)
 function needsNextYear(dateStr) {
   if (!dateStr) return false;
   const [, mm, dd] = dateStr.split('-').map(Number);
@@ -917,119 +527,85 @@ function needsNextYear(dateStr) {
 async function onSystemDateChange() {
   const val = document.getElementById('systemDate').value;
   if (!val) {
-    systemDate        = null;
-    fedHolidays       = [];
-    fedHolidayObjects = [];
-    loadedYears       = [];
+    systemDate = null; fedHolidays = []; fedHolidayObjects = []; loadedYears = [];
     setDateStatus('idle', 'Enter a system date to load federal holidays');
     document.getElementById('holidayListWrap').style.display = 'none';
     return;
   }
-
-  systemDate    = val;
+  systemDate = val;
   const yr      = parseInt(val.split('-')[0]);
   const needsNY = needsNextYear(val);
   const nextYr  = yr + 1;
-
-  // Check if we already have everything we need
   const hasThisYr = loadedYears.includes(yr);
   const hasNextYr = loadedYears.includes(nextYr);
+
   if (hasThisYr && (!needsNY || hasNextYr)) {
-    const fmt = fmtDate(val);
-    const label = needsNY
-      ? `System date: ${fmt} · holidays loaded for ${yr} + ${nextYr} (year-end spillover)`
-      : `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`;
-    setDateStatus('ok', label);
-    renderHolidayList();
-    return;
+    setDateStatus('ok', needsNY
+      ? `System date: ${fmtDate(val)} · holidays loaded for ${yr} + ${nextYr} (year-end spillover)`
+      : `System date: ${fmtDate(val)} · ${fedHolidays.length} federal holidays loaded for ${yr}`);
+    renderHolidayList(); return;
   }
 
   document.getElementById('holidayListWrap').style.display = 'none';
-  const loadMsg = needsNY
-    ? `Fetching ${yr} & ${nextYr} US federal holidays (year-end spillover)…`
-    : `Fetching ${yr} US federal holidays…`;
-  setDateStatus('loading', loadMsg);
+  setDateStatus('loading', needsNY
+    ? `Fetching ${yr} & ${nextYr} US federal holidays…`
+    : `Fetching ${yr} US federal holidays…`);
 
   try {
     const yearsToFetch = [];
     if (!hasThisYr) yearsToFetch.push(yr);
     if (needsNY && !hasNextYr) yearsToFetch.push(nextYr);
-
     const fetched = await Promise.all(yearsToFetch.map(y => fetchYearHolidays(y)));
     yearsToFetch.forEach((y, i) => {
       loadedYears.push(y);
-      // Tag next-year objects so the list can group them
       fetched[i].forEach(h => { if (y !== yr) h._nextYear = true; });
-      fedHolidayObjects = [...fedHolidayObjects.filter(h => {
-        const hy = parseInt(h.date.split('-')[0]);
-        return hy !== y; // replace any stale entries for this year
-      }), ...fetched[i]];
+      fedHolidayObjects = [
+        ...fedHolidayObjects.filter(h => parseInt(h.date.split('-')[0]) !== y),
+        ...fetched[i]
+      ];
     });
-
-    // Re-sort by date
     fedHolidayObjects.sort((a, b) => a.date.localeCompare(b.date));
     fedHolidays = fedHolidayObjects.map(h => h.date);
-
-    const fmt = fmtDate(val);
-    const label = needsNY
-      ? `System date: ${fmt} · holidays loaded for ${yr} + ${nextYr} ✦ year-end spillover handled`
-      : `System date: ${fmt} · ${fedHolidays.length} federal holidays loaded for ${yr}`;
-    setDateStatus('ok', label);
+    setDateStatus('ok', needsNY
+      ? `System date: ${fmtDate(val)} · holidays loaded for ${yr} + ${nextYr} ✦ year-end spillover handled`
+      : `System date: ${fmtDate(val)} · ${fedHolidays.length} federal holidays loaded for ${yr}`);
     renderHolidayList();
   } catch(e) {
-    fedHolidays       = [];
-    fedHolidayObjects = [];
-    loadedYears       = [];
+    fedHolidays = []; fedHolidayObjects = []; loadedYears = [];
     setDateStatus('err', `Could not fetch holidays (${e.message}). Day dates unavailable.`);
   }
 }
 
-// ─── HOLIDAY LIST RENDER ──────────────────────────────────────────────────────
 let holidayListOpen = true;
-
 function renderHolidayList() {
-  if (!fedHolidayObjects.length) {
-    document.getElementById('holidayListWrap').style.display = 'none';
-    return;
-  }
-
-  const yr = systemDate ? parseInt(systemDate.split('-')[0]) : null;
+  if (!fedHolidayObjects.length) { document.getElementById('holidayListWrap').style.display = 'none'; return; }
   const relevantWindow = systemDate ? addCalDays(systemDate, 90) : null;
-
-  const thisYearItems = fedHolidayObjects.filter(h => !h._nextYear);
-  const nextYearItems = fedHolidayObjects.filter(h =>  h._nextYear);
+  const thisYearItems  = fedHolidayObjects.filter(h => !h._nextYear);
+  const nextYearItems  = fedHolidayObjects.filter(h =>  h._nextYear);
+  const yr = systemDate ? parseInt(systemDate.split('-')[0]) : null;
 
   document.getElementById('holidayListWrap').style.display = 'block';
   document.getElementById('holidayCountBadge').textContent =
     nextYearItems.length ? `${thisYearItems.length}+${nextYearItems.length}` : thisYearItems.length;
 
-  function buildItem(h) {
+  const buildItem = h => {
     const isClose = relevantWindow && h.date >= systemDate && h.date <= relevantWindow;
-    const dateLabel = fmtDateShort(h.date);
-    const fullDate  = fmtDate(h.date);
-    return `<div class="holiday-item${isClose ? ' is-skipped' : ''}" title="${fullDate}">
+    return `<div class="holiday-item${isClose?' is-skipped':''}" title="${fmtDate(h.date)}">
       <div class="holiday-dot-h"></div>
-      <div class="holiday-date-h">${dateLabel}</div>
-      <div class="holiday-name-h">${escHtml(h.localName || h.name)}</div>
-      ${isClose ? '<span class="holiday-skipped-tag">↷ skip</span>' : ''}
+      <div class="holiday-date-h">${fmtDateShort(h.date)}</div>
+      <div class="holiday-name-h">${escHtml(h.localName||h.name)}</div>
     </div>`;
-  }
+  };
 
-  // Build inner HTML: this year's grid, then optional next-year section
   let inner = `<div class="holiday-grid-inner">${thisYearItems.map(buildItem).join('')}</div>`;
-
   if (nextYearItems.length) {
-    const nextYr = yr + 1;
-    inner += `<div class="holiday-year-sep"><span>📅 ${nextYr} — Year-end spillover</span></div>
+    inner += `<div class="holiday-year-sep"><span>📅 ${yr+1} — Year-end spillover</span></div>
               <div class="holiday-grid-inner holiday-grid-next">${nextYearItems.map(buildItem).join('')}</div>`;
   }
-
   const grid = document.getElementById('holidayGrid');
   grid.innerHTML = inner;
-  if (holidayListOpen) {
-    grid.classList.add('open');
-    document.getElementById('holidayChevron').classList.add('open');
-  }
+  grid.classList.toggle('open', holidayListOpen);
+  document.getElementById('holidayChevron').classList.toggle('open', holidayListOpen);
 }
 
 function toggleHolidayList() {
@@ -1038,85 +614,56 @@ function toggleHolidayList() {
   document.getElementById('holidayChevron').classList.toggle('open', holidayListOpen);
 }
 
-// ─── BUSINESS-DAY HELPERS ────────────────────────────────────────────────────
+// ─── BUSINESS-DAY HELPERS (UNTOUCHED) ────────────────────────────────────────
 function isWeekend(dateStr) {
-  // Use noon UTC to avoid DST shifts
-  const d = new Date(dateStr + 'T12:00:00Z');
-  const dow = d.getUTCDay();
+  const dow = new Date(dateStr + 'T12:00:00Z').getUTCDay();
   return dow === 0 || dow === 6;
 }
-
 function addCalDays(dateStr, n) {
   const d = new Date(dateStr + 'T12:00:00Z');
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().split('T')[0];
 }
-
-// Advance forward until a day is neither weekend nor federal holiday
 function nextBizDay(dateStr) {
   let cur = dateStr;
-  while (isWeekend(cur) || fedHolidays.includes(cur)) {
-    cur = addCalDays(cur, 1);
-  }
+  while (isWeekend(cur) || fedHolidays.includes(cur)) cur = addCalDays(cur, 1);
   return cur;
 }
-
-// Return the actual calendar date for business-day offset N from systemDate.
-// Day 1 = next biz day on or after systemDate.
-// Each subsequent business day skips weekends & holidays.
 function bizDayDate(n) {
-  if (!systemDate || fedHolidays === null) return null;
+  if (!systemDate) return null;
   let cur = nextBizDay(systemDate);
-  for (let i = 1; i < n; i++) {
-    cur = nextBizDay(addCalDays(cur, 1));
-  }
-  return cur;   // "YYYY-MM-DD"
+  for (let i = 1; i < n; i++) cur = nextBizDay(addCalDays(cur, 1));
+  return cur;
 }
-
 function fmtDate(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00Z');
-  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric', timeZone:'UTC' });
+  return new Date(dateStr + 'T12:00:00Z').toLocaleDateString('en-US',
+    {weekday:'short',month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});
 }
-
 function fmtDateShort(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00Z');
-  return d.toLocaleDateString('en-US', { month:'numeric', day:'numeric', timeZone:'UTC' });
+  return new Date(dateStr + 'T12:00:00Z').toLocaleDateString('en-US',
+    {month:'numeric',day:'numeric',timeZone:'UTC'});
 }
-
-const BUCKETS = [2,3,4,5,6,7];
-const BKT_COLORS = {2:'#6366f1',3:'#8b5cf6',4:'#a855f7',5:'#ec4899',6:'#f43f5e',7:'#fb923c'};
-
-const bucketCfg = {
-  2:{pri:1, def:1, ext:6, t1:0, t2:6, nd:false, excl:false},
-  3:{pri:4, def:4, ext:3, t1:2, t2:3, nd:false, excl:false},
-  4:{pri:5, def:2, ext:5, t1:0, t2:5, nd:false, excl:false},
-  5:{pri:2, def:1, ext:1, t1:5, t2:6, nd:true,  excl:false},
-  6:{pri:3, def:2, ext:5, t1:3, t2:5, nd:false, excl:true },
-  7:{pri:6, def:3, ext:5, t1:0, t2:5, nd:false, excl:false}
-};
 
 // ─── BUCKET TABLE ─────────────────────────────────────────────────────────────
 function renderBucketTable() {
   const type = document.getElementById('acctType').value;
-  let html = `<table class="bkt-table"><thead><tr>
-    <th>Bkt</th><th>Pri</th><th>Def</th>`;
-  if(type !== 'new')      html += `<th>Ext</th><th title="Next-day flag">ND</th>`;
-  if(type !== 'existing') html += `<th>T1</th><th>T2</th><th title="Exclusion flag">Excl</th>`;
+  let html = `<table class="bkt-table"><thead><tr><th>Bkt</th><th>Pri</th><th>Def</th>`;
+  if(type !== 'new')      html += `<th>Ext</th><th>ND</th>`;
+  if(type !== 'existing') html += `<th>T1</th><th>T2</th><th>Excl</th>`;
   html += `</tr></thead><tbody>`;
   BUCKETS.forEach(b => {
-    const c = bucketCfg[b];
-    const col = BKT_COLORS[b];
+    const c = bucketCfg[b], col = BKT_COLORS[b];
     html += `<tr>
       <td><span class="tl-bkt-badge" style="background:${col}22;color:${col};border:1px solid ${col}44">B${b}</span></td>
-      <td><input class="bkt-inp" type="number" min="1" max="10" value="${c.pri}" onchange="bucketCfg[${b}].pri=parseInt(this.value)||1; liveUpdate()"></td>
-      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.def}" onchange="bucketCfg[${b}].def=parseInt(this.value)||0; liveUpdate()"></td>`;
+      <td><input class="bkt-inp" type="number" min="1" max="10" value="${c.pri}" onchange="bucketCfg[${b}].pri=parseInt(this.value)||1;liveUpdate()"></td>
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.def}" onchange="bucketCfg[${b}].def=parseInt(this.value)||0;liveUpdate()"></td>`;
     if(type !== 'new') html += `
-      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.ext}" onchange="bucketCfg[${b}].ext=parseInt(this.value)||0; liveUpdate()"></td>
-      <td><input class="bkt-check" type="checkbox" ${c.nd?'checked':''} onchange="bucketCfg[${b}].nd=this.checked; renderRows(); liveUpdate()"></td>`;
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.ext}" onchange="bucketCfg[${b}].ext=parseInt(this.value)||0;liveUpdate()"></td>
+      <td><input class="bkt-check" type="checkbox" ${c.nd?'checked':''} onchange="bucketCfg[${b}].nd=this.checked;renderRows();liveUpdate()"></td>`;
     if(type !== 'existing') html += `
-      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.t1}" onchange="bucketCfg[${b}].t1=parseInt(this.value)||0; liveUpdate()"></td>
-      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.t2}" onchange="bucketCfg[${b}].t2=parseInt(this.value)||0; liveUpdate()"></td>
-      <td><input class="bkt-check" type="checkbox" ${c.excl?'checked':''} onchange="bucketCfg[${b}].excl=this.checked; renderRows(); liveUpdate()"></td>`;
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.t1}" onchange="bucketCfg[${b}].t1=parseInt(this.value)||0;liveUpdate()"></td>
+      <td><input class="bkt-inp" type="number" min="0" max="30" value="${c.t2}" onchange="bucketCfg[${b}].t2=parseInt(this.value)||0;liveUpdate()"></td>
+      <td><input class="bkt-check" type="checkbox" ${c.excl?'checked':''} onchange="bucketCfg[${b}].excl=this.checked;renderRows();liveUpdate()"></td>`;
     html += `</tr>`;
   });
   document.getElementById('bucketTableWrap').innerHTML = html + `</tbody></table>`;
@@ -1124,265 +671,180 @@ function renderBucketTable() {
 
 // ─── ROWS ─────────────────────────────────────────────────────────────────────
 function addRow() {
-  rows.push({id: Date.now(), ref: 'CK' + String(nextId).padStart(4,'0'), amt: 0, bkt: 2});
+  rows.push({id:Date.now(), ref:'CK'+String(nextId).padStart(4,'0'), amt:0, bkt:2});
   nextId++;
-  renderRows();
-  liveUpdate();
+  renderRows(); liveUpdate();
 }
 
 function updateRow(idx, field, val) {
-  if(field === 'amt') { rows[idx].amt = parseFloat(val) || 0; liveUpdate(); }
-  else if(field === 'ref') { rows[idx].ref = val; }
-  else if(field === 'bkt') { rows[idx].bkt = parseInt(val); renderRows(); liveUpdate(); }
+  if(field==='amt')      { rows[idx].amt=parseFloat(val)||0; liveUpdate(); }
+  else if(field==='ref') { rows[idx].ref=val; }
+  else if(field==='bkt') { rows[idx].bkt=parseInt(val); renderRows(); liveUpdate(); }
 }
 
 function renderRows() {
   const type = document.getElementById('acctType').value;
-  const cap = parseFloat(document.getElementById('cfgMax').value) || 0;
+  const cap  = parseFloat(document.getElementById('cfgMax').value) || 0;
 
-  // Compute which rows are capped in existing mode (for visual indicator)
-  const sorted = [...rows]
-    .map((r,i) => ({...r, origIdx:i}))
-    .filter(r => r.amt > 0)
-    .sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
+  const sorted = [...rows].map((r,i)=>({...r,origIdx:i}))
+    .filter(r=>r.amt>0).sort((a,b)=>bucketCfg[a.bkt].pri-bucketCfg[b.bkt].pri);
   let rem = cap;
   const cappedIdx = new Set();
   for(const r of sorted) {
-    if(rem <= 0) { cappedIdx.add(r.origIdx); continue; }
-    const canRelease = Math.min(r.amt, rem);
-    rem -= canRelease;
-    if(canRelease < r.amt) cappedIdx.add(r.origIdx);
+    if(rem<=0){cappedIdx.add(r.origIdx);continue;}
+    const can=Math.min(r.amt,rem); rem-=can;
+    if(can<r.amt) cappedIdx.add(r.origIdx);
   }
 
   document.getElementById('rowsWrap').innerHTML = rows.map((r,i) => {
-    const c = bucketCfg[r.bkt];
-    const col = BKT_COLORS[r.bkt];
-    let tags = '';
-    if(type !== 'new' && c.nd) tags += `<span class="tag tag-nd">⚡ Next-Day</span>`;
-    if(type !== 'existing' && c.excl) tags += `<span class="tag tag-excl">Exclusion</span>`;
-    if(r.amt === 0) tags += `<span class="tag tag-zero">Zero — excluded from output</span>`;
-    else if(cappedIdx.has(i)) tags += `<span class="tag tag-cap">⚠ Partially/fully beyond cap</span>`;
-    const isCapped = cappedIdx.has(i) && r.amt > 0;
-    return `
-      <div class="dep-row${isCapped?' capped':''}">
-        <div class="dep-row-top">
-          <span class="row-num">${i+1}</span>
-          <input type="text" class="dep-ref" value="${escHtml(r.ref)}" placeholder="REFID"
-            onchange="rows[${i}].ref=this.value" onblur="renderRows()">
-          <input type="number" class="dep-amt" value="${r.amt||''}" placeholder="0.00"
-            oninput="updateRow(${i},'amt',this.value)">
-          <select class="dep-bkt" style="border-color:${col}44"
-            onchange="updateRow(${i},'bkt',this.value)">
-            ${BUCKETS.map(b=>`<option value="${b}" ${r.bkt==b?'selected':''}>B${b}</option>`).join('')}
-          </select>
-          <button class="del-btn" onclick="rows.splice(${i},1); renderRows(); liveUpdate()">✕</button>
-        </div>
-        ${tags ? `<div class="dep-row-tags">${tags}</div>` : ''}
-      </div>`;
+    const c=bucketCfg[r.bkt], col=BKT_COLORS[r.bkt];
+    let tags='';
+    if(type!=='new'      && c.nd)   tags+=`<span class="tag tag-nd">⚡ Next-Day</span>`;
+    if(type!=='existing' && c.excl) tags+=`<span class="tag tag-excl">Exclusion</span>`;
+    if(r.amt===0)                   tags+=`<span class="tag tag-zero">Zero — excluded</span>`;
+    else if(cappedIdx.has(i))       tags+=`<span class="tag tag-cap">⚠ Partially/fully beyond cap</span>`;
+    return `<div class="dep-row${cappedIdx.has(i)&&r.amt>0?' capped':''}">
+      <div class="dep-row-top">
+        <span class="row-num">${i+1}</span>
+        <input type="text" class="dep-ref" value="${escHtml(r.ref)}" placeholder="REFID"
+          onchange="rows[${i}].ref=this.value" onblur="renderRows()">
+        <input type="number" class="dep-amt" value="${r.amt||''}" placeholder="0.00"
+          oninput="updateRow(${i},'amt',this.value)">
+        <select class="dep-bkt" style="border-color:${col}44" onchange="updateRow(${i},'bkt',this.value)">
+          ${BUCKETS.map(b=>`<option value="${b}" ${r.bkt==b?'selected':''}>B${b}</option>`).join('')}
+        </select>
+        <button class="del-btn" onclick="rows.splice(${i},1);renderRows();liveUpdate()">✕</button>
+      </div>
+      ${tags?`<div class="dep-row-tags">${tags}</div>`:''}
+    </div>`;
   }).join('');
 }
 
-function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ─── CAP METER ────────────────────────────────────────────────────────────────
 function updateCapMeter() {
   const cap = parseFloat(document.getElementById('cfgMax').value) || 0;
   document.getElementById('capTotalVal').textContent = '$' + cap.toLocaleString();
-  const sorted = [...rows]
-    .filter(r => r.amt > 0)
-    .sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
-  let used = 0;
-  for(const r of sorted) {
-    if(used >= cap) break;
-    used += Math.min(r.amt, cap - used);
-  }
+  const sorted = [...rows].filter(r=>r.amt>0).sort((a,b)=>bucketCfg[a.bkt].pri-bucketCfg[b.bkt].pri);
+  let used=0;
+  for(const r of sorted){if(used>=cap)break;used+=Math.min(r.amt,cap-used);}
   document.getElementById('capUsedVal').textContent = '$' + used.toLocaleString();
-  const pct = cap > 0 ? Math.min(100, (used/cap)*100) : 0;
-  const bar = document.getElementById('capBarEl');
-  bar.style.width = pct + '%';
-  bar.className = 'cap-bar' + (pct >= 100 ? ' over' : '');
+  const pct = cap>0?Math.min(100,(used/cap)*100):0;
+  const bar  = document.getElementById('capBarEl');
+  bar.style.width = pct+'%';
+  bar.className   = 'cap-bar'+(pct>=100?' over':'');
 }
 
-// ─── PROCESS ──────────────────────────────────────────────────────────────────
-// ND POOL RULE:
-//   There is ONE shared ND pool = ndMin ($275).
-//   Processed in priority order across ALL ND-flagged buckets.
-//   Each ND bucket draws from what remains in the pool until pool = 0.
-//   Example: B2($100,nd) B3($100,nd) B6($75,nd) with pool=$275
-//     B2 takes $100 → pool=$175
-//     B3 takes $100 → pool=$75
-//     B6 takes $75  → pool=$0  (fully used across 3 transactions)
-//   All ND releases also deduct from the main release cap (rem).
+function liveUpdate() { updateCapMeter(); }
 
+// ─── COMPUTE SCHEDULE (LOGIC IS UNTOUCHED) ───────────────────────────────────
+// ND POOL RULE:
+//   ONE shared pool = ndMin. Drained in priority order across ND-flagged buckets.
+//   All ND releases also deduct from the main release cap (rem).
 function computeSchedule(data, mode) {
   const cap   = parseFloat(document.getElementById('cfgMax').value)  || 0;
   const ndMin = parseFloat(document.getElementById('cfgNdMin').value) || 0;
-  let rem    = cap;   // shared release cap
-  let ndPool = ndMin; // shared ND pool, drained in priority order
+  let rem    = cap;
+  let ndPool = ndMin;
 
   return data.map(r => {
-    const c = bucketCfg[r.bkt];
-    const segments = [];
-    let rAmt = r.amt;
+    const c=bucketCfg[r.bkt], segments=[];
+    let rAmt=r.amt;
 
-    if(mode === 'ex') {
-      // ND: draw from shared pool (also constrained by rAmt and rem)
-      if(c.nd && ndPool > 0 && rem > 0 && rAmt > 0) {
-        const release = Math.min(ndPool, rAmt, rem);
-        if(release > 0) {
-          segments.push({d:1, amt:release, tag:'ND'});
-          rAmt   -= release;
-          rem    -= release;
-          ndPool -= release; // consume from the shared pool
-        }
+    if(mode==='ex') {
+      if(c.nd && ndPool>0 && rem>0 && rAmt>0) {
+        const release=Math.min(ndPool,rAmt,rem);
+        if(release>0){segments.push({d:1,amt:release,tag:'ND'});rAmt-=release;rem-=release;ndPool-=release;}
       }
-      // Default hold release (capped by rem)
-      if(rAmt > 0 && rem > 0) {
-        const release = Math.min(rAmt, rem);
-        segments.push({d:c.def, amt:release, tag:'DEFAULT'});
-        rAmt -= release;
-        rem  -= release;
-      }
-      // Extended: remainder — delayed, not denied, not capped
-      if(rAmt > 0) {
-        segments.push({d:c.def + c.ext, amt:rAmt, tag:'EXT'});
-      }
-
+      if(rAmt>0 && rem>0){const release=Math.min(rAmt,rem);segments.push({d:c.def,amt:release,tag:'DEFAULT'});rAmt-=release;rem-=release;}
+      if(rAmt>0) segments.push({d:c.def+c.ext,amt:rAmt,tag:'EXT'});
     } else {
-      // New account
-      if(c.excl) {
-        // Exclusion: straight to Def+T2, not subject to cap
-        segments.push({d:c.def + c.t2, amt:rAmt, tag:'EXCL'});
+      if(c.excl){
+        segments.push({d:c.def+c.t2,amt:rAmt,tag:'EXCL'});
       } else {
-        // Tier 1 (capped by rem)
-        if(rAmt > 0 && rem > 0) {
-          const release = Math.min(rAmt, rem);
-          segments.push({d:c.def + c.t1, amt:release, tag:'TIER1'});
-          rAmt -= release;
-          rem  -= release;
-        }
-        // Tier 2 (remainder — delayed, not denied)
-        if(rAmt > 0) {
-          segments.push({d:c.def + c.t2, amt:rAmt, tag:'TIER2'});
-        }
+        if(rAmt>0 && rem>0){const release=Math.min(rAmt,rem);segments.push({d:c.def+c.t1,amt:release,tag:'TIER1'});rAmt-=release;rem-=release;}
+        if(rAmt>0) segments.push({d:c.def+c.t2,amt:rAmt,tag:'TIER2'});
       }
     }
-
-    // Build a human-readable one-liner summary for this transaction
-    const summary = buildSummaryLine(r, segments, mode);
-    return { ref:r.ref, bkt:r.bkt, amt:r.amt, segments, summary };
+    return {ref:r.ref,bkt:r.bkt,amt:r.amt,segments,summary:buildSummaryLine(r,segments)};
   });
 }
 
-function buildSummaryLine(r, segments, mode) {
-  if(segments.length === 0) return 'No release scheduled.';
-  const parts = segments.map(s => {
-    const label = {
-      'ND':'Next-Day','DEFAULT':'Default hold','EXT':'Extended hold',
-      'TIER1':'Tier 1','TIER2':'Tier 2','EXCL':'Exclusion'
-    }[s.tag] || s.tag;
-    const calDate = bizDayDate(s.d);
-    const dateStr = calDate ? ` · ${fmtDate(calDate)}` : '';
-    return `$${s.amt.toLocaleString()} on Day ${s.d}${dateStr} (${label})`;
+function buildSummaryLine(r, segments) {
+  if(!segments.length) return 'No release scheduled.';
+  const labels={ND:'Next-Day',DEFAULT:'Default hold',EXT:'Extended hold',TIER1:'Tier 1',TIER2:'Tier 2',EXCL:'Exclusion'};
+  const parts=segments.map(s=>{
+    const calDate=bizDayDate(s.d);
+    return `$${s.amt.toLocaleString()} on Day ${s.d}${calDate?' · '+fmtDate(calDate):''} (${labels[s.tag]||s.tag})`;
   });
-  const total = segments.reduce((a,s)=>a+s.amt,0);
-  const held  = r.amt - total;
-  let line = parts.join(', ');
-  if(held > 0) line += `; $${held.toLocaleString()} beyond cap → Extended hold`;
-  return line;
+  const held=r.amt-segments.reduce((a,s)=>a+s.amt,0);
+  return parts.join(', ')+(held>0?`; $${held.toLocaleString()} beyond cap → Extended hold`:'');
 }
 
-function liveUpdate() {
-  // Only update the cap meter live — do NOT auto-recalc the schedule.
-  // Reason: schedule depends on priority-sorted order; adding a higher-priority
-  // transaction later would retroactively shift cap allocation, giving misleading
-  // intermediate results while the user is still entering data.
-  updateCapMeter();
-}
-
-function calculate(silent=false) {
-  const type = document.getElementById('acctType').value;
-  const validRows = [...rows]
-    .filter(r => r.amt > 0)
-    .sort((a,b) => bucketCfg[a.bkt].pri - bucketCfg[b.bkt].pri);
-
+// ─── CALCULATE ────────────────────────────────────────────────────────────────
+function calculate() {
+  const type      = document.getElementById('acctType').value;
+  const validRows = [...rows].filter(r=>r.amt>0).sort((a,b)=>bucketCfg[a.bkt].pri-bucketCfg[b.bkt].pri);
   updateCapMeter();
 
-  if(validRows.length === 0) {
-    if(!silent) {
-      document.getElementById('resultsGrid').innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">📋</div>
-          <div class="empty-title">No valid transactions</div>
-          <div class="empty-sub">Add transactions with amounts greater than $0.</div>
-        </div>`;
-    }
+  if(!validRows.length) {
+    document.getElementById('resultsGrid').innerHTML = `
+      <div class="empty-state"><div class="empty-icon">📋</div>
+      <div class="empty-title">No valid transactions</div>
+      <div class="empty-sub">Add transactions with amounts greater than $0.</div></div>`;
     return;
   }
 
-  const exData = computeSchedule(validRows, 'ex');
-  const nwData = computeSchedule(validRows, 'nw');
-  lastResults = {exData, nwData, type};
+  const exData = computeSchedule(validRows,'ex');
+  const nwData = computeSchedule(validRows,'nw');
+  const grid   = document.getElementById('resultsGrid');
 
-  const grid = document.getElementById('resultsGrid');
-  const toggle = document.getElementById('modeToggle');
-
-  if(type === 'both') {
-    grid.className = 'results-grid';
-    toggle.style.display = 'none';
-    grid.innerHTML = buildSchedulePanel(exData,'ex') + buildSchedulePanel(nwData,'nw');
-  } else if(type === 'existing') {
-    grid.className = 'results-grid single';
-    toggle.style.display = 'none';
-    grid.innerHTML = buildSchedulePanel(exData,'ex');
+  if(type==='both') {
+    grid.className='results-grid';
+    grid.innerHTML=buildSchedulePanel(exData,'ex')+buildSchedulePanel(nwData,'nw');
+  } else if(type==='existing') {
+    grid.className='results-grid single';
+    grid.innerHTML=buildSchedulePanel(exData,'ex');
   } else {
-    grid.className = 'results-grid single';
-    toggle.style.display = 'none';
-    grid.innerHTML = buildSchedulePanel(nwData,'nw');
+    grid.className='results-grid single';
+    grid.innerHTML=buildSchedulePanel(nwData,'nw');
   }
 }
 
 function buildSchedulePanel(data, mode) {
-  const isEx = mode === 'ex';
-  const title = isEx ? 'Existing Account' : 'New Account';
-  const cls = isEx ? 'ex' : 'nw';
-  const accent = isEx ? 'var(--accent)' : 'var(--teal)';
+  const isEx    = mode==='ex';
+  const cls     = isEx?'ex':'nw';
+  const title   = (isEx?'Existing Account':'New Account') +
+                  (activeClient&&CLIENT_CONFIGS[activeClient] ? ' · '+CLIENT_CONFIGS[activeClient].name : '');
 
-  // Collect all unique days
-  const allDays = [...new Set(data.flatMap(r => r.segments.map(s => s.d)))].sort((a,b)=>a-b);
-  if(allDays.length === 0) return '';
+  const allDays = [...new Set(data.flatMap(r=>r.segments.map(s=>s.d)))].sort((a,b)=>a-b);
+  if(!allDays.length) return '';
 
-  // Day totals
-  const dayTotals = {};
-  allDays.forEach(d => dayTotals[d] = 0);
-  data.forEach(r => r.segments.forEach(s => dayTotals[s.d] = (dayTotals[s.d]||0) + s.amt));
+  const dayTotals={};
+  allDays.forEach(d=>dayTotals[d]=0);
+  data.forEach(r=>r.segments.forEach(s=>dayTotals[s.d]=(dayTotals[s.d]||0)+s.amt));
+  const grandTotal=Object.values(dayTotals).reduce((a,b)=>a+b,0);
 
-  // Grand total released through cap
-  const grandTotal = Object.values(dayTotals).reduce((a,b)=>a+b,0);
-
-  // Tag styling map
-  const tagStyle = {
-    'ND':      {cls:'bar-nd',    label:'Next-Day'},
-    'DEFAULT': {cls:'bar-default',label:'Default'},
-    'EXT':     {cls:'bar-ext',   label:'Extended'},
-    'TIER1':   {cls:'bar-t1',    label:'Tier 1'},
-    'TIER2':   {cls:'bar-t2',    label:'Tier 2'},
-    'EXCL':    {cls:'bar-excl',  label:'Excl'},
+  const tagStyle={
+    ND:     {cls:'bar-nd',    label:'Next-Day'},
+    DEFAULT:{cls:'bar-default',label:'Default'},
+    EXT:    {cls:'bar-ext',   label:'Extended'},
+    TIER1:  {cls:'bar-t1',    label:'Tier 1'},
+    TIER2:  {cls:'bar-t2',    label:'Tier 2'},
+    EXCL:   {cls:'bar-excl',  label:'Excl'},
   };
 
-  // Build rows
-  const rowsHtml = data.map(r => {
-    const col = BKT_COLORS[r.bkt];
-    const cells = allDays.map(d => {
-      const seg = r.segments.find(s => s.d === d);
+  const rowsHtml=data.map(r=>{
+    const col=BKT_COLORS[r.bkt];
+    const cells=allDays.map(d=>{
+      const seg=r.segments.find(s=>s.d===d);
       if(!seg) return `<div class="tl-cell"><div class="tl-cell-empty"></div></div>`;
-      const ts = tagStyle[seg.tag] || {cls:'bar-default',label:seg.tag};
-      return `<div class="tl-cell">
-        <div class="tl-cell-bar ${ts.cls}">
-          <div class="tl-cell-amt">$${seg.amt.toLocaleString()}</div>
-          <div class="tl-cell-tag">${ts.label}</div>
-        </div>
-      </div>`;
+      const ts=tagStyle[seg.tag]||{cls:'bar-default',label:seg.tag};
+      return `<div class="tl-cell"><div class="tl-cell-bar ${ts.cls}">
+        <div class="tl-cell-amt">$${seg.amt.toLocaleString()}</div>
+        <div class="tl-cell-tag">${ts.label}</div>
+      </div></div>`;
     }).join('');
     return `<div class="tl-row">
       <div class="tl-row-info">
@@ -1394,65 +856,45 @@ function buildSchedulePanel(data, mode) {
     <div class="tl-summary-line">📌 ${escHtml(r.ref)}: ${r.summary}</div>`;
   }).join('');
 
-  const dayHeadersHtml = allDays.map(d => {
-    const calDate = bizDayDate(d);
-    const dateSub = calDate
-      ? `<div class="tl-day-date">${fmtDateShort(calDate)}</div>`
-      : '';
-    return `
-    <div class="tl-day-col">
+  const dayHeadersHtml=allDays.map(d=>{
+    const calDate=bizDayDate(d);
+    return `<div class="tl-day-col">
       <div class="tl-day-label">Day ${d}</div>
-      ${dateSub}
+      ${calDate?`<div class="tl-day-date">${fmtDateShort(calDate)}</div>`:''}
       <div class="tl-day-amt">$${dayTotals[d].toLocaleString()}</div>
     </div>`;
   }).join('');
 
-  const totalCellsHtml = allDays.map(d => `
-    <div class="tl-total-cell">$${dayTotals[d].toLocaleString()}</div>`).join('');
+  const totalCellsHtml=allDays.map(d=>`<div class="tl-total-cell">$${dayTotals[d].toLocaleString()}</div>`).join('');
 
   return `<div class="sched-panel">
     <div class="sched-hd">
       <div class="sched-title ${cls}">${title}</div>
       <div class="sched-total">Total: $${grandTotal.toLocaleString()}</div>
     </div>
-    <div class="timeline-wrap">
-      <div style="min-width:520px">
-        <div style="display:flex;gap:6px;margin-bottom:10px">
-          <div style="width:100px;flex-shrink:0"></div>
-          <div class="tl-days-header" style="flex:1;padding-left:0;margin-bottom:0">
-            ${dayHeadersHtml}
-          </div>
-        </div>
-        ${rowsHtml}
-        <div class="tl-totals-row">
-          <div class="tl-totals-label">Totals</div>
-          <div class="tl-totals-cells">${totalCellsHtml}</div>
-        </div>
+    <div class="timeline-wrap"><div style="min-width:520px">
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <div style="width:100px;flex-shrink:0"></div>
+        <div style="display:flex;gap:6px;flex:1">${dayHeadersHtml}</div>
       </div>
-    </div>
+      ${rowsHtml}
+      <div class="tl-totals-row">
+        <div class="tl-totals-label">Totals</div>
+        <div class="tl-totals-cells">${totalCellsHtml}</div>
+      </div>
+    </div></div>
   </div>`;
 }
 
-function showTab(t) {
-  document.getElementById('pane-ex').style.display = t === 'ex' ? 'block' : 'none';
-  document.getElementById('pane-nw').style.display = t === 'nw' ? 'block' : 'none';
-  document.getElementById('tab-ex').className = 'mode-btn' + (t==='ex'?' active':'');
-  document.getElementById('tab-nw').className = 'mode-btn' + (t==='nw'?' active':'');
-}
-
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+renderClientBtns();
 renderBucketTable();
-addRow();
 updateCapMeter();
 
-// Pre-fill system date with today and fetch holidays
 (function initSystemDate() {
-  const today = new Date();
-  const yyyy  = today.getFullYear();
-  const mm    = String(today.getMonth() + 1).padStart(2, '0');
-  const dd    = String(today.getDate()).padStart(2, '0');
-  const iso   = `${yyyy}-${mm}-${dd}`;
-  document.getElementById('systemDate').value = iso;
+  const t=new Date();
+  const iso=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+  document.getElementById('systemDate').value=iso;
   onSystemDateChange();
 })();
 </script>
