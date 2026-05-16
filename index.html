@@ -93,7 +93,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .sticky-col { display: flex; flex-direction: column; gap: 14px; }
 @media(min-width:1001px){ .sticky-col { position: sticky; top: 64px; align-self: start; } }
 
-.panel { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+.panel { background: var(--surface); border-radius: var(--r); border: 1px solid var(--border); overflow: visible; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
 .panel-hd { padding: 10px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
 .panel-hd h3 { font-family: var(--font-display); font-size: .8rem; font-weight: 600; color: var(--text2); letter-spacing: .01em; }
 .panel-body { padding: 14px 16px; }
@@ -382,30 +382,30 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 // ══════════════════════════════════════════════════════════════════════════════
 const CLIENT_CONFIGS = {
   1: {
-    name:  'Client 1',
+    name:  'CAX',
     icon:  '🏦',
     cap:   6725,
     ndMin:  275,
     buckets: {
       2: { pri:1, def:1, ext:6, t1:0, t2:6, nd:false, excl:false },
-      3: { pri:4, def:4, ext:3, t1:2, t2:3, nd:false, excl:false },
-      4: { pri:5, def:2, ext:5, t1:0, t2:5, nd:false, excl:false },
-      5: { pri:2, def:1, ext:1, t1:5, t2:6, nd:true,  excl:false },
-      6: { pri:3, def:2, ext:5, t1:3, t2:5, nd:false, excl:true  },
-      7: { pri:6, def:3, ext:5, t1:0, t2:5, nd:false, excl:false },
+      3: { pri:4, def:4, ext:3, t1:2, t2:3, nd:true,  excl:false },
+      4: { pri:5, def:2, ext:5, t1:0, t2:5, nd:true,  excl:false },
+      5: { pri:2, def:1, ext:1, t1:5, t2:6, nd:false, excl:false },
+      6: { pri:3, def:2, ext:5, t1:3, t2:5, nd:true,  excl:true  },
+      7: { pri:6, def:3, ext:5, t1:0, t2:5, nd:true,  excl:false },
     }
   },
   2: {
-    name:  'Client 2',
+    name:  'SMBC',
     icon:  '🏢',
-    cap:   5000,
-    ndMin:  200,
+    cap:   7000,
+    ndMin:  300,
     buckets: {
       2: { pri:1, def:1, ext:5, t1:0, t2:5, nd:false, excl:false },
-      3: { pri:3, def:3, ext:4, t1:1, t2:4, nd:false, excl:false },
+      3: { pri:3, def:3, ext:4, t1:1, t2:4, nd:true,  excl:true  },
       4: { pri:4, def:2, ext:4, t1:0, t2:4, nd:false, excl:false },
-      5: { pri:2, def:1, ext:2, t1:4, t2:5, nd:true,  excl:false },
-      6: { pri:5, def:2, ext:4, t1:2, t2:4, nd:false, excl:true  },
+      5: { pri:2, def:1, ext:2, t1:4, t2:5, nd:false, excl:false },
+      6: { pri:5, def:2, ext:4, t1:2, t2:4, nd:false, excl:false },
       7: { pri:6, def:3, ext:4, t1:0, t2:4, nd:false, excl:false },
     }
   },
@@ -430,14 +430,15 @@ let activeClient = null;
 let rows = [];
 let nextId = 1;
 
-// Live working copy of bucket config (mutated by inline table inputs)
+// Live working copy of bucket config (mutated by inline table inputs).
+// Starts blank — always populated from CLIENT_CONFIGS when a client is selected.
 const bucketCfg = {
-  2:{pri:1,def:1,ext:6,t1:0,t2:6,nd:false,excl:false},
-  3:{pri:4,def:4,ext:3,t1:2,t2:3,nd:false,excl:false},
-  4:{pri:5,def:2,ext:5,t1:0,t2:5,nd:false,excl:false},
-  5:{pri:2,def:1,ext:1,t1:5,t2:6,nd:true, excl:false},
-  6:{pri:3,def:2,ext:5,t1:3,t2:5,nd:false,excl:true },
-  7:{pri:6,def:3,ext:5,t1:0,t2:5,nd:false,excl:false}
+  2:{pri:0,def:0,ext:0,t1:0,t2:0,nd:false,excl:false},
+  3:{pri:0,def:0,ext:0,t1:0,t2:0,nd:false,excl:false},
+  4:{pri:0,def:0,ext:0,t1:0,t2:0,nd:false,excl:false},
+  5:{pri:0,def:0,ext:0,t1:0,t2:0,nd:false,excl:false},
+  6:{pri:0,def:0,ext:0,t1:0,t2:0,nd:false,excl:false},
+  7:{pri:0,def:0,ext:0,t1:0,t2:0,nd:false,excl:false}
 };
 
 const BUCKETS    = [2,3,4,5,6,7];
