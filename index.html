@@ -250,6 +250,226 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
 .tooltip-icon { width: 14px; height: 14px; border-radius: 50%; background: var(--surface3); color: var(--text3); font-size: .55rem; display: inline-flex; align-items: center; justify-content: center; cursor: help; border: 1px solid var(--border2); }
 .tooltip-box { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--text); color: #fff; font-size: .65rem; padding: 6px 10px; border-radius: 6px; white-space: normal; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 200; font-family: var(--font-body); line-height: 1.4; max-width: 200px; text-align: center; }
 .tooltip-wrap:hover .tooltip-box { opacity: 1; }
+
+/* ─── OVERRIDE BANNER ─────────────────────────────────────────────────────── */
+.override-banner {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  background: rgba(217,119,6,0.10);
+  border: 1.5px solid rgba(217,119,6,0.35);
+  border-radius: 8px;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--amber);
+  flex-wrap: wrap;
+}
+.override-banner.visible { display: flex; }
+.override-banner-text { flex: 1; }
+.btn-reset-override {
+  padding: 5px 12px;
+  background: var(--amber);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: .68rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all .15s;
+}
+.btn-reset-override:hover { opacity: .85; }
+
+/* ─── EXPORT / IMPORT BUTTONS ─────────────────────────────────────────────── */
+.cfg-action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.btn-cfg-action {
+  padding: 8px;
+  border-radius: 7px;
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all .15s;
+  text-align: center;
+}
+.btn-export {
+  background: var(--teal-dim);
+  color: var(--teal);
+  border: 1.5px solid rgba(13,168,154,0.3);
+}
+.btn-export:hover { background: var(--teal); color: #fff; }
+.btn-import {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1.5px solid rgba(59,126,246,0.3);
+}
+.btn-import:hover { background: var(--accent); color: #fff; }
+
+/* ─── MODAL ────────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.visible { display: flex; }
+.modal-box {
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+}
+.modal-hd {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.modal-close:hover { background: var(--red-dim); color: var(--red); }
+.modal-body { padding: 16px 18px; }
+.modal-desc {
+  font-size: .73rem;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.modal-desc strong { color: var(--text); }
+.modal-textarea {
+  width: 100%;
+  height: 160px;
+  padding: 10px;
+  border: 1.5px solid var(--border2);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+  background: var(--surface2);
+}
+.modal-textarea:focus { border-color: var(--accent); background: #fff; }
+.modal-error {
+  display: none;
+  margin-top: 8px;
+  padding: 7px 10px;
+  background: var(--red-dim);
+  border: 1px solid rgba(224,62,62,0.25);
+  border-radius: 6px;
+  font-size: .68rem;
+  color: var(--red);
+  font-weight: 500;
+}
+.modal-error.visible { display: block; }
+.modal-ft {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.btn-modal-cancel {
+  padding: 8px 18px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 7px;
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  color: var(--text2);
+  transition: all .15s;
+}
+.btn-modal-cancel:hover { border-color: var(--border2); background: var(--surface3); }
+.btn-modal-submit {
+  padding: 8px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 7px;
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-display);
+  color: #fff;
+  transition: all .15s;
+}
+.btn-modal-submit:hover { opacity: .88; }
+
+/* ─── CONFIRM MODAL ────────────────────────────────────────────────────────── */
+.confirm-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 600;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.confirm-modal-overlay.visible { display: flex; }
+.confirm-box {
+  background: var(--surface);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+  width: 100%;
+  max-width: 380px;
+  overflow: hidden;
+}
+.confirm-hd {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.confirm-icon { font-size: 1.2rem; }
+.confirm-title { font-family: var(--font-display); font-size: .95rem; font-weight: 600; color: var(--amber); }
+.confirm-body { padding: 16px 18px; font-size: .78rem; color: var(--text2); line-height: 1.6; }
+.confirm-body strong { color: var(--text); }
+.confirm-ft { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+.btn-confirm-cancel {
+  padding: 8px 18px; background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: 7px; font-size: .75rem; font-weight: 600; cursor: pointer;
+  font-family: var(--font-body); color: var(--text2); transition: all .15s;
+}
+.btn-confirm-ok {
+  padding: 8px 18px; background: var(--amber); border: none;
+  border-radius: 7px; font-size: .75rem; font-weight: 700; cursor: pointer;
+  font-family: var(--font-display); color: #fff; transition: all .15s;
+}
+.btn-confirm-ok:hover { opacity: .88; }
+
 </style>
 </head>
 <body>
@@ -285,6 +505,12 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
         <div class="client-btns" id="clientBtns"></div>
         <div class="client-hint" id="clientHint">Select a client to load their configuration</div>
       </div>
+    </div>
+
+    <!-- OVERRIDE BANNER -->
+    <div class="override-banner" id="overrideBanner">
+      <span class="override-banner-text">⚠ <strong id="overrideClientName"></strong> config overridden for this session only. Not visible to other users.</span>
+      <button class="btn-reset-override" onclick="resetOverride()">↩ Reset to Default</button>
     </div>
 
     <!-- SYSTEM DATE -->
@@ -330,6 +556,10 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);min-hei
             <option value="existing">Existing Only</option>
             <option value="new">New Account Only</option>
           </select>
+        </div>
+        <div class="cfg-action-row">
+          <button class="btn-cfg-action btn-export" onclick="exportConfig()">⬇ Export Config</button>
+          <button class="btn-cfg-action btn-import" onclick="openImportModal()">⬆ Import Config</button>
         </div>
       </div>
     </div>
@@ -429,6 +659,7 @@ const CLIENT_CONFIGS = {
 let activeClient = null;
 let rows = [];
 let nextId = 1;
+let sessionOverrideActive = false;  // true when user has pasted a JSON override this session
 
 // Live working copy of bucket config (mutated by inline table inputs).
 // Starts blank — always populated from CLIENT_CONFIGS when a client is selected.
@@ -490,6 +721,10 @@ function selectClient(id) {
   renderBucketTable();
   renderRows();
   liveUpdate();
+
+  // Clear override when switching clients
+  sessionOverrideActive = false;
+  updateOverrideBanner();
 
   // Clear stale results
   document.getElementById('resultsGrid').className = 'results-grid single';
@@ -785,6 +1020,24 @@ function buildSummaryLine(r, segments) {
 
 // ─── CALCULATE ────────────────────────────────────────────────────────────────
 function calculate() {
+  // If no client selected, show confirmation modal
+  if (!activeClient) {
+    document.getElementById('confirmModal').classList.add('visible');
+    return;
+  }
+  runCalculate();
+}
+
+function confirmAndCalculate() {
+  closeConfirmModal();
+  runCalculate();
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirmModal').classList.remove('visible');
+}
+
+function runCalculate() {
   const type      = document.getElementById('acctType').value;
   const validRows = [...rows].filter(r=>r.amt>0).sort((a,b)=>bucketCfg[a.bkt].pri-bucketCfg[b.bkt].pri);
   updateCapMeter();
@@ -887,6 +1140,195 @@ function buildSchedulePanel(data, mode) {
   </div>`;
 }
 
+// ─── EXPORT CONFIG ───────────────────────────────────────────────────────────
+function exportConfig() {
+  if (!activeClient) {
+    alert('Please select a client first before exporting.');
+    return;
+  }
+  const cfg = CLIENT_CONFIGS[activeClient];
+  // Build export object from CURRENT live bucketCfg (includes any UI edits)
+  const exportObj = {
+    clientId:   activeClient,
+    clientName: cfg.name,
+    cap:        parseFloat(document.getElementById('cfgMax').value)   || cfg.cap,
+    ndMin:      parseFloat(document.getElementById('cfgNdMin').value) || cfg.ndMin,
+    buckets: {}
+  };
+  BUCKETS.forEach(b => {
+    exportObj.buckets[b] = {
+      pri:  bucketCfg[b].pri,
+      def:  bucketCfg[b].def,
+      ext:  bucketCfg[b].ext,
+      t1:   bucketCfg[b].t1,
+      t2:   bucketCfg[b].t2,
+      nd:   bucketCfg[b].nd,
+      excl: bucketCfg[b].excl
+    };
+  });
+
+  const jsonStr = JSON.stringify(exportObj, null, 2);
+
+  // Copy to clipboard
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(jsonStr).then(() => {
+      showExportSuccess(jsonStr);
+    }).catch(() => {
+      showExportFallback(jsonStr);
+    });
+  } else {
+    showExportFallback(jsonStr);
+  }
+}
+
+function showExportSuccess(jsonStr) {
+  // Open modal showing the JSON with "copied" message
+  openExportModal(jsonStr, true);
+}
+
+function showExportFallback(jsonStr) {
+  openExportModal(jsonStr, false);
+}
+
+// Reuse import modal for export display (read-only)
+function openExportModal(jsonStr, copied) {
+  const cfg = CLIENT_CONFIGS[activeClient];
+  document.getElementById('importClientLabel').textContent = cfg.name;
+  const textarea = document.getElementById('importTextarea');
+  textarea.value = jsonStr;
+  textarea.readOnly = true;
+  textarea.style.background = '#f0f7f0';
+  document.querySelector('.modal-title').textContent = copied
+    ? '✅ Config Exported & Copied to Clipboard'
+    : '⬇ Config Exported — Copy the JSON below';
+  document.querySelector('.btn-modal-submit').style.display = 'none';
+  document.getElementById('importError').classList.remove('visible');
+  document.getElementById('importModal').classList.add('visible');
+}
+
+// ─── IMPORT CONFIG ────────────────────────────────────────────────────────────
+function openImportModal() {
+  if (!activeClient) {
+    alert('Please select a client first before importing a config override.');
+    return;
+  }
+  const cfg = CLIENT_CONFIGS[activeClient];
+  document.getElementById('importClientLabel').textContent = cfg.name;
+  const textarea = document.getElementById('importTextarea');
+  textarea.value = '';
+  textarea.readOnly = false;
+  textarea.style.background = '';
+  document.querySelector('.modal-title').textContent = '⬆ Import Config Override';
+  document.querySelector('.btn-modal-submit').style.display = '';
+  document.getElementById('importError').classList.remove('visible');
+  document.getElementById('importModal').classList.add('visible');
+}
+
+function closeImportModal() {
+  document.getElementById('importModal').classList.remove('visible');
+}
+
+function submitImport() {
+  const raw = document.getElementById('importTextarea').value.trim();
+  const errEl = document.getElementById('importError');
+  errEl.classList.remove('visible');
+
+  if (!raw) {
+    errEl.textContent = 'Please paste a valid exported JSON config.';
+    errEl.classList.add('visible');
+    return;
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch(e) {
+    errEl.textContent = 'Invalid JSON format. Please paste the exact exported JSON without modifications.';
+    errEl.classList.add('visible');
+    return;
+  }
+
+  // Validate it belongs to the selected client
+  if (parsed.clientId && parsed.clientId != activeClient) {
+    const expectedName = CLIENT_CONFIGS[activeClient]?.name || 'selected client';
+    const gotName = parsed.clientName || parsed.clientId;
+    errEl.textContent = `This config is for "${gotName}" but you have "${expectedName}" selected. Please select the correct client first.`;
+    errEl.classList.add('visible');
+    return;
+  }
+
+  // Validate required fields
+  if (!parsed.buckets || typeof parsed.cap === 'undefined' || typeof parsed.ndMin === 'undefined') {
+    errEl.textContent = 'Invalid config structure. Please use only configs generated by the Export button.';
+    errEl.classList.add('visible');
+    return;
+  }
+
+  // Apply override — only to active client's bucketCfg and cap/ndMin
+  document.getElementById('cfgMax').value   = parsed.cap;
+  document.getElementById('cfgNdMin').value = parsed.ndMin;
+
+  BUCKETS.forEach(b => {
+    const src = parsed.buckets[b] || parsed.buckets[String(b)];
+    if (src) {
+      bucketCfg[b].pri  = src.pri  ?? bucketCfg[b].pri;
+      bucketCfg[b].def  = src.def  ?? bucketCfg[b].def;
+      bucketCfg[b].ext  = src.ext  ?? bucketCfg[b].ext;
+      bucketCfg[b].t1   = src.t1   ?? bucketCfg[b].t1;
+      bucketCfg[b].t2   = src.t2   ?? bucketCfg[b].t2;
+      bucketCfg[b].nd   = src.nd   ?? bucketCfg[b].nd;
+      bucketCfg[b].excl = src.excl ?? bucketCfg[b].excl;
+    }
+  });
+
+  // Mark override active
+  sessionOverrideActive = true;
+  updateOverrideBanner();
+
+  // Re-render table and rows
+  renderBucketTable();
+  renderRows();
+  liveUpdate();
+
+  closeImportModal();
+}
+
+// ─── OVERRIDE BANNER ─────────────────────────────────────────────────────────
+function updateOverrideBanner() {
+  const banner = document.getElementById('overrideBanner');
+  if (sessionOverrideActive && activeClient) {
+    const cfg = CLIENT_CONFIGS[activeClient];
+    document.getElementById('overrideClientName').textContent = cfg.name;
+    banner.classList.add('visible');
+  } else {
+    banner.classList.remove('visible');
+  }
+}
+
+// ─── RESET OVERRIDE ──────────────────────────────────────────────────────────
+function resetOverride() {
+  if (!activeClient) return;
+  // Re-select client — loads original hardcoded config, clears override flag
+  sessionOverrideActive = false;
+  const cfg = CLIENT_CONFIGS[activeClient];
+  document.getElementById('cfgMax').value   = cfg.cap;
+  document.getElementById('cfgNdMin').value = cfg.ndMin;
+  BUCKETS.forEach(b => {
+    const src = cfg.buckets[b];
+    bucketCfg[b].pri  = src.pri;
+    bucketCfg[b].def  = src.def;
+    bucketCfg[b].ext  = src.ext;
+    bucketCfg[b].t1   = src.t1;
+    bucketCfg[b].t2   = src.t2;
+    bucketCfg[b].nd   = src.nd;
+    bucketCfg[b].excl = src.excl;
+  });
+  updateOverrideBanner();
+  renderBucketTable();
+  renderRows();
+  liveUpdate();
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 renderClientBtns();
 renderBucketTable();
@@ -899,5 +1341,47 @@ updateCapMeter();
   onSystemDateChange();
 })();
 </script>
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="importModal">
+  <div class="modal-box">
+    <div class="modal-hd">
+      <div class="modal-title">⬆ Import Config Override</div>
+      <button class="modal-close" onclick="closeImportModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-desc">
+        Paste the exported JSON config below. This will override <strong id="importClientLabel">the selected client</strong> for this session only.<br>
+        Other clients will not be affected. Refresh to reset.
+      </div>
+      <textarea class="modal-textarea" id="importTextarea" placeholder='Paste exported JSON here...'></textarea>
+      <div class="modal-error" id="importError"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-modal-cancel" onclick="closeImportModal()">Cancel</button>
+      <button class="btn-modal-submit" onclick="submitImport()">Apply Override</button>
+    </div>
+  </div>
+</div>
+
+<!-- NO CLIENT CONFIRM MODAL -->
+<div class="confirm-modal-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-hd">
+      <span class="confirm-icon">⚠</span>
+      <div class="confirm-title">No Client Selected</div>
+    </div>
+    <div class="confirm-body">
+      <strong>No client has been selected.</strong><br><br>
+      Processing will use the current default values shown in the Bucket Logic table.<br><br>
+      Do you want to proceed?
+    </div>
+    <div class="confirm-ft">
+      <button class="btn-confirm-cancel" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn-confirm-ok" onclick="confirmAndCalculate()">OK, Proceed</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
